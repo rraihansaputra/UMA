@@ -1,169 +1,191 @@
-<div class="product-template__container page-width test"
-  id="ProductSection-{{ section.id }}"
-  data-section-id="{{ section.id }}"
-  data-section-type="product"
-  data-enable-history-state="true"
-  data-ajax-enabled="{{ settings.enable_ajax }}"
->
+<div itemscope itemtype="http://schema.org/Product" data-section-id="{{ section.id }}" data-section-type="product" data-history-state>
+
   {% comment %}
     Get first variant, or deep linked one
   {% endcomment %}
-  {%- assign current_variant = product.selected_or_first_available_variant -%}
-  {%- assign product_image_zoom_size = '1024x1024' -%}
-  {%- assign product_image_scale = '2' -%}
-  {%- assign enable_image_zoom = section.settings.enable_image_zoom -%}
-  {%- assign compare_at_price = current_variant.compare_at_price -%}
-  {%- assign price = current_variant.price -%}
+  {% assign current_variant = product.selected_or_first_available_variant %}
 
-  {% case section.settings.media_size %}
-    {% when 'small' %}
-      {%- assign product_media_width = 'medium-up--one-third' -%}
-      {%- assign product_description_width = 'medium-up--two-thirds' -%}
-      {%- assign height = 345 -%}
-    {% when 'medium' %}
-      {%- assign product_media_width = 'medium-up--one-half' -%}
-      {%- assign product_description_width = 'medium-up--one-half' -%}
-      {%- assign height = 530 -%}
-    {% when 'large' %}
-      {%- assign product_media_width = 'medium-up--two-thirds' -%}
-      {%- assign product_description_width = 'medium-up--one-third' -%}
-      {%- assign height = 720 -%}
-    {% when 'full' %}
-      {%- assign product_media_width = '' -%}
-      {%- assign product_description_width = '' -%}
-      {%- assign height = 1090 -%}
-      {%- assign enable_image_zoom = false -%}
-  {% endcase %}
+  {% comment %}
+    Get first image
+  {% endcomment %}
+  {% assign featured_image = current_variant.featured_image | default: product.featured_image %}
 
-  <div class="grid product-single{% if section.settings.enable_payment_button %} product-single--{{ section.settings.media_size }}-media{% endif %}">
-    <div class="grid__item product-single__media-group {{ product_media_width }}{% if section.settings.media_size == 'full' %} product-single__media-group--full{% endif %}" data-product-single-media-group>
-      {%- assign featured_media = product.selected_or_first_available_variant.featured_media | default: product.featured_media -%}
+  <meta itemprop="url" content="{{ shop.url }}{{ product.url }}">
+  <meta itemprop="image" content="{{ featured_image | img_url: 'grande' }}">
+  <meta itemprop="name" content="{{ product.title }}{% if product.variants.size > 1 and product.selected_variant %} - {{ current_variant.title }}{% endif %}">
 
-      {%- for media in product.media -%}
-        {% include 'media', media: media, featured_media: featured_media, height: height, enable_image_zoom: enable_image_zoom, image_zoom_size: product_image_zoom_size, image_scale: product_image_scale %}
-      {%- endfor -%}
+  <div class="product grid grid--uniform grid--no-gutters" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
 
-      <noscript>
-        {% capture product_image_size %}{{ height }}x{% endcapture %}
-        <img src="{{ featured_media | img_url: product_image_size, scale: product_image_scale }}" alt="{{ featured_media.alt }}" id="FeaturedMedia-{{ section.id }}" class="product-featured-media" style="max-width: {{ height }}px;">
-      </noscript>
+    {% assign first_image = featured_image %}
 
-      {% assign first_3d_model = product.media | where: "media_type", "model" | first %}
+    {% if product.images.size > 1 and section.settings.skip_first_product_image and first_image == product.featured_image %}
+      {% assign first_image = product.images[1] %}
+    {% endif %}
 
-      {%- if first_3d_model -%}
-        <button
-          aria-label="{{ 'products.product.view_in_space_label' | t }}"
-          class="product-single__view-in-space"
-          data-shopify-xr
-          data-shopify-model3d-id="{{ first_3d_model.id }}"
-          data-shopify-title="{{ product.title | escape }}"
-          data-shopify-xr-hidden
-        >
-          {% include 'icon-3d-badge-full-color' %}<span class='product-single__view-in-space-text'>{{ 'products.product.view_in_space' | t }}</span>
-        </button>
-      {%- endif -%}
-
-
-      {% if product.media.size > 1 %}
-        {% if product.media.size > 4 %}
-          {%- assign enable_thumbnail_slides = true -%}
-        {% endif %}
-
-        <div class="thumbnails-wrapper{% if enable_thumbnail_slides == true %} thumbnails-slider--active{% endif %}">
-          {% if enable_thumbnail_slides == true %}
-            <button type="button" class="btn btn--link medium-up--hide thumbnails-slider__btn thumbnails-slider__prev thumbnails-slider__prev--{{ section.id }}">
-              {% include 'icon-chevron-left' %}
-              <span class="icon__fallback-text">{{ 'sections.slideshow.previous_slide' | t }}</span>
-            </button>
-          {% endif %}
-          <ul class="product-single__thumbnails product-single__thumbnails-{{ section.id }}">
-            {% for media in product.media %}
-              <li class="product-single__thumbnails-item product-single__thumbnails-item--{{ section.settings.media_size }} js">
-                <a href="{{ media.preview_image | img_url: product_image_zoom_size, scale: product_image_scale }}"
-                   class="text-link product-single__thumbnail product-single__thumbnail--{{ section.id }}"
-                   data-thumbnail-id="{{ section.id }}-{{ media.id }}"
-                   {% if enable_image_zoom %}data-zoom="{{ media.preview_image | img_url: product_image_zoom_size, scale: product_image_scale }}"{% endif %}>
-
-                    {%- capture thumbnailAlt -%}
-                      {%- if media.media_type == 'video' or media.media_type == 'external_video' -%}
-                        {{ 'sections.featured_product.video_thumbnail_alt' | t: imageAlt: media.alt | escape }}
-                      {%- elsif media.media_type == 'model' -%}
-                        {{ 'sections.featured_product.model_thumbnail_alt' | t: imageAlt: media.alt | escape }}
-                      {%- else -%}
-                        {{ 'sections.featured_product.gallery_thumbnail_alt' | t: imageAlt: media.alt | escape }}
-                      {%- endif -%}
-                    {%- endcapture -%}
-
-                    <img class="product-single__thumbnail-image" src="{{ media.preview_image | img_url: '110x110', scale: 2 }}" alt="{{ thumbnailAlt }}">
-                    {%- if media.media_type == 'video' or media.media_type =='external_video' -%}
-                      <div class="product-single__thumbnail-badge">
-                        {% include 'icon-video-badge-full-color' %}
-                      </div>
-                    {%- endif -%}
-                    {%- if media.media_type == 'model' -%}
-                      <div class="product-single__thumbnail-badge">
-                        {% include 'icon-3d-badge-full-color' %}
-                      </div>
-                    {%- endif -%}
-                </a>
-              </li>
-            {% endfor %}
-          </ul>
-          {% if enable_thumbnail_slides == true %}
-            <button type="button" class="btn btn--link medium-up--hide thumbnails-slider__btn thumbnails-slider__next thumbnails-slider__next--{{ section.id }}">
-              {% include 'icon-chevron-right' %}
-              <span class="icon__fallback-text">{{ 'sections.slideshow.next_slide' | t }}</span>
-            </button>
-          {% endif %}
-        </div>
+    {% comment %}
+      Set variables for product image grid
+    {% endcomment %}
+    {% if section.settings.product_image_type == 'portrait' %}
+      {% if product.images.size == 1 %}
+        {% assign grid_item_width = '' %}
+      {% elsif product.images.size == 2 and section.settings.skip_first_product_image %}
+        {% assign grid_item_width = '' %}
+      {% else %}
+        {% assign grid_item_width = 'medium-up--one-half' %}
       {% endif %}
-    </div>
+      {% assign is_portrait_image = true %}
+    {% else %}
+      {% assign grid_item_width = '' %}
+    {% endif %}
 
-    <div class="grid__item {{ product_description_width }}">
-      <div class="product-single__meta">
+    {% if product.images.size > 0 %}
+      <div class="product__photo grid__item {{ grid_item_width }}">
+        {% for image in product.images %}
+          {% assign img_url = image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
+          <div data-image-id="{{ image.id }}" class="product__photo--single product__photo--variant-wrapper
+          {% if product.images.size > 1 and section.settings.skip_first_product_image %}
+            fade-in
+            {% if forloop.first == true %} hide{% endif %}
+            {% if forloop.index != 2 %} hide{% endif %}
+          {% else %}
+            {% unless featured_image == image %} hide{% endunless %}
+          {% endif %}" style="padding-top:{{ 1 | divided_by: image.aspect_ratio | times: 100}}%;">
+            <img class="product__photo--variant lazyload"
+              src="{{ image | img_url: '300x' }}"
+              data-src="{{ img_url }}"
+              data-widths="[360, 540, 720, 900, 1080, 1296, 1512, 1728, 1944, 2048, 4472]"
+              data-aspectratio="{{ image.aspect_ratio }}"
+              data-sizes="auto"
+              alt="{{ image.alt | escape }}">
+          </div>
+        {% endfor %}
 
-        <h1 class="product-single__title">{{ product.title }}</h1>
+        <noscript>
+          <img class="product__photo--variant" src="{{ first_image | img_url: '2048x2048' }}" alt="{{ image.alt | escape }}">
+        </noscript>
+      </div>
 
-        <div class="product-single__description rte">
-          {{ product.description }}
-        </div>
+      {% comment %}
+        Counting images shown on the page
+      {% endcomment %}
+      {% assign index = 1 %}
 
-<!-- CUSTOM VUE PART FOR OPTION RECOMMENDATION AND ADD TO CART-->
-        <div id="app" class="vue-form vue">
-          <script src="{{ 'CartWizard.js' | asset_url }}"></script>
-        </div>
-<!-- END CUSTOM VUE PART -->
+      {% comment %}
+        If we have portrait images, we show two per row, so let's get a second image.
+        That image will be moved down below the description on mobile, hence why we'll use
+        `small--hide`. The image moved down is stored in the variable `duplicate_image`.
+      {% endcomment %}
 
-        {%- comment -%}
-          Live region for announcing updated price and availability to screen readers
-        {%- endcomment -%}
-        <p class="visually-hidden" data-product-status
-          aria-live="polite"
-          role="status"
-        ></p>
-
-        {%- comment -%}
-          Live region for announcing that the product form has been submitted and the
-          product is in the process being added to the cart
-        {%- endcomment -%}
-        <p class="visually-hidden" data-loader-status
-          aria-live="assertive"
-          role="alert"
-          aria-hidden="true"
-        >{{ 'products.product.loader_label' | t }}</p>
-
-    </div>
-  </div>
-
-  <div class="grid">
-    <div class="grid__item {% if section.settings.enable_payment_button %}product-single--{{ section.settings.media_size }}-media{% endif %}">
-
-      <div id="shopify-product-reviews" data-id="{{product.id}}">{{ product.metafields.spr.reviews }}</div>
-
-      {% if section.settings.show_share_buttons %}
-        {% include 'social-sharing', share_title: product.title, share_permalink: product.url, share_image: product.featured_media %}
+      {% if is_portrait_image %}
+        {% for image in product.images %}
+          {% unless image == first_image %}
+            {% unless section.settings.skip_first_product_image and image == product.featured_image %}
+              <div class="product__photo grid__item small--hide {{ grid_item_width }}">
+                <noscript>
+                  <img src="{{ image | img_url: '2048x2048' }}" alt="{{ image.alt | escape }}">
+                </noscript>
+                {% assign img_url = image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
+                <div class="product__photo--single" style="padding-top:{{ 1 | divided_by: image.aspect_ratio | times: 100}}%;">
+                  <img class="lazyload"
+                    src="{{ image | img_url: '300x' }}"
+                    data-src="{{ img_url }}"
+                    data-widths="[360, 540, 720, 900, 1080, 1296, 1512, 1728, 1944, 2048, 4472]"
+                    data-aspectratio="{{ image.aspect_ratio }}"
+                    data-sizes="auto"
+                    alt="{{ image.alt | escape }}">
+                </div>
+              </div>
+              {% assign index = index | plus: 1 %}
+              {% assign index_offset = forloop.index %}
+              {% assign duplicate_image = image %}
+              {% break %}
+            {% endunless %}
+          {% endunless %}
+        {% endfor %}
       {% endif %}
+
+    {% endif %}
+
+    <div class="product__details grid__item">
+      <div class="grid grid--no-gutters product__details-content">
+        <div class="grid__item {% if section.settings.product_form_width == 'large' %}medium-up--three-twelfths medium-up--push-one-fifth{% else %}large-up--two-twelfths large-up--push-two-twelfths medium-up--three-twelfths medium-up--push-one-twelfth{% endif %}">
+          {% if section.settings.show_vendor %}
+            <p class="product-item__vendor small--text-center">{{ product.vendor }}</p>
+          {% endif %}
+          <h1 class="h2" itemprop="name">{{ product.title }}</h1>
+          <link itemprop="availability" href="http://schema.org/{% if current_variant.available %}InStock{% else %}OutOfStock{% endif %}">
+          {%- capture 'form_id' -%}AddToCartForm-{{ section.id }}{%- endcapture -%}
+          {%- capture 'form_class' -%}
+            product__form--add-to-cart{% if section.settings.product_form_width == 'large' %} product__form--full-width{% endif %}
+          {%- endcapture -%}
+          <div class="product-single__errors"></div>
+          <div class="product-single__description rte" itemprop="description">
+            {{ product.description }}
+          </div>
+          <div class="product-single__errors"></div>
+          <div class="product-single__description rte" itemprop="description">
+            {{ product.description }}
+          </div>
+          {% if section.settings.social_sharing_products %}
+            {% include 'social-sharing', share_title: product.title, share_permalink: product.url, share_image: product %}
+          {% endif %}
+          <!-- CUSTOM VUE PART FOR OPTION RECOMMENDATION AND ADD TO CART-->
+          <div id="app" class="vue-form vue">
+            <script src="{{ 'CartWizard.js' | asset_url }}"></script>
+          </div>
+          <!-- END CUSTOM VUE PART -->
+        </div>
+      </div>
     </div>
+
+    {% comment %}
+      Show second product photo after description on mobile if
+      image setting style is 'portrait' and there is a duplicate_image to show
+    {% endcomment %}
+    {% if is_portrait_image and product.images.size > 1 and duplicate_image %}
+      <div class="product__photo grid__item medium-up--hide {{ grid_item_width }}">
+        <noscript>
+          <img src="{{ duplicate_image | img_url: '2048x2048' }}" alt="{{ duplicate_image.alt | escape }}">
+        </noscript>
+        {% assign img_url = duplicate_image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
+        <div class="product__photo--single" style="padding-top:{{ 1 | divided_by: duplicate_image.aspect_ratio | times: 100}}%;">
+          <img class="lazyload"
+            src="{{ duplicate_image | img_url: '300x' }}"
+            data-src="{{ img_url }}"
+            data-widths="[360, 540, 720, 900, 1080, 1296, 1512, 1728, 1944, 2048, 4472]"
+            data-aspectratio="{{ duplicate_image.aspect_ratio }}"
+            data-sizes="auto"
+            alt="{{ duplicate_image.alt | escape }}">
+        </div>
+      </div>
+    {% endif %}
+
+    {% comment %}
+      Show other product images below product info if there's any left to show
+    {% endcomment %}
+    {% if index < product.images.size %}
+      {% for image in product.images offset:index_offset %}
+        {% unless image == first_image %}
+          {% unless section.settings.skip_first_product_image and image == product.featured_image %}
+            <div class="product__photo grid__item {{ grid_item_width }}">
+              <noscript>
+                <img src="{{ image | img_url: '2048x2048' }}" alt="{{ image.alt | escape }}">
+              </noscript>
+              {% assign img_url = image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
+              <div class="product__photo--single" style="padding-top:{{ 1 | divided_by: image.aspect_ratio | times: 100}}%;">
+                <img class="lazyload"
+                  src="{{ image | img_url: '300x' }}"
+                  data-src="{{ img_url }}"
+                  data-widths="[360, 540, 720, 900, 1080, 1296, 1512, 1728, 1944, 2048, 4472]"
+                  data-aspectratio="{{ image.aspect_ratio }}"
+                  data-sizes="auto"
+                  alt="{{ image.alt | escape }}">
+              </div>
+            </div>
+          {% endunless %}
+        {% endunless %}
+      {% endfor %}
+    {% endif %}
   </div>
 </div>
 
@@ -174,38 +196,205 @@
   <script type="application/json" id="ProductJsonData">
     {{ product | json }}
   </script>
-  <script type="application/json" id="ModelJson-{{ section.id }}">
-    {{ product.media | where: 'media_type', 'model' | json }}
-  </script>
 {% endunless %}
 
 {% schema %}
 {
   "name": {
-    "da": "Produktsider",
-    "de": "Produktseiten",
-    "en": "Product pages",
-    "es": "Páginas de productos",
-    "fi": "Tuotesivut",
-    "fr": "Pages de produits",
-    "hi": "उत्पाद पेज",
-    "it": "Pagine di prodotto",
-    "ja": "商品ページ",
-    "ko": "제품 페이지",
-    "nb": "Produktsider",
-    "nl": "Productpagina's",
-    "pt-BR": "Páginas de produtos",
-    "pt-PT": "Páginas de produtos",
-    "sv": "Produktsidor",
-    "th": "หน้าสินค้า",
-    "zh-CN": "产品页面",
-    "zh-TW": "產品頁面"
+    "cs": "Produkt",
+    "da": "Produkt",
+    "de": "Produkt",
+    "en": "Product",
+    "es": "Producto",
+    "fi": "Tuote",
+    "fr": "Produit",
+    "hi": "उत्पाद",
+    "it": "Prodotto",
+    "ja": "商品",
+    "ko": "제품",
+    "nb": "Produkt",
+    "nl": "Product",
+    "pl": "Produkt",
+    "pt-BR": "Produto",
+    "pt-PT": "Produto",
+    "sv": "Produkt",
+    "th": "สินค้า",
+    "tr": "Ürün",
+    "vi": "Sản phẩm",
+    "zh-CN": "产品",
+    "zh-TW": "產品"
   },
   "settings": [
     {
       "type": "checkbox",
+      "id": "skip_first_product_image",
+      "label": {
+        "cs": "Vynechat první obrázek produktu",
+        "da": "Spring over første produktbillede",
+        "de": "Das erste Produktbild überspringen",
+        "en": "Skip first product image",
+        "es": "Omitir la primera imagen del producto",
+        "fi": "Ohita ensimmäinen tuotekuva",
+        "fr": "Sauter la première image du produit",
+        "hi": "पहली उत्पाद इमेज छोडें",
+        "it": "Salta prima immagine prodotto",
+        "ja": "最初の商品画像をスキップする",
+        "ko": "첫 번째 제품 이미지 건너 뛰기",
+        "nb": "Hopp over første produktbilde",
+        "nl": "Sla de eerste productafbeelding over",
+        "pl": "Pomiń pierwszy obraz produktu",
+        "pt-BR": "Ignorar a primeira imagem do produto",
+        "pt-PT": "Ignorar a primeira imagem de produto",
+        "sv": "Hoppa över första produktbilden",
+        "th": "ข้ามรูปภาพสินค้าแรก",
+        "tr": "İlk ürün görselini atla",
+        "vi": "Bỏ qua hình ảnh sản phẩm đầu tiên",
+        "zh-CN": "跳过第一张产品图片",
+        "zh-TW": "略過第一張產品圖片"
+      },
+      "info": {
+        "cs": "První obrázek každého produktu můžete nastavit tak, aby se ve vašem obchodě zobrazoval jen na stránce s kolekcemi. [Zjistěte více](https://docs.shopify.com/manual/more/official-shopify-themes/boundless#skip-first-product-image-option).",
+        "da": "Sørg for, at det første billede for hvert produkt kun vises på din butiks kollektionsside. [Få mere at vide](https://docs.shopify.com/manual/more/official-shopify-themes/boundless#skip-first-product-image-option).",
+        "de": "Lass das erste Bild für jedes Produkt nur auf der Kategorieseite deines Shops anzeigen. [Mehr Informationen](https://docs.shopify.com/manual/more/official-shopify-themes/boundless#skip-first-product-image-option).",
+        "en": "Make the first image for each product only appear on the collections page of your store. [Learn more](https://docs.shopify.com/manual/more/official-shopify-themes/boundless#skip-first-product-image-option).",
+        "es": "Haz que la primera imagen de cada producto aparezca solo en la página de colecciones de tu tienda. [Más información](https://docs.shopify.com/manual/more/official-shopify-themes/boundless#skip-first-product-image-option).",
+        "fi": "Määritä kunkin tuotteen ensimmäinen kuva näkymään vain kaupan kokoelmasivulla. [Lue lisää](https://docs.shopify.com/manual/more/official-shopify-themes/boundless#skip-first-product-image-option).",
+        "fr": "Faites en sorte que la première image de chaque produit apparaisse uniquement à la page des collections de votre boutique. [En savoir plus](https://docs.shopify.com/manual/more/official-shopify-themes/boundless#skip-first-product-image-option).",
+        "hi": "प्रत्येक उत्पाद के लिए पहली छवि केवल अपने स्टोर के कलेक्शन्स पेज पर प्रदर्शित करें. [अधिक जानें](https://docs.shopify.com/manual/more/official-shopify-themes/boundless#skip-first-product-image-option).",
+        "it": "Fai apparire la prima immagine di ogni prodotto solo sulla pagina delle collezioni del tuo negozio. [Maggiori informazioni](https://docs.shopify.com/manual/more/official-shopify-themes/boundless#skip-first-product-image-option).",
+        "ja": "各商品の最初のイメージをストアのコレクションページにのみ表示するようにします。[詳しくはこちら](https://docs.shopify.com/manual/more/official-shopify-themes/boundless#skip-first-product-image-option)。",
+        "ko": "각 제품의 첫 번째 이미지를 스토어의 컬렉션 페이지에만 표시하십시오. [자세히 알아보기](https://docs.shopify.com/manual/more/official-shopify-themes/boundless#skip-first-product-image-option)",
+        "nb": "Gjør at det første bildet for hvert produkt kun vises på samlingssiden i butikken din. [Finn ut mer](https://docs.shopify.com/manual/more/official-shopify-themes/boundless#skip-first-product-image-option).",
+        "nl": "Laat de eerste afbeelding voor elk product alleen op de pagina collecties van je winkel zien. [Meer informatie](https://docs.shopify.com/manual/more/official-shopify-themes/boundless#skip-first-product-image-option).",
+        "pl": "Ustaw wyświetlanie pierwszego obrazu dla każdego produktu tyko na stronie kolekcji Twojego sklepu. [Dowiedz się więcej](https://docs.shopify.com/manual/more/official-shopify-themes/boundless#skip-first-product-image-option).",
+        "pt-BR": "Faça com que a primeira imagem de cada produto apareça apenas na página de coleções de sua loja. [Saiba mais](https://docs.shopify.com/manual/more/official-shopify-themes/boundless#skip-first-product-image-option).",
+        "pt-PT": "A primeira imagem de cada produto apenas irá aparecer na página de coleções da sua loja. [Saiba mais](https://docs.shopify.com/manual/more/official-shopify-themes/boundless#skip-first-product-image-option).",
+        "sv": "Gör så att den första bilden för varje produkt endast visas på din butiks produktseriesidor. [Läs mer](https://docs.shopify.com/manual/more/official-shopify-themes/boundless#skip-first-product-image-option).",
+        "th": "ทำให้รูปภาพแรกสำหรับสินค้าแต่ละรายการปรากฏเฉพาะในหน้าคอลเลกชันของร้านค้าของคุณ [ดูข้อมูลเพิ่มเติม](https://docs.shopify.com/manual/more/official-shopify-themes/boundless#skip-first-product-image-option)",
+        "tr": "Her ürünün ilk görselini, yalnızca mağazanızın koleksiyonlar sayfasında gösterin. [Daha fazla bilgi edinin](https://docs.shopify.com/manual/more/official-shopify-themes/boundless#skip-first-product-image-option).",
+        "vi": "Chỉ tạo hình ảnh đầu tiên cho mỗi sản phẩm xuất hiện trên trang bộ sưu tập của cửa hàng. [Tìm hiểu thêm](https://docs.shopify.com/manual/more/official-shopify-themes/boundless#skip-first-product-image-option).",
+        "zh-CN": "让每个产品的第一张图片仅在商店的产品系列页面上显示。[了解详细信息](https://docs.shopify.com/manual/more/official-shopify-themes/boundless#skip-first-product-image-option)。",
+        "zh-TW": "讓每個產品的第一張圖片僅在您商店的商品系列頁面上顯示。[深入瞭解](https://docs.shopify.com/manual/more/official-shopify-themes/boundless#skip-first-product-image-option)。"
+      }
+    },
+    {
+      "type": "select",
+      "id": "product_image_type",
+      "label": {
+        "cs": "Styl obrázku",
+        "da": "Billedstil",
+        "de": "Bildstil",
+        "en": "Image style",
+        "es": "Estilo de imagen",
+        "fi": "Kuvan tyyli",
+        "fr": "Style d'image",
+        "hi": "इमेज स्टाइल",
+        "it": "Stile immagine",
+        "ja": "画像スタイル",
+        "ko": "이미지 스타일",
+        "nb": "Bildestil",
+        "nl": "Afbeeldingsstijl",
+        "pl": "Styl obrazu",
+        "pt-BR": "Estilo da imagem",
+        "pt-PT": "Estilo da imagem",
+        "sv": "Bildstil",
+        "th": "รูปแบบรูปภาพ",
+        "tr": "Görsel stili",
+        "vi": "Kiểu hình ảnh",
+        "zh-CN": "图片样式",
+        "zh-TW": "圖片樣式"
+      },
+      "options": [
+        {
+          "value": "portrait",
+          "label": {
+            "cs": "Na výšku/čtverec",
+            "da": "Høj/firkantet",
+            "de": "Hoch/Quadrat",
+            "en": "Tall/square",
+            "es": "Alta/cuadrada",
+            "fi": "Korkea/neliö",
+            "fr": "Grand/carré",
+            "hi": "लंबा/वर्ग",
+            "it": "Verticale/quadrata",
+            "ja": "縦長/正方形",
+            "ko": "높이/정사각형",
+            "nb": "Høyt/kvadratisk",
+            "nl": "Hoog/vierkant",
+            "pl": "Wysoki/kwadratowy",
+            "pt-BR": "Alto/quadrado",
+            "pt-PT": "Alto/quadrado",
+            "sv": "Hög/kvadratisk",
+            "th": "สูง/สี่เหลี่ยมจัตุรัส",
+            "tr": "Uzun/kare",
+            "vi": "Cao/vuông",
+            "zh-CN": "高/正方形",
+            "zh-TW": "高/正方形"
+          }
+        },
+        {
+          "value": "landscape",
+          "label": {
+            "cs": "Na šířku",
+            "da": "Bred",
+            "de": "Breit",
+            "en": "Wide",
+            "es": "Ancho",
+            "fi": "Leveä",
+            "fr": "Large",
+            "hi": "चौड़ा",
+            "it": "Orizzontale",
+            "ja": "横長",
+            "ko": "넓이",
+            "nb": "Bred",
+            "nl": "Breed",
+            "pl": "Szeroki",
+            "pt-BR": "Grande",
+            "pt-PT": "Largo",
+            "sv": "Bred",
+            "th": "กว้าง",
+            "tr": "Geniş",
+            "vi": "Rộng",
+            "zh-CN": "宽",
+            "zh-TW": "寬"
+          }
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": {
+        "cs": "Zobrazit dodavatele",
+        "da": "Vis leverandør",
+        "de": "Lieferanten anzeigen",
+        "en": "Show vendor",
+        "es": "Mostrar proveedor",
+        "fi": "Näytä myyjä",
+        "fr": "Afficher le distributeur",
+        "hi": "विक्रेता दिखाएं",
+        "it": "Mostra fornitore",
+        "ja": "販売元を表示する",
+        "ko": "공급업체 표시",
+        "nb": "Vis leverandør",
+        "nl": "Leverancier weergeven",
+        "pl": "Pokaż dostawcę",
+        "pt-BR": "Exibir fornecedor",
+        "pt-PT": "Mostrar fornecedor",
+        "sv": "Visa säljare",
+        "th": "แสดงผู้ขาย",
+        "tr": "Satıcıyı göster",
+        "vi": "Hiển thị nhà cung cấp",
+        "zh-CN": "显示厂商",
+        "zh-TW": "顯示廠商"
+      },
+      "default": false
+    },
+    {
+      "type": "checkbox",
       "id": "show_quantity_selector",
       "label": {
+        "cs": "Zobrazit výběr množství",
         "da": "Vis antalsvælger",
         "de": "Mengenauswahl anzeigen",
         "en": "Show quantity selector",
@@ -218,10 +407,13 @@
         "ko": "수량 선택기 표시",
         "nb": "Vis mengdevelger",
         "nl": "Hoeveelheidskiezer weergeven",
-        "pt-BR": "Exibir seletor de quantidade",
+        "pl": "Pokaż selektor ilości",
+        "pt-BR": "Exiba um seletor de quantidade",
         "pt-PT": "Mostrar um seletor de quantidade",
         "sv": "Visa kvantitetsväljare",
         "th": "แสดงตัวเลือกจำนวน",
+        "tr": "Adet seçiciyi göster",
+        "vi": "Hiển thị hộp chọn số lượng",
         "zh-CN": "显示数量选择器",
         "zh-TW": "顯示數量選擇器"
       },
@@ -229,58 +421,38 @@
     },
     {
       "type": "checkbox",
-      "id": "show_variant_labels",
+      "id": "social_sharing_products",
       "label": {
-        "da": "Vis variantlabels",
-        "de": "Varianten-Etiketten anzeigen",
-        "en": "Show variant labels",
-        "es": "Mostrar etiquetas de variantes",
-        "fi": "Näytä vaihtoehtoiset tarrat",
-        "fr": "Afficher le nom des variantes",
-        "hi": "वेरिएंट लेबल दिखाएं",
-        "it": "Mostra etichette varianti",
-        "ja": "バリエーションのラベルを表示する",
-        "ko": "이형 상품 레이블 표시",
-        "nb": "Vis variantetiketter",
-        "nl": "Variantlabels weergeven",
-        "pt-BR": "Exibir etiquetas de variantes",
-        "pt-PT": "Mostrar etiquetas de variantes",
-        "sv": "Visa variantetiketter",
-        "th": "แสดงป้ายกำกับตัวเลือกสินค้า",
-        "zh-CN": "显示多属性标签",
-        "zh-TW": "顯示子類選項標籤"
+        "cs": "Povolit sdílení produktů",
+        "da": "Aktivér produktdeling",
+        "de": "Teilen von Produkten aktivieren",
+        "en": "Enable product sharing",
+        "es": "Habilitar compartir productos",
+        "fi": "Ota tuotejako käyttöön",
+        "fr": "Activer le partage de produits",
+        "hi": "उत्पाद साझाकरण सक्षम करें",
+        "it": "Permetti condivisione del prodotto",
+        "ja": "商品の共有を有効にする",
+        "ko": "제품 공유 활성화",
+        "nb": "Aktiver produktdeling",
+        "nl": "Schakel het delen van producten in",
+        "pl": "Włącz udostępnianie produktów",
+        "pt-BR": "Habilite o compartilhamento de produtos",
+        "pt-PT": "Ativar a partilha de produtos",
+        "sv": "Aktivera produktdelning",
+        "th": "เปิดใช้การแชร์สินค้า",
+        "tr": "Ürün paylaşımını etkinleştir",
+        "vi": "Bật chia sẻ sản phẩm",
+        "zh-CN": "启用产品共享",
+        "zh-TW": "啟用產品分享"
       },
       "default": true
     },
     {
       "type": "checkbox",
-      "id": "show_vendor",
-      "label": {
-        "da": "Vis leverandør",
-        "de": "Lieferanten anzeigen",
-        "en": "Show vendor",
-        "es": "Mostrar proveedor",
-        "fi": "Näytä myyjä",
-        "fr": "Afficher les vendeurs",
-        "hi": "विक्रेता दिखाएं",
-        "it": "Mostra fornitore",
-        "ja": "販売元を表示する",
-        "ko": "공급업체 표시",
-        "nb": "Vis leverandør",
-        "nl": "Leverancier weergeven",
-        "pt-BR": "Exibir fornecedor",
-        "pt-PT": "Mostrar fornecedor",
-        "sv": "Visa säljare",
-        "th": "แสดงผู้ขาย",
-        "zh-CN": "显示厂商",
-        "zh-TW": "顯示廠商"
-      },
-      "default": false
-    },
-    {
-      "type": "checkbox",
       "id": "enable_payment_button",
       "label": {
+        "cs": "Zobrazit dynamické tlačítko pokladny",
         "da": "Vis dynamisk betalingsknap",
         "de": "Dynamischen Checkout Button anzeigen",
         "en": "Show dynamic checkout button",
@@ -293,16 +465,20 @@
         "ko": "동적 결제 버튼 표시",
         "nb": "Vis dynamisk knapp for å gå til kassen",
         "nl": "Dynamische betaalknop weergeven",
+        "pl": "Pokaż dynamiczny przycisk realizacji zakupu",
         "pt-BR": "Exibir botão de checkout dinâmico",
         "pt-PT": "Mostrar o botão dinâmico de finalização da compra",
         "sv": "Visa dynamiska utcheckningsknappar",
         "th": "แสดงปุ่มชำระเงินแบบไดนามิก",
+        "tr": "Dinamik ödeme düğmeleri göster",
+        "vi": "Hiển thị nút thanh toán động",
         "zh-CN": "显示动态结账按钮",
         "zh-TW": "顯示動態結帳按鈕"
       },
       "info": {
+        "cs": "Každý zákazník uvidí platební metodu, kterou ze všech metod dostupných v obchodě (například PayPal nebo Apple Pay) nejvíce preferuje. [Další informace](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
         "da": "Den enkelte kunde vil se sin foretrukne betalingsmetode blandt dem, der er tilgængelige i din butik, f.eks. PayPal eller Apple Pay. [Få mere at vide](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
-        "de": "Jeder Kunde sieht seine bevorzugte Zahlungsmethode aus den in Ihrem Shop verfügbaren Zahlungsmethoden wie PayPal oder Apple Pay. [Mehr Informationen](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
+        "de": "Jeder Kunde sieht seine bevorzugte Zahlungsmethode aus den in deinem Shop verfügbaren Zahlungsmethoden wie PayPal oder Apple Pay. [Mehr Informationen](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
         "en": "Each customer will see their preferred payment method from those available on your store, such as PayPal or Apple Pay. [Learn more](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
         "es": "Cada cliente verá su forma de pago preferida entre las disponibles en tu tienda, como PayPal o Apple Pay. [Más información](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
         "fi": "Kukin asiakas näkee ensisijaisen valintansa kauppasi tarjoamista maksutavoista, esim. PayPal tai Apple Pay. [Lisätietoja](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
@@ -313,156 +489,78 @@
         "ko": "각 고객은 PayPal 또는 Apple Pay와 같이 스토어에서 사용 가능한 지불 방법을 확인할 수 있습니다. [자세히 알아보기](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
         "nb": "Hver enkelt kunde vil se sin foretrukne betalingsmåte blant de som er tilgjengelig i butikken din, som PayPal eller Apple Pay. [Finn ut mer](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
         "nl": "Elke klant ziet zijn of haar beschikbare voorkeursmethode om af te rekenen, zoals PayPal of Apple Pay. [Meer informatie](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
+        "pl": "Każdy klient zobaczy swoją preferowaną metodę płatności wśród metod dostępnych w Twoim sklepie, np. PayPal lub Apple Pay. [Dowiedz się więcej](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
         "pt-BR": "Cada cliente verá a forma de pagamento preferencial dele dentre as disponíveis na loja, como PayPal ou Apple Pay. [Saiba mais](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
         "pt-PT": "Cada cliente irá ver o seu método de pagamento preferido entre os disponíveis na loja, como o PayPal ou Apple Pay. [Saiba mais](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
         "sv": "Varje kund kommer att se den föredragna betalningsmetoden från de som finns tillgängliga i din butik, till exempel PayPal eller Apple Pay. [Läs mer](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
         "th": "ลูกค้าแต่ละรายจะเห็นวิธีการชำระเงินที่ต้องการจากวิธีที่ใช้ได้ในร้านค้าของคุณ เช่น PayPal หรือ Apple Pay [ดูข้อมูลเพิ่มเติม](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
+        "tr": "Her müşteri, mağazanız sunulanlar arasından tercih ettikleri ödeme yöntemini görür (ör. PayPal veya Apple Pay). [Daha fazla bilgi edinin](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
+        "vi": "Mỗi khách hàng sẽ thấy phương thức thanh toán ưu tiên trong những phương thức thanh toán được hỗ trợ tại cửa hàng như PayPal hoặc Apple Pay. [Tìm hiểu thêm](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
         "zh-CN": "每位客户都可在您商店提供的付款方式中看到他们的首选付款方式，例如 PayPal 或 Apple Pay。[了解详细信息](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
         "zh-TW": "每位顧客都可以在您商店內開放使用的付款方式中看見他們偏好使用的方式，如 PayPal、Apple Pay 等。[深入瞭解](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)"
       },
       "default": true
     },
     {
-      "type": "checkbox",
-      "id": "show_share_buttons",
-      "label": {
-        "da": "Vis knapper til deling på sociale medier",
-        "de": "Buttons für Social Media anzeigen",
-        "en": "Show social sharing buttons",
-        "es": "Mostrar botones para compartir en redes sociales",
-        "fi": "Näytä sosiaalisen median jakamispainikkeet",
-        "fr": "Affichez les boutons de partage sur les médias sociaux",
-        "hi": "सोशल शेयरिंग बटन दिखाएं",
-        "it": "Mostra i pulsanti per la condivisione sui social",
-        "ja": "ソーシャルメディアでの共有ボタンを表示する",
-        "ko": "소셜 공유 버튼 표시",
-        "nb": "Vis knapper for deling på sosiale medier",
-        "nl": "Knoppen voor sociaal delen weergeven",
-        "pt-BR": "Exibir botões de compartilhamento em redes sociais",
-        "pt-PT": "Mostrar botões de partilha nas redes sociais",
-        "sv": "Visa knappar för delning i sociala medier",
-        "th": "แสดงปุ่มสำหรับแชร์ลงโซเชียล",
-        "zh-CN": "显示社交分享按钮",
-        "zh-TW": "顯示社群分享按鈕"
-      },
-      "default": true
-    },
-    {
-      "type": "header",
-      "content": {
-        "da": "Medie",
-        "de": "Medien",
-        "en": "Media",
-        "es": "Elementos multimedia",
-        "fi": "Media",
-        "fr": "Support multimédia",
-        "hi": "मीडिया",
-        "it": "Media",
-        "ja": "メディア",
-        "ko": "미디어",
-        "nb": "Medier",
-        "nl": "Media",
-        "pt-BR": "Mídia",
-        "pt-PT": "Multimédia",
-        "sv": "Media",
-        "th": "สื่อ",
-        "zh-CN": "媒体",
-        "zh-TW": "媒體"
-      },
-      "info": {
-        "da": "Få mere at vide om [media types](https://help.shopify.com/manual/products/product-media)",
-        "de": "Mehr Informationen über [Medientypen ](https://help.shopify.com/manual/products/product-media)",
-        "en": "Learn more about [media types](https://help.shopify.com/manual/products/product-media)",
-        "es": "Más información sobre [tipos de archivos multimedia](https://help.shopify.com/manual/products/product-media)",
-        "fi": "Lue lisää [mediatyypeistä](https://help.shopify.com/manual/products/product-media)",
-        "fr": "En savoir plus sur les [types de supports multimédia](https://help.shopify.com/manual/products/product-media)",
-        "hi": "[मीडिया प्रकार](https://help.shopify.com/manual/products/product-media) के बारे में और जानें",
-        "it": "Scopri di più sulle [tipologie di file multimediali](https://help.shopify.com/manual/products/product-media)",
-        "ja": "[メディアのタイプ](https://help.shopify.com/manual/products/product-media) について詳しくはこちら",
-        "ko": "[미디어 유형](https://help.shopify.com/manual/products/product-media)에 대해 자세히 알아보기",
-        "nb": "Lær mer om [medietyper](https://help.shopify.com/manual/products/product-media)",
-        "nl": "Meer informatie over [mediatypen](https://help.shopify.com/manual/products/product-media)",
-        "pt-BR": "Saiba mais sobre [tipos de mídia](https://help.shopify.com/manual/products/product-media)",
-        "pt-PT": "Saiba mais sobre [media types](https://help.shopify.com/manual/products/product-media)",
-        "sv": "Läs mer om [mediatyper](https://help.shopify.com/manual/products/product-media)",
-        "th": "ดูข้อมูลเพิ่มเติมเกี่ยวกับ [ประเภทของสื่อ](https://help.shopify.com/manual/products/product-media)",
-        "zh-CN": "详细了解[媒体类型](https://help.shopify.com/manual/products/product-media)",
-        "zh-TW": "深入瞭解 [媒體類型](https://help.shopify.com/manual/products/product-media)"
-      }
-    },
-    {
       "type": "select",
-      "id": "media_size",
+      "id": "product_form_width",
       "label": {
-        "da": "Størrelse",
-        "de": "Größe",
-        "en": "Size",
-        "es": "Tamaño",
-        "fi": "Koko",
-        "fr": "Taille",
-        "hi": "आकार",
-        "it": "Dimensione",
-        "ja": "サイズ",
-        "ko": "사이즈",
-        "nb": "Størrelse",
-        "nl": "Grootte",
-        "pt-BR": "Tamanho",
-        "pt-PT": "Tamanho",
-        "sv": "Storlek",
-        "th": "ขนาด",
-        "zh-CN": "大小",
-        "zh-TW": "尺寸"
+        "cs": "Šířka produktového formuláře",
+        "da": "Bredde af produktformular",
+        "de": "Breite Produktformular",
+        "en": "Product form width",
+        "es": "Ancho del formulario del producto",
+        "fi": "Tuotelomakkeen leveys",
+        "fr": "Largeur du formulaire de produit",
+        "hi": "उत्पाद फ़ॉर्म की चौड़ाई",
+        "it": "Larghezza scheda prodotto",
+        "ja": "商品のフォームの幅",
+        "ko": "제품 양식 폭",
+        "nb": "Bredde på produktskjema",
+        "nl": "Breedte productformulier",
+        "pl": "Szerokość formularza produktu",
+        "pt-BR": "Largura do formulário do produto",
+        "pt-PT": "Largura do formulário do produto",
+        "sv": "Produktformsbredd",
+        "th": "ความกว้างของแบบฟอร์มสินค้า",
+        "tr": "Ürün form genişliği",
+        "vi": "Chiều rộng sản phẩm",
+        "zh-CN": "产品表单宽度",
+        "zh-TW": "產品表單寬度"
       },
+      "default": "small",
       "options": [
         {
           "value": "small",
           "label": {
+            "cs": "Malá",
             "da": "Lille",
             "de": "Klein",
             "en": "Small",
             "es": "Pequeño",
             "fi": "Pieni",
-            "fr": "Petit",
+            "fr": "Petite",
             "hi": "छोटा",
-            "it": "Piccolo",
-            "ja": "スモール",
+            "it": "Small",
+            "ja": "小",
             "ko": "스몰",
             "nb": "Liten",
             "nl": "Klein",
+            "pl": "Mały",
             "pt-BR": "Pequeno",
             "pt-PT": "Pequeno",
             "sv": "Liten",
             "th": "เล็ก",
+            "tr": "Küçük",
+            "vi": "Nhỏ",
             "zh-CN": "小",
             "zh-TW": "小型"
           }
         },
         {
-          "value": "medium",
-          "label": {
-            "da": "Medium",
-            "de": "Mittel",
-            "en": "Medium",
-            "es": "Mediano",
-            "fi": "Keskisuuri",
-            "fr": "Moyenne",
-            "hi": "मध्यम",
-            "it": "Medio",
-            "ja": "中",
-            "ko": "보통",
-            "nb": "Middels",
-            "nl": "Gemiddeld",
-            "pt-BR": "Médio",
-            "pt-PT": "Médio",
-            "sv": "Medium",
-            "th": "ปานกลาง",
-            "zh-CN": "中等",
-            "zh-TW": "中等"
-          }
-        },
-        {
           "value": "large",
           "label": {
+            "cs": "Velká",
             "da": "Stor",
             "de": "Groß",
             "en": "Large",
@@ -470,94 +568,23 @@
             "fi": "Suuri",
             "fr": "Grande",
             "hi": "बड़ा",
-            "it": "Grande",
+            "it": "Large",
             "ja": "大",
             "ko": "라지",
             "nb": "Stor",
             "nl": "Groot",
+            "pl": "Duży",
             "pt-BR": "Grande",
             "pt-PT": "Grande",
             "sv": "Stor",
             "th": "ใหญ่",
+            "tr": "Büyük",
+            "vi": "Lớn",
             "zh-CN": "大",
             "zh-TW": "大型"
           }
-        },
-        {
-          "value": "full",
-          "label": {
-            "da": "Fuld bredde",
-            "de": "Volle Breite",
-            "en": "Full-width",
-            "es": "Ancho completo",
-            "fi": "Täysi leveys",
-            "fr": "Pleine largeur",
-            "hi": "पूर्ण चौड़ाई",
-            "it": "Intera larghezza",
-            "ja": "全幅",
-            "ko": "전체 폭",
-            "nb": "Full bredde",
-            "nl": "Volledige breedte",
-            "pt-BR": "Largura completa",
-            "pt-PT": "Largura completa",
-            "sv": "Full bredd",
-            "th": "เต็มความกว้าง",
-            "zh-CN": "全宽",
-            "zh-TW": "完整寬度"
-          }
         }
-      ],
-      "default": "medium"
-    },
-    {
-      "type": "checkbox",
-      "id": "enable_image_zoom",
-      "label": {
-        "da": "Aktivér billedzoom",
-        "de": "Foto-Zoom zulassen",
-        "en": "Enable image zoom",
-        "es": "Habilitar zoom de imagen",
-        "fi": "Ota kuvan zoomaus käyttöön",
-        "fr": "Activer le zoom d'image",
-        "hi": "इमेज ज़ूम सक्षम करें",
-        "it": "Abilita lo zoom dell'immagine",
-        "ja": "画像ズームを有効にする",
-        "ko": "이미지 확대 사용",
-        "nb": "Aktiver bildezoom",
-        "nl": "Inzoomen op afbeelding inschakelen",
-        "pt-BR": "Habilitar o zoom da imagem",
-        "pt-PT": "Ativar o zoom da imagem",
-        "sv": "Aktivera bildzoom",
-        "th": "เปิดใช้การซูมภาพ",
-        "zh-CN": "启用图片缩放",
-        "zh-TW": "啟用圖片縮放"
-      },
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "enable_video_looping",
-      "label": {
-        "da": "Aktivér looping af videoer",
-        "de": "Videschleife aktivieren",
-        "en": "Enable video looping",
-        "es": "Habilitar la reproducción de video en bucle",
-        "fi": "Ota käyttöön videosilmukka",
-        "fr": "Activer le bouclage de la vidéo",
-        "hi": "वीडियो लूपिंग सक्षम करें",
-        "it": "Abilita la riproduzione in loop dei video",
-        "ja": "ビデオのループを有効にする",
-        "ko": "동영상 루프",
-        "nb": "Aktiver løkkeavspilling av video",
-        "nl": "Video-looping inschakelen",
-        "pt-BR": "Habilitar loop de vídeo",
-        "pt-PT": "Ativar ciclo de vídeo",
-        "sv": "Aktivera video-loopning",
-        "th": "เปิดใช้งานการวนซ้ำวิดีโอ",
-        "zh-CN": "启用视频循环",
-        "zh-TW": "啟用影片循環功能"
-      },
-      "default": false
+      ]
     }
   ]
 }
