@@ -1,0 +1,8 @@
+// unset modal-breaking attribute from shopify theme scss
+.modal {
+  opacity: unset;
+  background: unset;
+}
+
+@import '~bootstrap/scss/bootstrap';
+@import '~bootstrap-vue/src/index.scss';
