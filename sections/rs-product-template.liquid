@@ -122,18 +122,16 @@
           <div class="product-single__description rte" itemprop="description">
             {{ product.description }}
           </div>
-          <div class="product-single__errors"></div>
-          <div class="product-single__description rte" itemprop="description">
-            {{ product.description }}
-          </div>
-          {% if section.settings.social_sharing_products %}
-            {% include 'social-sharing', share_title: product.title, share_permalink: product.url, share_image: product %}
-          {% endif %}
+        </div>
+        <div class="grid__item {% if section.settings.product_form_width == 'large' %}medium-up--four-twelfths medium-up--push-three-tenths{% else %}large-up--one-half large-up--push-three-twelfths medium-up--six-twelfths medium-up--push-two-twelfths{% endif %}">
           <!-- CUSTOM VUE PART FOR OPTION RECOMMENDATION AND ADD TO CART-->
           <div id="app" class="vue-form vue">
             <script src="{{ 'CartWizard.js' | asset_url }}"></script>
           </div>
           <!-- END CUSTOM VUE PART -->
+          {% if section.settings.social_sharing_products %}
+          {% include 'social-sharing', share_title: product.title, share_permalink: product.url, share_image: product %}
+          {% endif %}
         </div>
       </div>
     </div>
