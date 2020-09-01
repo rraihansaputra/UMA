@@ -119,11 +119,22 @@
     </div>
 
     <b-modal id="modal1" ok-disabled cancel-disabled="">
-      <p class="lead">PILIH JUMLAH SESUAI KEBUTUHAN KAMU</p>
-      <form @submit.prevent="handleAssortmentForm">
+      <p class="lead">Select minimum three boxes</p>
+      <form
+        @submit.prevent="handleAssortmentForm"
+        @change.prevent="console.log"
+      >
         <table>
           <tr>
-            <td><p value="OPR10SBP1">10 REGULAR</p></td>
+            <td>
+              <div class="d-flex align-items-center">
+                <div class="circle mr-1"></div>
+                <p class="m-0">
+                  <span class="h3">REGULAR</span>
+                  ({{ variantQty[VARIANT_SKU.REGULAR] * 10 }} counts)
+                </p>
+              </div>
+            </td>
             <td>
               <b-form-spinbutton
                 id="Quantity-OPR10SBP1"
@@ -136,7 +147,17 @@
             </td>
           </tr>
           <tr>
-            <td><p value="OPH10SBP1">10 HEAVY</p></td>
+            <td>
+              <div class="d-flex align-items-center">
+                <div class="circle mr-1"></div>
+                <p class="m-0">
+                  <span class="h3">HEAVY</span> ({{
+                    variantQty[VARIANT_SKU.HEAVY] * 10
+                  }}
+                  counts)
+                </p>
+              </div>
+            </td>
             <td>
               <b-form-spinbutton
                 id="Quantity-OPH10SBP1"
@@ -150,10 +171,6 @@
           </tr>
         </table>
 
-        <p>
-          Cheat sheet: <br />
-          Regular pads = 24cm. Heavy pads = 29 cm.
-        </p>
         <b-button type="submit" name="submit" block>Change</b-button>
       </form>
 
@@ -162,8 +179,8 @@
       </template>
     </b-modal>
 
-    <div v-if="assortmentCopy" class="mb-4">
-      <div style="border: 2px solid black">
+    <div v-if="totalAssortmentQuantity" class="mb-4">
+      <div style="border: 2px solid black" class="p-4">
         <div class="d-flex align-items-center">
           <b-button class="invisible"> edit </b-button>
           <h4 class="text-uppercase text-center lead flex-grow-1 m-0">
@@ -173,8 +190,8 @@
             edit
           </b-button>
         </div>
-        <!-- <h2>{{ assortmentCopy }}</h2> -->
-        <div class="d-flex px-2 justify-content-around mb-2">
+        <!-- <h2>{{ totalAssortmentQuantity }}</h2> -->
+        <div class="d-flex px-2 justify-content-around mb-4">
           <div
             v-if="variantQty[VARIANT_SKU.REGULAR] > 0"
             class="d-flex align-items-center"
@@ -200,43 +217,41 @@
             </p>
           </div>
         </div>
-        <div class="d-flex">
-          <div class="d-flex align-items-center">
-            <div class="circle"></div>
-            <p class="small text-uppercase">Free shipping nationwide</p>
+        <div class="">
+          <div class="d-flex align-items-center mb-2">
+            <div class="circle mr-2"></div>
+            <p class="text-uppercase mb-0">Renewed every 3 months</p>
+          </div>
+          <div class="d-flex align-items-center mb-2">
+            <div class="circle mr-2"></div>
+            <p class="text-uppercase mb-0">
+              Authorize next order with one click
+            </p>
           </div>
           <div class="d-flex align-items-center">
-            <div class="circle"></div>
-            <p class="small text-uppercase">Renewed every 3 months</p>
-          </div>
-          <div class="d-flex align-items-center">
-            <div class="circle"></div>
-            <p class="small text-uppercase">No unauthorized charges</p>
-          </div>
-          <div class="d-flex align-items-center">
-            <div class="circle"></div>
-            <p class="small text-uppercase">Adjust, skip, or cancel anytime</p>
+            <div class="circle mr-2"></div>
+            <p class="text-uppercase mb-0">Adjust, skip, or cancel anytime</p>
           </div>
         </div>
       </div>
-
-      <b-form-checkbox type="checkbox" v-model="notSubscribeCheckbox">
-        I'd like to opt out from subscription
-      </b-form-checkbox>
     </div>
 
-    <b-button block @click="addToCart" :disabled="!assortmentCopy || loading">
+    <b-button
+      block
+      @click="addToCart"
+      :disabled="!totalAssortmentQuantity || loading"
+    >
       <b-spinner v-if="loading" small></b-spinner>
-
       PROCEED
-      <span v-if="assortmentCopy"
+      <span v-if="totalAssortmentQuantity"
         >- IDR {{ (totalPrice / 100) | numeral("0,0.00") }}
       </span>
     </b-button>
+
     <div
       id="sealsubscriptions-default-widget-target-element"
       style="display: none"
-    ></div>
+    />
   </div>
 </template>
 
@@ -315,12 +330,12 @@ export default Vue.extend({
         // TODO change skuMap to update from the live JSON
         // SKU MAP is mapping from SKU -> variant Id for adding to cart
         OPR10SBP1: "34520384569497", // 10 REGULAR
-        OPH10SBP1: "34520384602265", // 8 HEAVY
+        OPH10SBP1: "34520384602265", // 10 HEAVY
       },
       product: {},
       loading: false,
-      notSubscribeCheckbox: false,
       imageUrls: {},
+      VARIANT_SKU: VARIANT_SKU,
     };
   },
   computed: {
@@ -337,23 +352,15 @@ export default Vue.extend({
       );
       return total;
     },
-    assortmentCopy() {
-      const totalCount = { regular: 0, heavy: 0 };
+    totalAssortmentQuantity() {
+      let totalCount = 0;
+
+      // TODO use reduce..
       Object.keys(this.variantQty).map((sku) => {
-        totalCount.regular +=
-          this.variantDetail[sku].regular * this.variantQty[sku];
-        totalCount.heavy +=
-          this.variantDetail[sku].heavy * this.variantQty[sku];
+        totalCount += this.variantQty[sku];
       });
 
-      const totalArray = [];
-
-      totalCount.regular
-        ? totalArray.push(`${totalCount.regular} regular`)
-        : null;
-      totalCount.heavy ? totalArray.push(`${totalCount.heavy} heavy`) : null;
-
-      return totalArray.join(" + ");
+      return totalCount > 0 ? totalCount : false;
     },
   },
   methods: {
@@ -410,7 +417,7 @@ export default Vue.extend({
     },
   },
   mounted() {
-    this.VARIANT_SKU = Object.freeze(VARIANT_SKU);
+    // this.VARIANT_SKU = Object.freeze(VARIANT_SKU);
     document.onreadystatechange = () => {
       if (document.readyState == "complete") {
         this.updateProducts();
