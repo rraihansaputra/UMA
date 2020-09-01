@@ -108,7 +108,9 @@
 
     <div class="product__details grid__item">
       <div class="grid grid--no-gutters product__details-content">
-        <div class="grid__item {% if section.settings.product_form_width == 'large' %}medium-up--three-twelfths medium-up--push-one-fifth{% else %}large-up--two-twelfths large-up--push-two-twelfths medium-up--three-twelfths medium-up--push-one-twelfth{% endif %}">
+        <!-- div class="grid__item {% if section.settings.product_form_width == 'large' %}medium-up--three-twelfths medium-up--push-one-fifth{% else %}large-up--two-twelfths large-up--push-two-twelfths medium-up--three-twelfths medium-up--push-one-twelfth{% endif %}">
+        </div-->
+        <div class="grid__item {% if section.settings.product_form_width == 'large' %}medium-up--four-twelfths medium-up--push-three-tenths{% else %}large-up--one-half large-up--push-three-twelfths medium-up--six-twelfths medium-up--push-two-twelfths{% endif %}">
           {% if section.settings.show_vendor %}
             <p class="product-item__vendor small--text-center">{{ product.vendor }}</p>
           {% endif %}
@@ -122,8 +124,6 @@
           <div class="product-single__description rte" itemprop="description">
             {{ product.description }}
           </div>
-        </div>
-        <div class="grid__item {% if section.settings.product_form_width == 'large' %}medium-up--four-twelfths medium-up--push-three-tenths{% else %}large-up--one-half large-up--push-three-twelfths medium-up--six-twelfths medium-up--push-two-twelfths{% endif %}">
           <!-- CUSTOM VUE PART FOR OPTION RECOMMENDATION AND ADD TO CART-->
           <div id="app" class="vue-form vue">
             <script src="{{ 'CartWizard.js' | asset_url }}"></script>
@@ -195,6 +195,15 @@
     {{ product | json }}
   </script>
 {% endunless %}
+
+<script type="application/json" id="image-urls">
+  {
+    "chlorine_free": "https:{{ 'gtk_chlorine_free.png' | asset_url }}",
+    "recycled_boxes": "https:{{ 'gtk_recycled_boxes.png' | asset_url }}",
+    "organic_cotton": "https:{{ 'gtk_organic_cotton.png' | asset_url }}",
+    "bioplastic": "https:{{ 'gtk_bioplastic.png' | asset_url }}"
+  }
+</script>
 
 {% schema %}
 {
