@@ -465,7 +465,6 @@ export default Vue.extend({
       this.$bvModal.hide("modal1");
     },
     resetModalQty() {
-      console.log('RESET!')
       this.modalQty =  {
         OPR10SBP1: {
           qty: 0,
