@@ -6,8 +6,9 @@
         style="text-decoration: underline;"
         v-if="!infoOpen"
         @click="infoOpen = true"
-        >Learn more.</a
       >
+        Learn more.
+      </a>
       <div v-else>
         <p><strong>WHY IT IS SPECIAL</strong><br /></p>
         <ul>
@@ -46,8 +47,9 @@
           class="text-reset"
           style="text-decoration: underline;"
           @click="infoOpen = false"
-          >See less</a
         >
+          See less
+        </a>
       </div>
     </div>
 
@@ -120,10 +122,7 @@
 
     <b-modal id="modal1" ok-disabled cancel-disabled centered>
       <p class="lead text-center"><b>Select minimum three boxes:</b></p>
-      <form
-        @submit.prevent="handleAssortmentForm"
-        @change.prevent="console.log"
-      >
+      <form @submit.prevent="handleAssortmentForm">
         <table class="mb-4">
           <tr>
             <td class="border-0">
@@ -137,6 +136,7 @@
                 id="Quantity-OPR10SBP1"
                 name="OPR10SBP1"
                 :value="variantQty.OPR10SBP1"
+                @change="updateModalQtyRegular"
                 min="0"
                 max="100"
                 data-quantity-input
@@ -155,6 +155,7 @@
                 id="Quantity-OPH10SBP1"
                 name="OPH10SBP1"
                 :value="variantQty.OPH10SBP1"
+                @change="updateModalQtyHeavy"
                 min="0"
                 max="100"
                 data-quantity-input
@@ -162,6 +163,10 @@
             </td>
           </tr>
         </table>
+
+        <div v-show="!isEligibleForFreeShipping" class="text-danger text-center">
+          <p><i>You'll lose free shipping if you select less than three</i></p>
+        </div>
 
         <div class="d-flex justify-content-center">
           <b-button type="submit" name="submit" class="px-4">Change</b-button>
@@ -174,22 +179,10 @@
     </b-modal>
 
     <div v-show="totalAssortmentQuantity" class="mb-4">
-      <div class="p-4 border border-secondary">
-        <div class="d-flex align-items-center">
-          <a class="invisible"> customize </a>
-          <h4 class="text-uppercase text-center lead flex-grow-1 mb-2">
-            Your 3-month subscription:
-          </h4>
-          <a
-            v-b-modal.modal1
-            variant="link-secondary"
-            class="text-reset"
-            style="text-decoration: underline;"
-          >
-            customize
-          </a>
-        </div>
-        <!-- <h2>{{ totalAssortmentQuantity }}</h2> -->
+      <div class="p-3 border border-secondary">
+        <h4 class="text-uppercase text-center lead flex-grow-1 mb-2">
+          Your 3-month subscription:
+        </h4>
         <div class="d-flex justify-content-around mb-4">
           <div
             v-if="variantQty[VARIANT_SKU.REGULAR] > 0"
@@ -216,7 +209,8 @@
             </p>
           </div>
         </div>
-        <div class="text-muted">
+
+        <div class="text-muted mb-4">
           <div class="d-flex align-items-center mb-2">
             <img :src="imageUrls.repeat" class="icon-image mr-3" />
             <p class="text-uppercase mb-0">Renewed every 3 months</p>
@@ -232,6 +226,17 @@
             <p class="text-uppercase mb-0">Adjust, skip, or cancel anytime</p>
           </div>
         </div>
+
+        <div class="d-flex justify-content-center">
+          <a
+            v-b-modal.modal1
+            variant="link-secondary"
+            class="text-reset text-center"
+            style="text-decoration: underline;"
+          >
+            customize your assortment
+          </a>
+        </div>
       </div>
     </div>
 
@@ -246,6 +251,7 @@
         >- IDR {{ (totalPrice / 100) | numeral("0,0.00") }}
       </span>
     </b-button>
+    <p v-show="isEligibleForFreeShipping"><i>Free shipping!</i></p>
 
     <div
       id="sealsubscriptions-default-widget-target-element"
@@ -321,6 +327,16 @@ export default Vue.extend({
         OPR10SBP1: 0, // 10 REGULAR
         OPH10SBP1: 0, // 10 HEAVY
       },
+      modalQty: {
+        OPR10SBP1: {
+          qty: 0,
+          dirty: false,
+        },
+        OPH10SBP1: {
+          qty: 0,
+          dirty: false,
+        },
+      },
       variantDetail: {
         OPR10SBP1: { regular: 10, heavy: 0 }, // 10 REGULAR
         OPH10SBP1: { regular: 0, heavy: 10 }, // 10 HEAVY
@@ -354,13 +370,26 @@ export default Vue.extend({
     totalAssortmentQuantity() {
       let totalCount = 0;
 
-      // TODO use reduce..
+      // TODO use reduce...
       Object.keys(this.variantQty).map((sku) => {
         totalCount += this.variantQty[sku];
       });
 
       return totalCount > 0 ? totalCount : false;
     },
+    totalModalQty() {
+      const totalRegular = this.modalQty[VARIANT_SKU.REGULAR].dirty
+        ? this.modalQty[VARIANT_SKU.REGULAR].qty
+        : this.variantQty[VARIANT_SKU.REGULAR]
+      const totalHeavy = this.modalQty[VARIANT_SKU.HEAVY].dirty
+        ? this.modalQty[VARIANT_SKU.HEAVY].qty
+        : this.variantQty[VARIANT_SKU.HEAVY]
+
+      return totalRegular + totalHeavy
+    },
+    isEligibleForFreeShipping() {
+      return this.totalModalQty >= 3
+    }
   },
   methods: {
     updateVariantQty(flow) {
@@ -368,6 +397,14 @@ export default Vue.extend({
       this.variantQty = {
         ...this.recommendation[this.recommendationChoice.days][flow],
       };
+    },
+    updateModalQtyRegular(qty) {
+      console.log(['reqular', qty])
+      this.modalQty[VARIANT_SKU.REGULAR]= {qty, dirty: true}
+    },
+    updateModalQtyHeavy(qty) {
+      console.log(['heavy', qty])
+      this.modalQty[VARIANT_SKU.HEAVY]= {qty, dirty: true}
     },
     async addToCart() {
       const cartItems = Object.keys(this.variantQty).map((variantId) => ({
@@ -428,7 +465,7 @@ export default Vue.extend({
 </script>
 <style>
 .circle {
-  min-width:24px;
+  min-width: 24px;
   width: 24px;
   height: 24px;
   border-radius: 50%;
