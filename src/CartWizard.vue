@@ -190,10 +190,10 @@
           </a>
         </div>
         <!-- <h2>{{ totalAssortmentQuantity }}</h2> -->
-        <div class="d-flex px-2 justify-content-around mb-4">
+        <div class="d-flex justify-content-around mb-4">
           <div
             v-if="variantQty[VARIANT_SKU.REGULAR] > 0"
-            class="d-flex align-items-center"
+            class="d-flex align-items-center mr-2"
           >
             <div class="circle regular-color mr-1"></div>
             <p class="mb-0">
@@ -218,17 +218,17 @@
         </div>
         <div class="text-muted">
           <div class="d-flex align-items-center mb-2">
-            <img :src="imageUrls.repeat" class="icon-image mr-2" />
+            <img :src="imageUrls.repeat" class="icon-image mr-3" />
             <p class="text-uppercase mb-0">Renewed every 3 months</p>
           </div>
           <div class="d-flex align-items-center mb-2">
-            <img :src="imageUrls.padlock" class="icon-image mr-2" />
+            <img :src="imageUrls.padlock" class="icon-image mr-3" />
             <p class="text-uppercase mb-0">
               Authorize next order with one click
             </p>
           </div>
           <div class="d-flex align-items-center">
-            <img :src="imageUrls.tickbox" class="icon-image mr-2" />
+            <img :src="imageUrls.tickbox" class="icon-image mr-3" />
             <p class="text-uppercase mb-0">Adjust, skip, or cancel anytime</p>
           </div>
         </div>
@@ -428,6 +428,7 @@ export default Vue.extend({
 </script>
 <style>
 .circle {
+  min-width:24px;
   width: 24px;
   height: 24px;
   border-radius: 50%;
