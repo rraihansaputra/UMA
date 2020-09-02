@@ -118,7 +118,7 @@
       </div>
     </div>
 
-    <b-modal id="modal1" ok-disabled cancel-disabled="">
+    <b-modal id="modal1" ok-disabled cancel-disabled centered>
       <p class="lead text-center"><b>Select minimum three boxes:</b></p>
       <form
         @submit.prevent="handleAssortmentForm"
@@ -174,7 +174,7 @@
     </b-modal>
 
     <div v-show="totalAssortmentQuantity" class="mb-4">
-      <div style="border: 2px solid black" class="p-4">
+      <div class="p-4 border border-secondary">
         <div class="d-flex align-items-center">
           <a class="invisible"> customize </a>
           <h4 class="text-uppercase text-center lead flex-grow-1 mb-2">
@@ -216,7 +216,7 @@
             </p>
           </div>
         </div>
-        <div class="">
+        <div class="text-muted">
           <div class="d-flex align-items-center mb-2">
             <img :src="imageUrls.repeat" class="icon-image mr-2" />
             <p class="text-uppercase mb-0">Renewed every 3 months</p>
