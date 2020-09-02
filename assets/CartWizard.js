@@ -2381,7 +2381,7 @@ var VARIANT_SKU = {
       var formContent = event.currentTarget;
       var newQty = {};
       Object.keys(this.variantQty).map(function (sku) {
-        newQty[sku] = formContent[sku].value;
+        newQty[sku] = parseInt(formContent[sku].value);
       });
       this.variantQty = _objectSpread({}, newQty);
       this.$bvModal.hide("modal1");
@@ -52870,7 +52870,7 @@ var render = function() {
                   attrs: {
                     variant: "primary",
                     pill: "",
-                    pressed: _vm.recommendationChoice.days === "<5days"
+                    pressed: _vm.recommendationChoice.days === ">5days"
                   },
                   on: {
                     click: function($event) {
@@ -53073,143 +53073,136 @@ var render = function() {
         ]
       ),
       _vm._v(" "),
-      _vm.totalAssortmentQuantity
-        ? _c("div", { staticClass: "mb-4" }, [
-            _c(
-              "div",
-              {
-                staticClass: "p-4",
-                staticStyle: { border: "2px solid black" }
-              },
-              [
-                _c("div", { staticClass: "d-flex align-items-center" }, [
-                  _c("a", { staticClass: "invisible" }, [
-                    _vm._v(" customize ")
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "h4",
-                    {
-                      staticClass:
-                        "text-uppercase text-center lead flex-grow-1 mb-2"
-                    },
-                    [_vm._v("\n          Your 3-month subscription:\n        ")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "a",
-                    {
-                      directives: [
-                        {
-                          name: "b-modal",
-                          rawName: "v-b-modal.modal1",
-                          modifiers: { modal1: true }
-                        }
-                      ],
-                      staticClass: "text-reset",
-                      staticStyle: { "text-decoration": "underline" },
-                      attrs: { variant: "link-secondary" }
-                    },
-                    [_vm._v("\n          customize\n        ")]
-                  )
-                ]),
+      _c(
+        "div",
+        {
+          directives: [
+            {
+              name: "show",
+              rawName: "v-show",
+              value: _vm.totalAssortmentQuantity,
+              expression: "totalAssortmentQuantity"
+            }
+          ],
+          staticClass: "mb-4"
+        },
+        [
+          _c(
+            "div",
+            { staticClass: "p-4", staticStyle: { border: "2px solid black" } },
+            [
+              _c("div", { staticClass: "d-flex align-items-center" }, [
+                _c("a", { staticClass: "invisible" }, [_vm._v(" customize ")]),
                 _vm._v(" "),
                 _c(
-                  "div",
-                  { staticClass: "d-flex px-2 justify-content-around mb-4" },
-                  [
-                    _vm.variantQty[_vm.VARIANT_SKU.REGULAR] > 0
-                      ? _c(
-                          "div",
-                          { staticClass: "d-flex align-items-center" },
-                          [
-                            _c("div", {
-                              staticClass: "circle regular-color mr-1"
-                            }),
-                            _vm._v(" "),
-                            _c("p", { staticClass: "mb-0" }, [
-                              _c("span", { staticClass: "h3" }, [
-                                _vm._v("REGULAR")
-                              ]),
-                              _vm._v(
-                                " (" +
-                                  _vm._s(
-                                    _vm.variantQty[_vm.VARIANT_SKU.REGULAR] * 10
-                                  ) +
-                                  "\n            counts)\n          "
-                              )
-                            ])
-                          ]
-                        )
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _vm.variantQty[_vm.VARIANT_SKU.HEAVY] > 0
-                      ? _c(
-                          "div",
-                          { staticClass: "d-flex align-items-center" },
-                          [
-                            _c("div", {
-                              staticClass: "circle heavy-color mr-1"
-                            }),
-                            _vm._v(" "),
-                            _c("p", { staticClass: "mb-0" }, [
-                              _c("span", { staticClass: "h3" }, [
-                                _vm._v("HEAVY")
-                              ]),
-                              _vm._v(
-                                " (" +
-                                  _vm._s(
-                                    _vm.variantQty[_vm.VARIANT_SKU.HEAVY] * 10
-                                  ) +
-                                  "\n            counts)\n          "
-                              )
-                            ])
-                          ]
-                        )
-                      : _vm._e()
-                  ]
+                  "h4",
+                  {
+                    staticClass:
+                      "text-uppercase text-center lead flex-grow-1 mb-2"
+                  },
+                  [_vm._v("\n          Your 3-month subscription:\n        ")]
                 ),
                 _vm._v(" "),
-                _c("div", {}, [
-                  _c("div", { staticClass: "d-flex align-items-center mb-2" }, [
-                    _c("img", {
-                      staticClass: "icon-image mr-2",
-                      attrs: { src: _vm.imageUrls.repeat }
-                    }),
-                    _vm._v(" "),
-                    _c("p", { staticClass: "text-uppercase mb-0" }, [
-                      _vm._v("Renewed every 3 months")
-                    ])
-                  ]),
+                _c(
+                  "a",
+                  {
+                    directives: [
+                      {
+                        name: "b-modal",
+                        rawName: "v-b-modal.modal1",
+                        modifiers: { modal1: true }
+                      }
+                    ],
+                    staticClass: "text-reset",
+                    staticStyle: { "text-decoration": "underline" },
+                    attrs: { variant: "link-secondary" }
+                  },
+                  [_vm._v("\n          customize\n        ")]
+                )
+              ]),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "d-flex px-2 justify-content-around mb-4" },
+                [
+                  _vm.variantQty[_vm.VARIANT_SKU.REGULAR] > 0
+                    ? _c("div", { staticClass: "d-flex align-items-center" }, [
+                        _c("div", { staticClass: "circle regular-color mr-1" }),
+                        _vm._v(" "),
+                        _c("p", { staticClass: "mb-0" }, [
+                          _c("span", { staticClass: "h3" }, [
+                            _vm._v("REGULAR")
+                          ]),
+                          _vm._v(
+                            " (" +
+                              _vm._s(
+                                _vm.variantQty[_vm.VARIANT_SKU.REGULAR] * 10
+                              ) +
+                              "\n            counts)\n          "
+                          )
+                        ])
+                      ])
+                    : _vm._e(),
                   _vm._v(" "),
-                  _c("div", { staticClass: "d-flex align-items-center mb-2" }, [
-                    _c("img", {
-                      staticClass: "icon-image mr-2",
-                      attrs: { src: _vm.imageUrls.padlock }
-                    }),
-                    _vm._v(" "),
-                    _c("p", { staticClass: "text-uppercase mb-0" }, [
-                      _vm._v(
-                        "\n            Authorize next order with one click\n          "
-                      )
-                    ])
-                  ]),
+                  _vm.variantQty[_vm.VARIANT_SKU.HEAVY] > 0
+                    ? _c("div", { staticClass: "d-flex align-items-center" }, [
+                        _c("div", { staticClass: "circle heavy-color mr-1" }),
+                        _vm._v(" "),
+                        _c("p", { staticClass: "mb-0" }, [
+                          _c("span", { staticClass: "h3" }, [_vm._v("HEAVY")]),
+                          _vm._v(
+                            " (" +
+                              _vm._s(
+                                _vm.variantQty[_vm.VARIANT_SKU.HEAVY] * 10
+                              ) +
+                              "\n            counts)\n          "
+                          )
+                        ])
+                      ])
+                    : _vm._e()
+                ]
+              ),
+              _vm._v(" "),
+              _c("div", {}, [
+                _c("div", { staticClass: "d-flex align-items-center mb-2" }, [
+                  _c("img", {
+                    staticClass: "icon-image mr-2",
+                    attrs: { src: _vm.imageUrls.repeat }
+                  }),
                   _vm._v(" "),
-                  _c("div", { staticClass: "d-flex align-items-center" }, [
-                    _c("img", {
-                      staticClass: "icon-image mr-2",
-                      attrs: { src: _vm.imageUrls.tickbox }
-                    }),
-                    _vm._v(" "),
-                    _c("p", { staticClass: "text-uppercase mb-0" }, [
-                      _vm._v("Adjust, skip, or cancel anytime")
-                    ])
+                  _c("p", { staticClass: "text-uppercase mb-0" }, [
+                    _vm._v("Renewed every 3 months")
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "d-flex align-items-center mb-2" }, [
+                  _c("img", {
+                    staticClass: "icon-image mr-2",
+                    attrs: { src: _vm.imageUrls.padlock }
+                  }),
+                  _vm._v(" "),
+                  _c("p", { staticClass: "text-uppercase mb-0" }, [
+                    _vm._v(
+                      "\n            Authorize next order with one click\n          "
+                    )
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "d-flex align-items-center" }, [
+                  _c("img", {
+                    staticClass: "icon-image mr-2",
+                    attrs: { src: _vm.imageUrls.tickbox }
+                  }),
+                  _vm._v(" "),
+                  _c("p", { staticClass: "text-uppercase mb-0" }, [
+                    _vm._v("Adjust, skip, or cancel anytime")
                   ])
                 ])
-              ]
-            )
-          ])
-        : _vm._e(),
+              ])
+            ]
+          )
+        ]
+      ),
       _vm._v(" "),
       _c(
         "b-button",

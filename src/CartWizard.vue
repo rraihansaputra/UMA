@@ -75,7 +75,7 @@
               recommendationChoice.days = '>5days';
               recommendationChoice.flow = null;
             "
-            :pressed="recommendationChoice.days === '<5days'"
+            :pressed="recommendationChoice.days === '>5days'"
           >
             5 Days or more
           </b-button>
@@ -173,7 +173,7 @@
       </template>
     </b-modal>
 
-    <div v-if="totalAssortmentQuantity" class="mb-4">
+    <div v-show="totalAssortmentQuantity" class="mb-4">
       <div style="border: 2px solid black" class="p-4">
         <div class="d-flex align-items-center">
           <a class="invisible"> customize </a>
@@ -409,7 +409,7 @@ export default Vue.extend({
       const formContent = event.currentTarget;
       const newQty = {};
       Object.keys(this.variantQty).map((sku) => {
-        newQty[sku] = formContent[sku].value;
+        newQty[sku] = parseInt(formContent[sku].value);
       });
       this.variantQty = { ...newQty };
       this.$bvModal.hide("modal1");
