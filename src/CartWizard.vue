@@ -119,23 +119,20 @@
     </div>
 
     <b-modal id="modal1" ok-disabled cancel-disabled="">
-      <p class="lead">Select minimum three boxes</p>
+      <p class="lead text-center"><b>Select minimum three boxes:</b></p>
       <form
         @submit.prevent="handleAssortmentForm"
         @change.prevent="console.log"
       >
-        <table>
+        <table class="mb-4">
           <tr>
-            <td>
+            <td class="border-0">
               <div class="d-flex align-items-center">
-                <div class="circle mr-1"></div>
-                <p class="m-0">
-                  <span class="h3">REGULAR</span>
-                  ({{ variantQty[VARIANT_SKU.REGULAR] * 10 }} counts)
-                </p>
+                <div class="circle regular-color mr-1"></div>
+                <p class="m-0"><span class="h3">REGULAR</span> (10 counts)</p>
               </div>
             </td>
-            <td>
+            <td class="border-0">
               <b-form-spinbutton
                 id="Quantity-OPR10SBP1"
                 name="OPR10SBP1"
@@ -147,18 +144,13 @@
             </td>
           </tr>
           <tr>
-            <td>
+            <td class="border-0">
               <div class="d-flex align-items-center">
-                <div class="circle mr-1"></div>
-                <p class="m-0">
-                  <span class="h3">HEAVY</span> ({{
-                    variantQty[VARIANT_SKU.HEAVY] * 10
-                  }}
-                  counts)
-                </p>
+                <div class="circle heavy-color mr-1"></div>
+                <p class="m-0"><span class="h3">HEAVY</span> (10 counts)</p>
               </div>
             </td>
-            <td>
+            <td class="border-0">
               <b-form-spinbutton
                 id="Quantity-OPH10SBP1"
                 name="OPH10SBP1"
@@ -171,7 +163,9 @@
           </tr>
         </table>
 
-        <b-button type="submit" name="submit" block>Change</b-button>
+        <div class="d-flex justify-content-center">
+          <b-button type="submit" name="submit" class="px-4">Change</b-button>
+        </div>
       </form>
 
       <template v-slot:modal-footer>
@@ -182,13 +176,18 @@
     <div v-if="totalAssortmentQuantity" class="mb-4">
       <div style="border: 2px solid black" class="p-4">
         <div class="d-flex align-items-center">
-          <b-button class="invisible"> edit </b-button>
-          <h4 class="text-uppercase text-center lead flex-grow-1 m-0">
+          <a class="invisible"> customize </a>
+          <h4 class="text-uppercase text-center lead flex-grow-1 mb-2">
             Your 3-month subscription:
           </h4>
-          <b-button v-b-modal.modal1 variant="link">
-            edit
-          </b-button>
+          <a
+            v-b-modal.modal1
+            variant="link-secondary"
+            class="text-reset"
+            style="text-decoration: underline;"
+          >
+            customize
+          </a>
         </div>
         <!-- <h2>{{ totalAssortmentQuantity }}</h2> -->
         <div class="d-flex px-2 justify-content-around mb-4">
@@ -196,8 +195,8 @@
             v-if="variantQty[VARIANT_SKU.REGULAR] > 0"
             class="d-flex align-items-center"
           >
-            <div class="circle mr-1"></div>
-            <p>
+            <div class="circle regular-color mr-1"></div>
+            <p class="mb-0">
               <span class="h3">REGULAR</span> ({{
                 variantQty[VARIANT_SKU.REGULAR] * 10
               }}
@@ -208,8 +207,8 @@
             v-if="variantQty[VARIANT_SKU.HEAVY] > 0"
             class="d-flex align-items-center"
           >
-            <div class="circle mr-1"></div>
-            <p>
+            <div class="circle heavy-color mr-1"></div>
+            <p class="mb-0">
               <span class="h3">HEAVY</span> ({{
                 variantQty[VARIANT_SKU.HEAVY] * 10
               }}
@@ -219,17 +218,17 @@
         </div>
         <div class="">
           <div class="d-flex align-items-center mb-2">
-            <div class="circle mr-2"></div>
+            <img :src="imageUrls.repeat" class="icon-image mr-2" />
             <p class="text-uppercase mb-0">Renewed every 3 months</p>
           </div>
           <div class="d-flex align-items-center mb-2">
-            <div class="circle mr-2"></div>
+            <img :src="imageUrls.padlock" class="icon-image mr-2" />
             <p class="text-uppercase mb-0">
               Authorize next order with one click
             </p>
           </div>
           <div class="d-flex align-items-center">
-            <div class="circle mr-2"></div>
+            <img :src="imageUrls.tickbox" class="icon-image mr-2" />
             <p class="text-uppercase mb-0">Adjust, skip, or cancel anytime</p>
           </div>
         </div>
@@ -434,7 +433,33 @@ export default Vue.extend({
   border-radius: 50%;
   background: black;
 }
+
+.regular-color {
+  background: #96bbd8 !important;
+}
+
+.heavy-color {
+  background: #5f81b2 !important;
+}
+
 .gtk-image {
   height: 4em;
+}
+
+.icon-image {
+  height: 2em;
+}
+
+#modal1___BV_modal_footer_ {
+  display: none;
+}
+
+#modal1___BV_modal_header_ {
+  border-bottom: 0px solid red;
+  padding: 1rem 1rem 0 1rem !important;
+}
+
+#modal1___BV_modal_content_ {
+  background: #f9f7f3;
 }
 </style>
