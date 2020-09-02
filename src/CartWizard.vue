@@ -120,7 +120,14 @@
       </div>
     </div>
 
-    <b-modal id="modal1" ok-disabled cancel-disabled centered>
+    <b-modal
+      id="modal1"
+      ok-disabled
+      cancel-disabled
+      centered
+      @show="resetModalQty"
+      @hide="resetModalQty"
+    >
       <p class="lead text-center"><b>Select minimum three boxes:</b></p>
       <form @submit.prevent="handleAssortmentForm">
         <table class="mb-4">
@@ -164,7 +171,10 @@
           </tr>
         </table>
 
-        <div v-show="!isEligibleForFreeShipping" class="text-danger text-center">
+        <div
+          v-show="!modalIsEligibleForFreeShipping"
+          class="text-danger text-center"
+        >
           <p><i>You'll lose free shipping if you select less than three</i></p>
         </div>
 
@@ -327,6 +337,8 @@ export default Vue.extend({
         OPR10SBP1: 0, // 10 REGULAR
         OPH10SBP1: 0, // 10 HEAVY
       },
+      // TODO a better way to do this is to have clean as null
+      // instead of having a dirty property
       modalQty: {
         OPR10SBP1: {
           qty: 0,
@@ -377,6 +389,9 @@ export default Vue.extend({
 
       return totalCount > 0 ? totalCount : false;
     },
+    isEligibleForFreeShipping() {
+      return this.totalAssortmentQuantity >= 3
+    },
     totalModalQty() {
       const totalRegular = this.modalQty[VARIANT_SKU.REGULAR].dirty
         ? this.modalQty[VARIANT_SKU.REGULAR].qty
@@ -387,7 +402,7 @@ export default Vue.extend({
 
       return totalRegular + totalHeavy
     },
-    isEligibleForFreeShipping() {
+    modalIsEligibleForFreeShipping() {
       return this.totalModalQty >= 3
     }
   },
@@ -399,11 +414,9 @@ export default Vue.extend({
       };
     },
     updateModalQtyRegular(qty) {
-      console.log(['reqular', qty])
       this.modalQty[VARIANT_SKU.REGULAR]= {qty, dirty: true}
     },
     updateModalQtyHeavy(qty) {
-      console.log(['heavy', qty])
       this.modalQty[VARIANT_SKU.HEAVY]= {qty, dirty: true}
     },
     async addToCart() {
@@ -451,6 +464,19 @@ export default Vue.extend({
       this.variantQty = { ...newQty };
       this.$bvModal.hide("modal1");
     },
+    resetModalQty() {
+      console.log('RESET!')
+      this.modalQty =  {
+        OPR10SBP1: {
+          qty: 0,
+          dirty: false,
+        },
+        OPH10SBP1: {
+          qty: 0,
+          dirty: false,
+        },
+      }
+    }
   },
   mounted() {
     // this.VARIANT_SKU = Object.freeze(VARIANT_SKU);
