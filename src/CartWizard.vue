@@ -1,58 +1,5 @@
 <template>
-  <div>
-    <div class="mb-4">
-      <a
-        class="text-reset"
-        style="text-decoration: underline;"
-        v-if="!infoOpen"
-        @click="infoOpen = true"
-      >
-        Learn more.
-      </a>
-      <div v-else>
-        <p><strong>WHY IT IS SPECIAL</strong><br /></p>
-        <ul>
-          <li>
-            Made with 100% organic cotton top sheet for maximum comfort and
-            protection.
-          </li>
-          <li>
-            Features thousands of natural micro pores to let your skin breathe.
-          </li>
-          <li>
-            Perfume and deodorant free, making them suitable for sensitive skin.
-          </li>
-        </ul>
-        <p><strong>GOOD TO KNOW</strong></p>
-        <div class="">
-          <div class="d-flex align-items-center mb-2">
-            <img :src="imageUrls.organic_cotton" class="gtk-image mr-2" />
-            <p class="mb-0">Certified organic by GOTS</p>
-          </div>
-          <div class="d-flex align-items-center mb-2">
-            <img :src="imageUrls.chlorine_free" class="gtk-image mr-2" />
-            <p class="mb-0">Chlorine-free processing</p>
-          </div>
-          <div class="d-flex align-items-center mb-2">
-            <img :src="imageUrls.bioplastic" class="gtk-image mr-2" />
-            <p class="mb-0">Biodegradable wrapper &amp; backing</p>
-          </div>
-          <div class="d-flex align-items-center mb-2">
-            <img :src="imageUrls.recycled_boxes" class="gtk-image mr-2" />
-            <p class="mb-0">Fully-recycled boxes</p>
-          </div>
-        </div>
-        <br />
-        <a
-          class="text-reset"
-          style="text-decoration: underline;"
-          @click="infoOpen = false"
-        >
-          See less
-        </a>
-      </div>
-    </div>
-
+  <div class="my-4">
     <div class="mb-4">
       <div class="mb-2">
         <b>Pilih siklus menstruasi kamu</b>
@@ -287,7 +234,6 @@ export default Vue.extend({
   components: { BButton, BModal, BSpinner, BFormCheckbox, BFormSpinbutton },
   data() {
     return {
-      infoOpen: true,
       recommendationChoice: {
         days: null,
         flow: null,

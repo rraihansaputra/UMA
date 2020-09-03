@@ -121,15 +121,15 @@
             product__form--add-to-cart{% if section.settings.product_form_width == 'large' %} product__form--full-width{% endif %}
           {%- endcapture -%}
           <div class="product-single__errors"></div>
-          <div class="product-single__description rte" itemprop="description">
-            {{ product.description }}
-          </div>
           <!-- CUSTOM VUE PART FOR OPTION RECOMMENDATION AND ADD TO CART-->
-          <div id="app" class="vue-form vue">
+          <div id="app" class="vue-form vue" style="margin-top: 1.5em">
             <p>Loading...</p>
             <script src="{{ 'CartWizard.js' | asset_url }}"></script>
           </div>
           <!-- END CUSTOM VUE PART -->
+          <div class="product-single__description rte" itemprop="description">
+            {{ product.description }}
+          </div>
           {% if section.settings.social_sharing_products %}
           {% include 'social-sharing', share_title: product.title, share_permalink: product.url, share_image: product %}
           {% endif %}
