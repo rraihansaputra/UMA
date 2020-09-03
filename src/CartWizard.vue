@@ -179,7 +179,13 @@
         </div>
 
         <div class="d-flex justify-content-center">
-          <b-button type="submit" name="submit" class="px-4">Change</b-button>
+          <b-button
+            type="submit"
+            name="submit"
+            class="px-4"
+            :disabled="this.totalModalQty < 1"
+            >Change</b-button
+          >
         </div>
       </form>
 
@@ -222,17 +228,14 @@
 
         <div class="text-muted mb-4">
           <div class="d-flex align-items-center mb-2">
-            <img :src="imageUrls.repeat" class="icon-image mr-3" />
             <p class="text-uppercase mb-0">Renewed every 3 months</p>
           </div>
           <div class="d-flex align-items-center mb-2">
-            <img :src="imageUrls.padlock" class="icon-image mr-3" />
             <p class="text-uppercase mb-0">
               Authorize next order with one click
             </p>
           </div>
           <div class="d-flex align-items-center">
-            <img :src="imageUrls.tickbox" class="icon-image mr-3" />
             <p class="text-uppercase mb-0">Adjust, skip, or cancel anytime</p>
           </div>
         </div>
@@ -390,21 +393,21 @@ export default Vue.extend({
       return totalCount > 0 ? totalCount : false;
     },
     isEligibleForFreeShipping() {
-      return this.totalAssortmentQuantity >= 3
+      return this.totalAssortmentQuantity >= 3;
     },
     totalModalQty() {
       const totalRegular = this.modalQty[VARIANT_SKU.REGULAR].dirty
         ? this.modalQty[VARIANT_SKU.REGULAR].qty
-        : this.variantQty[VARIANT_SKU.REGULAR]
+        : this.variantQty[VARIANT_SKU.REGULAR];
       const totalHeavy = this.modalQty[VARIANT_SKU.HEAVY].dirty
         ? this.modalQty[VARIANT_SKU.HEAVY].qty
-        : this.variantQty[VARIANT_SKU.HEAVY]
+        : this.variantQty[VARIANT_SKU.HEAVY];
 
-      return totalRegular + totalHeavy
+      return totalRegular + totalHeavy;
     },
     modalIsEligibleForFreeShipping() {
-      return this.totalModalQty >= 3
-    }
+      return this.totalModalQty >= 3;
+    },
   },
   methods: {
     updateVariantQty(flow) {
@@ -414,10 +417,10 @@ export default Vue.extend({
       };
     },
     updateModalQtyRegular(qty) {
-      this.modalQty[VARIANT_SKU.REGULAR]= {qty, dirty: true}
+      this.modalQty[VARIANT_SKU.REGULAR] = { qty, dirty: true };
     },
     updateModalQtyHeavy(qty) {
-      this.modalQty[VARIANT_SKU.HEAVY]= {qty, dirty: true}
+      this.modalQty[VARIANT_SKU.HEAVY] = { qty, dirty: true };
     },
     async addToCart() {
       const cartItems = Object.keys(this.variantQty).map((variantId) => ({
@@ -465,7 +468,7 @@ export default Vue.extend({
       this.$bvModal.hide("modal1");
     },
     resetModalQty() {
-      this.modalQty =  {
+      this.modalQty = {
         OPR10SBP1: {
           qty: 0,
           dirty: false,
@@ -474,8 +477,8 @@ export default Vue.extend({
           qty: 0,
           dirty: false,
         },
-      }
-    }
+      };
+    },
   },
   mounted() {
     // this.VARIANT_SKU = Object.freeze(VARIANT_SKU);
