@@ -226,20 +226,6 @@
           </div>
         </div>
 
-        <div class="text-muted mb-4">
-          <div class="d-flex align-items-center mb-2">
-            <p class="text-uppercase mb-0">Renewed every 3 months</p>
-          </div>
-          <div class="d-flex align-items-center mb-2">
-            <p class="text-uppercase mb-0">
-              Authorize next order with one click
-            </p>
-          </div>
-          <div class="d-flex align-items-center">
-            <p class="text-uppercase mb-0">Adjust, skip, or cancel anytime</p>
-          </div>
-        </div>
-
         <div class="d-flex justify-content-center">
           <a
             v-b-modal.modal1
