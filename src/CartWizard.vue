@@ -195,11 +195,11 @@
     </b-modal>
 
     <div v-show="totalAssortmentQuantity" class="mb-4">
-      <div class="p-3 border border-secondary">
+      <div class="p-3 py-4 border border-secondary">
         <h4 class="text-uppercase text-center lead flex-grow-1 mb-2">
           Your 3-month subscription:
         </h4>
-        <div class="d-flex justify-content-around mb-4">
+        <div class="d-flex justify-content-around mb-2">
           <div
             v-if="variantQty[VARIANT_SKU.REGULAR] > 0"
             class="d-flex align-items-center mr-2"
