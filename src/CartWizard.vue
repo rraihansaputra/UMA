@@ -7,7 +7,7 @@
       </p>
     </div>
 
-    <div class="mb-4">
+    <div class="mb-3">
       <div class="mb-3">
         <b>Pilih siklus menstruasi kamu</b>
         <div class="d-flex mt-3">
@@ -18,6 +18,7 @@
             @click="
               recommendationChoice.days = '<4days';
               recommendationChoice.flow = null;
+              resetVariantQty();
             "
             :pressed="recommendationChoice.days === '<4days'"
           >
@@ -30,6 +31,7 @@
             @click="
               recommendationChoice.days = '>5days';
               recommendationChoice.flow = null;
+              resetVariantQty();
             "
             :pressed="recommendationChoice.days === '>5days'"
           >
@@ -37,7 +39,7 @@
           </b-button>
         </div>
       </div>
-      <div class="mb-1">
+      <div :class="['mb-1', recommendationChoice.days ? false : 'text-muted']">
         <b>Pilih tingkat flow kamu</b>
         <div class="d-flex justify-content-around text-uppercase lead mt-3">
           <div
@@ -46,9 +48,9 @@
           >
             <input
               type="radio"
-              name="flow"
               value="light"
               @change="updateVariantQty('light')"
+              v-model="recommendationChoice.flow"
               id="form_light"
               :disabled="!recommendationChoice.days"
             />
@@ -60,8 +62,8 @@
           >
             <input
               type="radio"
-              name="flow"
               value="medium"
+              v-model="recommendationChoice.flow"
               @change="updateVariantQty('medium')"
               id="form_medium"
               :disabled="!recommendationChoice.days"
@@ -74,9 +76,9 @@
           >
             <input
               type="radio"
-              name="flow"
               value="heavy"
               @change="updateVariantQty('heavy')"
+              v-model="recommendationChoice.flow"
               id="form_heavy"
               :disabled="!recommendationChoice.days"
             />
@@ -160,7 +162,7 @@
       </template>
     </b-modal>
 
-    <div v-show="totalAssortmentQuantity" class="mb-4">
+    <div v-show="totalAssortmentQuantity" class="mb-3">
       <div class="p-3 py-4 border border-secondary">
         <h4 class="text-uppercase text-center lead flex-grow-1 mb-2">
           Your 3-month subscription:
@@ -374,6 +376,12 @@ export default Vue.extend({
         ...this.recommendation[this.recommendationChoice.days][flow],
       };
     },
+    resetVariantQty() {
+      this.variantQty = {
+        OPR10SBP1: 0, // 10 REGULAR
+        OPH10SBP1: 0, // 10 HEAVY
+      };
+    },
     updateModalQtyRegular(qty) {
       this.modalQty[VARIANT_SKU.REGULAR] = { qty, dirty: true };
     },
@@ -451,8 +459,8 @@ export default Vue.extend({
 </script>
 <style lang="scss">
 // TODO might have to switch out primary and secondary..
-$primary: #F5EDE4;
-$secondary: #463A23;
+$primary: #f5ede4;
+$secondary: #463a23;
 
 $body-color: $secondary;
 
@@ -508,7 +516,7 @@ $body-color: $secondary;
     border: 1px solid $secondary;
 
     &:checked {
-      border: .4em solid $secondary;
+      border: 0.4em solid $secondary;
     }
   }
 }

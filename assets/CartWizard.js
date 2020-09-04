@@ -2167,6 +2167,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
 
 
 
@@ -2190,7 +2192,6 @@ var VARIANT_SKU = {
   },
   data: function data() {
     return {
-      selected: null,
       recommendationChoice: {
         days: null,
         flow: null
@@ -2311,8 +2312,17 @@ var VARIANT_SKU = {
   },
   methods: {
     updateVariantQty: function updateVariantQty(flow) {
+      // TODO clear radio when length button is pressed again
       this.recommendationChoice.flow = flow;
       this.variantQty = _objectSpread({}, this.recommendation[this.recommendationChoice.days][flow]);
+    },
+    resetVariantQty: function resetVariantQty() {
+      this.variantQty = {
+        OPR10SBP1: 0,
+        // 10 REGULAR
+        OPH10SBP1: 0 // 10 HEAVY
+
+      };
     },
     updateModalQtyRegular: function updateModalQtyRegular(qty) {
       this.modalQty[VARIANT_SKU.REGULAR] = {
@@ -45736,7 +45746,7 @@ exports = module.exports = __webpack_require__(/*! ../node_modules/css-loader/li
 
 
 // module
-exports.push([module.i, ".circle {\n  min-width: 24px;\n  width: 24px;\n  height: 24px;\n  border-radius: 50%;\n  background: black;\n}\n.regular-color {\n  background: #96bbd8 !important;\n}\n.heavy-color {\n  background: #5f81b2 !important;\n}\n.gtk-image {\n  height: 4em;\n}\n.icon-image {\n  height: 2em;\n}\n#modal1___BV_modal_footer_ {\n  display: none;\n}\n#modal1___BV_modal_header_ {\n  border-bottom: 0px solid red;\n  padding: 1rem 1rem 0 1rem !important;\n}\n#modal1___BV_modal_content_ {\n  background: #f9f7f3;\n}\n.radio-thing label {\n  margin-top: 0.2em;\n}\n.radio-thing input {\n  z-index: 1;\n  appearance: none;\n  border-radius: 50%;\n  width: 16px;\n  height: 16px;\n  border: 1px solid #463A23;\n}\n.radio-thing input:checked {\n  border: 0.4em solid #463A23;\n}\n.radio-thing:not(:last-child):before {\n  content: \"\";\n  position: relative;\n  height: 1px;\n  width: 96%;\n  background: #463A23;\n  top: 0.4em;\n  left: 50%;\n  z-index: 0;\n}", ""]);
+exports.push([module.i, ".circle {\n  min-width: 24px;\n  width: 24px;\n  height: 24px;\n  border-radius: 50%;\n  background: black;\n}\n.regular-color {\n  background: #96bbd8 !important;\n}\n.heavy-color {\n  background: #5f81b2 !important;\n}\n.gtk-image {\n  height: 4em;\n}\n.icon-image {\n  height: 2em;\n}\n#modal1___BV_modal_footer_ {\n  display: none;\n}\n#modal1___BV_modal_header_ {\n  border-bottom: 0px solid red;\n  padding: 1rem 1rem 0 1rem !important;\n}\n#modal1___BV_modal_content_ {\n  background: #f9f7f3;\n}\n.radio-thing label {\n  margin-top: 0.2em;\n}\n.radio-thing input {\n  z-index: 1;\n  appearance: none;\n  border-radius: 50%;\n  width: 16px;\n  height: 16px;\n  border: 1px solid #463a23;\n}\n.radio-thing input:checked {\n  border: 0.4em solid #463a23;\n}\n.radio-thing:not(:last-child):before {\n  content: \"\";\n  position: relative;\n  height: 1px;\n  width: 96%;\n  background: #463a23;\n  top: 0.4em;\n  left: 50%;\n  z-index: 0;\n}", ""]);
 
 // exports
 
@@ -52771,7 +52781,7 @@ var render = function() {
     [
       _vm._m(0),
       _vm._v(" "),
-      _c("div", { staticClass: "mb-4" }, [
+      _c("div", { staticClass: "mb-3" }, [
         _c("div", { staticClass: "mb-3" }, [
           _c("b", [_vm._v("Pilih siklus menstruasi kamu")]),
           _vm._v(" "),
@@ -52792,6 +52802,7 @@ var render = function() {
                     click: function($event) {
                       _vm.recommendationChoice.days = "<4days"
                       _vm.recommendationChoice.flow = null
+                      _vm.resetVariantQty()
                     }
                   }
                 },
@@ -52811,6 +52822,7 @@ var render = function() {
                     click: function($event) {
                       _vm.recommendationChoice.days = ">5days"
                       _vm.recommendationChoice.flow = null
+                      _vm.resetVariantQty()
                     }
                   }
                 },
@@ -52821,105 +52833,171 @@ var render = function() {
           )
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "mb-1" }, [
-          _c("b", [_vm._v("Pilih tingkat flow kamu")]),
-          _vm._v(" "),
-          _c(
-            "div",
-            {
-              staticClass:
-                "d-flex justify-content-around text-uppercase lead mt-3"
-            },
-            [
-              _c(
-                "div",
-                {
-                  staticClass:
-                    "d-flex flex-column align-items-center radio-thing",
-                  staticStyle: { flex: "0 1 33%" }
-                },
-                [
-                  _c("input", {
-                    attrs: {
-                      type: "radio",
-                      name: "flow",
-                      value: "light",
-                      id: "form_light",
-                      disabled: !_vm.recommendationChoice.days
-                    },
-                    on: {
-                      change: function($event) {
-                        return _vm.updateVariantQty("light")
-                      }
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c("label", { attrs: { for: "form_light" } }, [
-                    _vm._v("Light")
-                  ])
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "div",
-                {
-                  staticClass:
-                    "d-flex flex-column align-items-center radio-thing",
-                  staticStyle: { flex: "0 1 33%" }
-                },
-                [
-                  _c("input", {
-                    attrs: {
-                      type: "radio",
-                      name: "flow",
-                      value: "medium",
-                      id: "form_medium",
-                      disabled: !_vm.recommendationChoice.days
-                    },
-                    on: {
-                      change: function($event) {
-                        return _vm.updateVariantQty("medium")
-                      }
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c("label", { attrs: { for: "form_medium" } }, [
-                    _vm._v("Medium")
-                  ])
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "div",
-                {
-                  staticClass:
-                    "d-flex flex-column align-items-center radio-thing",
-                  staticStyle: { flex: "0 1 33%" }
-                },
-                [
-                  _c("input", {
-                    attrs: {
-                      type: "radio",
-                      name: "flow",
-                      value: "heavy",
-                      id: "form_heavy",
-                      disabled: !_vm.recommendationChoice.days
-                    },
-                    on: {
-                      change: function($event) {
-                        return _vm.updateVariantQty("heavy")
-                      }
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c("label", { attrs: { for: "form_heavy" } }, [
-                    _vm._v("Heavy")
-                  ])
-                ]
-              )
+        _c(
+          "div",
+          {
+            class: [
+              "mb-1",
+              _vm.recommendationChoice.days ? false : "text-muted"
             ]
-          )
-        ])
+          },
+          [
+            _c("b", [_vm._v("Pilih tingkat flow kamu")]),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                staticClass:
+                  "d-flex justify-content-around text-uppercase lead mt-3"
+              },
+              [
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "d-flex flex-column align-items-center radio-thing",
+                    staticStyle: { flex: "0 1 33%" }
+                  },
+                  [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.recommendationChoice.flow,
+                          expression: "recommendationChoice.flow"
+                        }
+                      ],
+                      attrs: {
+                        type: "radio",
+                        value: "light",
+                        id: "form_light",
+                        disabled: !_vm.recommendationChoice.days
+                      },
+                      domProps: {
+                        checked: _vm._q(_vm.recommendationChoice.flow, "light")
+                      },
+                      on: {
+                        change: [
+                          function($event) {
+                            return _vm.$set(
+                              _vm.recommendationChoice,
+                              "flow",
+                              "light"
+                            )
+                          },
+                          function($event) {
+                            return _vm.updateVariantQty("light")
+                          }
+                        ]
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("label", { attrs: { for: "form_light" } }, [
+                      _vm._v("Light")
+                    ])
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "d-flex flex-column align-items-center radio-thing",
+                    staticStyle: { flex: "0 1 33%" }
+                  },
+                  [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.recommendationChoice.flow,
+                          expression: "recommendationChoice.flow"
+                        }
+                      ],
+                      attrs: {
+                        type: "radio",
+                        value: "medium",
+                        id: "form_medium",
+                        disabled: !_vm.recommendationChoice.days
+                      },
+                      domProps: {
+                        checked: _vm._q(_vm.recommendationChoice.flow, "medium")
+                      },
+                      on: {
+                        change: [
+                          function($event) {
+                            return _vm.$set(
+                              _vm.recommendationChoice,
+                              "flow",
+                              "medium"
+                            )
+                          },
+                          function($event) {
+                            return _vm.updateVariantQty("medium")
+                          }
+                        ]
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("label", { attrs: { for: "form_medium" } }, [
+                      _vm._v("Medium")
+                    ])
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "d-flex flex-column align-items-center radio-thing",
+                    staticStyle: { flex: "0 1 33%" }
+                  },
+                  [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.recommendationChoice.flow,
+                          expression: "recommendationChoice.flow"
+                        }
+                      ],
+                      attrs: {
+                        type: "radio",
+                        value: "heavy",
+                        id: "form_heavy",
+                        disabled: !_vm.recommendationChoice.days
+                      },
+                      domProps: {
+                        checked: _vm._q(_vm.recommendationChoice.flow, "heavy")
+                      },
+                      on: {
+                        change: [
+                          function($event) {
+                            return _vm.$set(
+                              _vm.recommendationChoice,
+                              "flow",
+                              "heavy"
+                            )
+                          },
+                          function($event) {
+                            return _vm.updateVariantQty("heavy")
+                          }
+                        ]
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("label", { attrs: { for: "form_heavy" } }, [
+                      _vm._v("Heavy")
+                    ])
+                  ]
+                )
+              ]
+            )
+          ]
+        )
       ]),
       _vm._v(" "),
       _c(
@@ -53083,7 +53161,7 @@ var render = function() {
               expression: "totalAssortmentQuantity"
             }
           ],
-          staticClass: "mb-4"
+          staticClass: "mb-3"
         },
         [
           _c("div", { staticClass: "p-3 py-4 border border-secondary" }, [
