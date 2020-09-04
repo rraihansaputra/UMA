@@ -8,9 +8,9 @@
     </div>
 
     <div class="mb-4">
-      <div class="mb-2">
+      <div class="mb-3">
         <b>Pilih siklus menstruasi kamu</b>
-        <div class="d-flex">
+        <div class="d-flex mt-3">
           <b-button
             variant="primary"
             class="text-uppercase mr-1 flex-grow-1"
@@ -39,37 +39,49 @@
       </div>
       <div class="mb-1">
         <b>Pilih tingkat flow kamu</b>
-        <div class="d-flex">
-          <b-button
-            variant="primary"
-            class="text-uppercase mr-1 flex-grow-1"
-            pill
-            @click="updateVariantQty('light')"
-            :pressed="recommendationChoice.flow === 'light'"
-            :disabled="!recommendationChoice.days"
+        <div class="d-flex justify-content-around text-uppercase lead mt-3">
+          <div
+            class="d-flex flex-column align-items-center radio-thing"
+            style="flex:0 1 33%"
           >
-            Light
-          </b-button>
-          <b-button
-            variant="primary"
-            class="text-uppercase mr-1 flex-grow-1"
-            pill
-            @click="updateVariantQty('medium')"
-            :pressed="recommendationChoice.flow === 'medium'"
-            :disabled="!recommendationChoice.days"
+            <input
+              type="radio"
+              name="flow"
+              value="light"
+              @change="updateVariantQty('light')"
+              id="form_light"
+              :disabled="!recommendationChoice.days"
+            />
+            <label for="form_light">Light</label>
+          </div>
+          <div
+            class="d-flex flex-column align-items-center radio-thing"
+            style="flex:0 1 33%"
           >
-            Medium
-          </b-button>
-          <b-button
-            variant="primary"
-            class="text-uppercase mr-1 flex-grow-1"
-            pill
-            @click="updateVariantQty('heavy')"
-            :pressed="recommendationChoice.flow === 'heavy'"
-            :disabled="!recommendationChoice.days"
+            <input
+              type="radio"
+              name="flow"
+              value="medium"
+              @change="updateVariantQty('medium')"
+              id="form_medium"
+              :disabled="!recommendationChoice.days"
+            />
+            <label for="form_medium">Medium</label>
+          </div>
+          <div
+            class="d-flex flex-column align-items-center radio-thing"
+            style="flex:0 1 33%"
           >
-            Heavy
-          </b-button>
+            <input
+              type="radio"
+              name="flow"
+              value="heavy"
+              @change="updateVariantQty('heavy')"
+              id="form_heavy"
+              :disabled="!recommendationChoice.days"
+            />
+            <label for="form_heavy">Heavy</label>
+          </div>
         </div>
       </div>
     </div>
@@ -238,7 +250,13 @@ const VARIANT_SKU = {
 };
 
 export default Vue.extend({
-  components: { BButton, BModal, BSpinner, BFormCheckbox, BFormSpinbutton },
+  components: {
+    BButton,
+    BModal,
+    BSpinner,
+    BFormCheckbox,
+    BFormSpinbutton,
+  },
   data() {
     return {
       recommendationChoice: {
@@ -350,6 +368,7 @@ export default Vue.extend({
   },
   methods: {
     updateVariantQty(flow) {
+      // TODO clear radio when length button is pressed again
       this.recommendationChoice.flow = flow;
       this.variantQty = {
         ...this.recommendation[this.recommendationChoice.days][flow],
@@ -430,7 +449,13 @@ export default Vue.extend({
   },
 });
 </script>
-<style>
+<style lang="scss">
+// TODO might have to switch out primary and secondary..
+$primary: #F5EDE4;
+$secondary: #463A23;
+
+$body-color: $secondary;
+
 .circle {
   min-width: 24px;
   width: 24px;
@@ -466,5 +491,37 @@ export default Vue.extend({
 
 #modal1___BV_modal_content_ {
   background: #f9f7f3;
+}
+
+.radio-thing {
+  label {
+    margin-top: 0.2em;
+  }
+  input {
+    z-index: 1;
+    appearance: none;
+
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+
+    border: 1px solid $secondary;
+
+    &:checked {
+      border: .4em solid $secondary;
+    }
+  }
+}
+.radio-thing:not(:last-child) {
+  &:before {
+    content: "";
+    position: relative;
+    height: 1px;
+    width: 96%;
+    background: $secondary;
+    top: 0.4em;
+    left: 50%;
+    z-index: 0;
+  }
 }
 </style>
