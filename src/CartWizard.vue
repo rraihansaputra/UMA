@@ -174,9 +174,9 @@
           >
             <div class="circle regular-color mr-1"></div>
             <p class="mb-0">
-              <span class="h3">{{
-                variantQty[VARIANT_SKU.REGULAR]
-              }} REGULAR</span>
+              <span class="h3"
+                >{{ variantQty[VARIANT_SKU.REGULAR] }} REGULAR</span
+              >
             </p>
           </div>
           <div
@@ -185,9 +185,7 @@
           >
             <div class="circle heavy-color mr-1"></div>
             <p class="mb-0">
-              <span class="h3">{{
-                variantQty[VARIANT_SKU.HEAVY]
-              }} HEAVY</span>
+              <span class="h3">{{ variantQty[VARIANT_SKU.HEAVY] }} HEAVY</span>
             </p>
           </div>
         </div>
@@ -214,9 +212,20 @@
       PROCEED
       <span v-if="totalAssortmentQuantity"
         >- IDR {{ (totalPrice / 100) | numeral("0,0.00") }}
+        {{ isEligibleForFreeShipping ? "" : "+ shipping" }}
       </span>
     </b-button>
     <p v-show="isEligibleForFreeShipping"><i>Free shipping!</i></p>
+    <div class="pt-2">
+      <p class="text-center text-reset">
+        <a
+          href="#subscription"
+          class="text-secondary"
+          style="text-decoration: underline;"
+          >What is subscription?</a
+        >
+      </p>
+    </div>
 
     <div
       id="sealsubscriptions-default-widget-target-element"

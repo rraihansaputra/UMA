@@ -12,6 +12,7 @@ let mix = require('laravel-mix');
  */
 
 mix.js('src/CartWizard.js', 'assets/');
+mix.sass('src/faq-details.scss', 'assets/');
 
 // Full API
 // mix.js(src, output);

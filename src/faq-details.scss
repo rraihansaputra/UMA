@@ -1,0 +1,55 @@
+// TODO might have to switch out primary and secondary..
+$primary: #f5ede4;
+$secondary: #463a23;
+$tertiary: #f9f7f3;
+
+$body-color: $secondary;
+
+.faq-details {
+  margin-bottom: 0.5em;
+
+  &::before {
+    display: block;
+    content: " ";
+    margin-top: -150px;
+    height: 150px;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  summary:after {
+    content: "+";
+    float: right;
+    text-align: right;
+    // margin-right: 0.5em
+  }
+  &[open] > summary:after {
+    content: "–";
+  }
+
+  &__summary {
+    background: $tertiary;
+    color: $secondary;
+    text-transform: uppercase;
+    margin-bottom: 0.5em;
+    padding: 0.5em;
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+  }
+
+  &__text {
+    color: $secondary;
+    padding: 0.3em;
+
+    p {
+      margin: 0;
+    }
+  }
+
+  &__image {
+    max-width: 100%;
+    padding: 0.3em
+  }
+}

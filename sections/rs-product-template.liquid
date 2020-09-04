@@ -130,6 +130,54 @@
           <div class="product-single__description rte" itemprop="description">
             {{ product.description }}
           </div>
+
+          {% for block in section.blocks %}
+          <div
+            class="grid-item"
+            {{block.shopify_attributes}}
+          >
+            {% if block.type == 'faq' %}
+            <details class="faq-details"
+            {% if block.settings.open %} open {% endif %}
+            {% if block.settings.idTag > "" %}
+            id="{{block.settings.idTag}}"
+            {% endif %}
+            >
+            <summary class="faq-details__summary">
+              <span class="faq-details__summary-text">
+                {{ block.settings.title }}
+              </span>
+            </summary>
+            <div class="faq-details__text">
+              <p>
+                {{ block.settings.content }}
+              </p>
+            </div>
+          </details>
+          {% endif %}
+          {% if block.type == 'faqImage' %}
+          <details class="faq-details"
+            {% if block.settings.open %} open {% endif %}
+            {% if block.settings.idTag > "" %}
+              id="{{block.settings.idTag}}"
+            {% endif %}
+            >
+              <summary class="faq-details__summary">
+                <span class="faq-details__summary-text">
+                  {{ block.settings.title }}
+                </span>
+              </summary>
+              <div class="faq-details__image">
+                <img
+                  src="{{ block.settings.image | img_url: '2048x' }}"
+                >
+              </div>
+            </details>
+            {% endif %}
+
+          </div>
+
+          {% endfor %}
           {% if section.settings.social_sharing_products %}
           {% include 'social-sharing', share_title: product.title, share_permalink: product.url, share_image: product %}
           {% endif %}
@@ -188,6 +236,8 @@
   </div>
 </div>
 
+{{ 'faq-details.css' | asset_url | stylesheet_tag }}
+
 {% unless product == empty %}
   <script type="application/json" id="ProductJson-{{ section.id }}">
     {{ product | json }}
@@ -235,6 +285,60 @@
     "zh-CN": "产品",
     "zh-TW": "產品"
   },
+  "blocks": [
+    {
+      "type": "faq",
+      "name": "FAQ Text",
+      "settings": [
+        {
+          "id": "title",
+          "type": "text",
+          "label": "Title"
+        },
+        {
+          "id": "content",
+          "type": "textarea",
+          "label": "Content"
+        },
+        {
+          "id": "idTag",
+          "type": "text",
+          "label": "id Tag for navigation"
+        },
+        {
+          "id": "open",
+          "type": "checkbox",
+          "label": "Load with section open"
+        }
+      ]
+    },
+    {
+      "type": "faqImage",
+      "name": "FAQ Image",
+      "settings": [
+        {
+          "id": "title",
+          "type": "text",
+          "label": "Title"
+        },
+        {
+          "id": "image",
+          "type": "image_picker",
+          "label": "Image"
+        },
+        {
+          "id": "idTag",
+          "type": "text",
+          "label": "id Tag for navigation"
+        },
+        {
+          "id": "open",
+          "type": "checkbox",
+          "label": "Load with section open"
+        }
+      ]
+    }
+  ],
   "settings": [
     {
       "type": "checkbox",
