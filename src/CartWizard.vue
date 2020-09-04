@@ -1,6 +1,13 @@
 <template>
   <div class="my-4">
     <div class="mb-4">
+      <p>
+        Get maximum comfort and protection from these ultra-soft, organic pads.
+        Available in Regular and Heavy variant.
+      </p>
+    </div>
+
+    <div class="mb-4">
       <div class="mb-2">
         <b>Pilih siklus menstruasi kamu</b>
         <div class="d-flex">
