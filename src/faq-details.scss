@@ -8,6 +8,8 @@ $body-color: $secondary;
 .faq-details {
   margin-bottom: 0.5em;
 
+  // hack to get hash navigation (#) not be displayed up top
+  // https://css-tricks.com/hash-tag-links-padding/#fancier-clean-html-method
   &::before {
     display: block;
     content: " ";
@@ -17,12 +19,13 @@ $body-color: $secondary;
     pointer-events: none;
   }
 
+  // add + and - instead the default detail triangle
   summary:after {
     content: "+";
     float: right;
     text-align: right;
-    // margin-right: 0.5em
   }
+
   &[open] > summary:after {
     content: "–";
   }
@@ -34,6 +37,7 @@ $body-color: $secondary;
     margin-bottom: 0.5em;
     padding: 0.5em;
 
+    // disable the default detail triangle
     &::-webkit-details-marker {
       display: none;
     }

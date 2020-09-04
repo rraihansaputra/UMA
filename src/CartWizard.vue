@@ -203,6 +203,15 @@
       </div>
     </div>
 
+    <div v-if="isEligibleForFreeShipping" class="d-flex justify-content-end">
+      <p
+        class="px-3 mb-n2"
+        style="color: #F9F7F3; background: #B8C3CC; z-index: 1"
+      >
+        <i>Free shipping!</i>
+      </p>
+    </div>
+
     <b-button
       block
       @click="addToCart"
@@ -215,7 +224,7 @@
         {{ isEligibleForFreeShipping ? "" : "+ shipping" }}
       </span>
     </b-button>
-    <p v-show="isEligibleForFreeShipping"><i>Free shipping!</i></p>
+
     <div class="pt-2">
       <p class="text-center text-reset">
         <a
