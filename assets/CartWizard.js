@@ -2167,8 +2167,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
 
 
 
@@ -52783,7 +52781,7 @@ var render = function() {
       _vm._v(" "),
       _c("div", { staticClass: "mb-3" }, [
         _c("div", { staticClass: "mb-3" }, [
-          _c("b", [_vm._v("Pilih siklus menstruasi kamu")]),
+          _c("b", [_vm._v("Select your period cycle")]),
           _vm._v(" "),
           _c(
             "div",
@@ -52842,7 +52840,7 @@ var render = function() {
             ]
           },
           [
-            _c("b", [_vm._v("Pilih tingkat flow kamu")]),
+            _c("b", [_vm._v("Select your flow")]),
             _vm._v(" "),
             _c(
               "div",
@@ -53118,9 +53116,7 @@ var render = function() {
                 [
                   _c("p", [
                     _c("i", [
-                      _vm._v(
-                        "You'll lose free shipping if you select less than three"
-                      )
+                      _vm._v("Free shippping requires at least 3 boxes")
                     ])
                   ])
                 ]
@@ -53164,13 +53160,13 @@ var render = function() {
           staticClass: "mb-3"
         },
         [
-          _c("div", { staticClass: "p-3 py-4 border border-secondary" }, [
+          _c("div", { staticClass: "p-3 pt-4 border border-secondary" }, [
             _c(
               "h4",
               {
                 staticClass: "text-uppercase text-center lead flex-grow-1 mb-2"
               },
-              [_vm._v("\n        Your 3-month subscription:\n      ")]
+              [_vm._v("\n        Your three-month subscription:\n      ")]
             ),
             _vm._v(" "),
             _c("div", { staticClass: "d-flex justify-content-around mb-2" }, [
@@ -53179,12 +53175,12 @@ var render = function() {
                     _c("div", { staticClass: "circle regular-color mr-1" }),
                     _vm._v(" "),
                     _c("p", { staticClass: "mb-0" }, [
-                      _c("span", { staticClass: "h3" }, [_vm._v("REGULAR")]),
-                      _vm._v(
-                        " (" +
-                          _vm._s(_vm.variantQty[_vm.VARIANT_SKU.REGULAR] * 10) +
-                          "\n            counts)\n          "
-                      )
+                      _c("span", { staticClass: "h3" }, [
+                        _vm._v(
+                          _vm._s(_vm.variantQty[_vm.VARIANT_SKU.REGULAR]) +
+                            " REGULAR"
+                        )
+                      ])
                     ])
                   ])
                 : _vm._e(),
@@ -53194,12 +53190,12 @@ var render = function() {
                     _c("div", { staticClass: "circle heavy-color mr-1" }),
                     _vm._v(" "),
                     _c("p", { staticClass: "mb-0" }, [
-                      _c("span", { staticClass: "h3" }, [_vm._v("HEAVY")]),
-                      _vm._v(
-                        " (" +
-                          _vm._s(_vm.variantQty[_vm.VARIANT_SKU.HEAVY] * 10) +
-                          "\n            counts)\n          "
-                      )
+                      _c("span", { staticClass: "h3" }, [
+                        _vm._v(
+                          _vm._s(_vm.variantQty[_vm.VARIANT_SKU.HEAVY]) +
+                            " HEAVY"
+                        )
+                      ])
                     ])
                   ])
                 : _vm._e()

@@ -9,7 +9,7 @@
 
     <div class="mb-3">
       <div class="mb-3">
-        <b>Pilih siklus menstruasi kamu</b>
+        <b>Select your period cycle</b>
         <div class="d-flex mt-3">
           <b-button
             variant="primary"
@@ -40,7 +40,7 @@
         </div>
       </div>
       <div :class="['mb-1', recommendationChoice.days ? false : 'text-muted']">
-        <b>Pilih tingkat flow kamu</b>
+        <b>Select your flow</b>
         <div class="d-flex justify-content-around text-uppercase lead mt-3">
           <div
             class="d-flex flex-column align-items-center radio-thing"
@@ -143,7 +143,7 @@
           v-show="!modalIsEligibleForFreeShipping"
           class="text-danger text-center"
         >
-          <p><i>You'll lose free shipping if you select less than three</i></p>
+          <p><i>Free shippping requires at least 3 boxes</i></p>
         </div>
 
         <div class="d-flex justify-content-center">
@@ -163,9 +163,9 @@
     </b-modal>
 
     <div v-show="totalAssortmentQuantity" class="mb-3">
-      <div class="p-3 py-4 border border-secondary">
+      <div class="p-3 pt-4 border border-secondary">
         <h4 class="text-uppercase text-center lead flex-grow-1 mb-2">
-          Your 3-month subscription:
+          Your three-month subscription:
         </h4>
         <div class="d-flex justify-content-around mb-2">
           <div
@@ -174,10 +174,9 @@
           >
             <div class="circle regular-color mr-1"></div>
             <p class="mb-0">
-              <span class="h3">REGULAR</span> ({{
-                variantQty[VARIANT_SKU.REGULAR] * 10
-              }}
-              counts)
+              <span class="h3">{{
+                variantQty[VARIANT_SKU.REGULAR]
+              }} REGULAR</span>
             </p>
           </div>
           <div
@@ -186,10 +185,9 @@
           >
             <div class="circle heavy-color mr-1"></div>
             <p class="mb-0">
-              <span class="h3">HEAVY</span> ({{
-                variantQty[VARIANT_SKU.HEAVY] * 10
-              }}
-              counts)
+              <span class="h3">{{
+                variantQty[VARIANT_SKU.HEAVY]
+              }} HEAVY</span>
             </p>
           </div>
         </div>
