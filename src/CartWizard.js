@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import './index.scss';
+// import './index.scss';
 import CartWizard from './CartWizard.vue';
 
 new Vue({

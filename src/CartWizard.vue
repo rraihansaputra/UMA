@@ -1,5 +1,5 @@
 <template>
-  <div class="my-4">
+  <div class="my-4" id="container">
     <div class="mb-4">
       <p>
         Get maximum comfort and protection from these ultra-soft, organic pads.
@@ -95,6 +95,7 @@
       centered
       @show="resetModalQty"
       @hide="resetModalQty"
+      static
     >
       <p class="lead text-center"><b>Select minimum three boxes:</b></p>
       <form @submit.prevent="handleAssortmentForm">
@@ -150,7 +151,7 @@
           <b-button
             type="submit"
             name="submit"
-            class="px-4"
+            class="px-4 text-uppercase"
             :disabled="this.totalModalQty < 1"
             >Change</b-button
           >
@@ -509,17 +510,12 @@ $primary: #f5ede4;
 $secondary: #463a23;
 
 $body-color: $secondary;
-@import "~bootstrap/scss/bootstrap";
-@import "~bootstrap-vue/src/index.scss";
 
-// body, input, textarea, button, select {
-//   font-size: 15px;
-//   font-family: Lato,sans-serif;
-//   font-weight: 400;
-//   font-style: normal;
-//   color: #463a23;
-//   line-height: 1.6;
-// }
+// inject deep to enable modals
+#container::v-deep {
+  @import "~bootstrap";
+  @import "~bootstrap-vue";
+}
 
 .circle {
   min-width: 24px;
@@ -577,17 +573,23 @@ $body-color: $secondary;
   }
 }
 </style>
-<style>
-#modal1___BV_modal_footer_ {
-  display: none;
-}
+<style lang="scss">
+// modal override styles
+#modal1 {
+  opacity: 1;
+  background: unset;
 
-#modal1___BV_modal_header_ {
-  border-bottom: 0px solid red;
-  padding: 1rem 1rem 0 1rem !important;
-}
+  &___BV_modal_footer_ {
+    display: none !important;
+  }
 
-#modal1___BV_modal_content_ {
-  background: #f9f7f3;
+  &___BV_modal_header_ {
+    border-bottom: 0px solid red !important;
+    padding: 1rem 1rem 0 1rem !important;
+  }
+
+  &___BV_modal_content_ {
+    background: #f9f7f3 !important;
+  }
 }
 </style>
