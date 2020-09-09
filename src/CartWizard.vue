@@ -257,6 +257,12 @@ import {
 } from "bootstrap-vue";
 import vueNumeralFilterInstaller from "vue-numeral-filter";
 
+import Client from "shopify-buy";
+const client = Client.buildClient({
+  domain: "umawomen.myshopify.com",
+  storefrontAccessToken: "eb9af665e31356249e1a3eb3be18754e",
+});
+
 Vue.use(vueNumeralFilterInstaller, { locale: "en-gb" });
 
 Vue.use(ModalPlugin);
@@ -332,8 +338,7 @@ export default Vue.extend({
         OPH10SBP1: { regular: 0, heavy: 10 }, // 10 HEAVY
       },
       skuMap: {
-        // TODO change skuMap to update from the live JSON
-        // SKU MAP is mapping from SKU -> variant Id for adding to cart
+        // Updated to the GraphQL ID on mounted (updateProducts())
         OPR10SBP1: "34520384569497", // 10 REGULAR
         OPH10SBP1: "34520384602265", // 10 HEAVY
       },
@@ -341,6 +346,8 @@ export default Vue.extend({
       loading: false,
       imageUrls: {},
       VARIANT_SKU: VARIANT_SKU,
+      productGraphQLData: null,
+      checkoutData: null,
     };
   },
   computed: {
@@ -406,35 +413,58 @@ export default Vue.extend({
     },
     async addToCart() {
       const cartItems = Object.keys(this.variantQty).map((variantId) => ({
-        id: this.skuMap[variantId],
+        variantId: this.skuMap[variantId],
         quantity: this.variantQty[variantId],
-        // TODO make this dependent on subscription checkbox
-        properties: {
-          "Subscription interval": "3 months",
-          _subscription_order: "",
-          "Cycle Days": this.recommendationChoice.days,
-          "Cycle Flow": this.recommendationChoice.flow,
-        },
       }));
 
-      this.loading = true;
-      await Axios.post("/cart/update.js", {
-        updates: {
-          "34520384569497": 0,
-          "34520384602265": 0,
-        },
-      });
-      await Axios.post("/cart/add.js", {
-        items: cartItems,
-      });
+      const checkoutAttributes = {
+        customAttributes: [
+          { key: "Subscription interval", value: "3 months" },
+          { key: "_subscription_order", value: "" },
+          { key: "Cycle Days", value: this.recommendationChoice.days },
+          { key: "Cycle Flow", value: this.recommendationChoice.flow },
+        ],
+      };
 
-      this.loading = false;
-      window.location.href = "/cart";
+      this.loading = true;
+
+      try {
+        this.checkoutData = await client.checkout.create();
+
+        this.checkoutData = await client.checkout.updateAttributes(
+          this.checkoutData.id,
+          checkoutAttributes
+        );
+
+        this.checkoutData = await client.checkout.addLineItems(
+          this.checkoutData.id,
+          cartItems
+        );
+
+        this.loading = false;
+        window.location.href = this.checkoutData.webUrl;
+      } catch (e) {
+        this.loading = false;
+        console.error(e);
+        window.alert("Something went wrong. Please notify the store owner.");
+      }
     },
-    updateProducts() {
+    async updateProducts() {
       const productJsonData = document.getElementById("ProductJsonData")
         .innerText;
       this.product = JSON.parse(productJsonData);
+
+      this.productGraphQLData = await client.product.fetchByHandle(
+        "organic-period-pads"
+      );
+      const getGraphQLID = (SKU) =>
+        this.productGraphQLData?.variants.find((variant) => variant.sku === SKU)
+          ?.id;
+
+      this.skuMap = {
+        OPR10SBP1: getGraphQLID("OPR10SBP1"),
+        OPH10SBP1: getGraphQLID("OPH10SBP1"),
+      };
     },
     updateImageUrls() {
       const imageUrlsData = document.getElementById("image-urls").innerText;
