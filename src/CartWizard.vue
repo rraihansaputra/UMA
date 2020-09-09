@@ -232,6 +232,7 @@
           href="#subscription"
           class="text-secondary"
           style="text-decoration: underline;"
+          @click="openSubscriptionDetails"
           >What is subscription?</a
         >
       </p>
@@ -468,6 +469,9 @@ export default Vue.extend({
         },
       };
     },
+    openSubscriptionDetails() {
+      document.getElementById('subscription').open = true
+    }
   },
   mounted() {
     // this.VARIANT_SKU = Object.freeze(VARIANT_SKU);
