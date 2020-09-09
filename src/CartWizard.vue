@@ -174,7 +174,7 @@
           >
             <div class="circle regular-color mr-1"></div>
             <p class="mb-0">
-              <span class="h3"
+              <span class="h4"
                 >{{ variantQty[VARIANT_SKU.REGULAR] }} REGULAR</span
               >
             </p>
@@ -185,7 +185,7 @@
           >
             <div class="circle heavy-color mr-1"></div>
             <p class="mb-0">
-              <span class="h3">{{ variantQty[VARIANT_SKU.HEAVY] }} HEAVY</span>
+              <span class="h4">{{ variantQty[VARIANT_SKU.HEAVY] }} HEAVY</span>
             </p>
           </div>
         </div>
@@ -503,12 +503,23 @@ export default Vue.extend({
   },
 });
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 // TODO might have to switch out primary and secondary..
 $primary: #f5ede4;
 $secondary: #463a23;
 
 $body-color: $secondary;
+@import "~bootstrap/scss/bootstrap";
+@import "~bootstrap-vue/src/index.scss";
+
+// body, input, textarea, button, select {
+//   font-size: 15px;
+//   font-family: Lato,sans-serif;
+//   font-weight: 400;
+//   font-style: normal;
+//   color: #463a23;
+//   line-height: 1.6;
+// }
 
 .circle {
   min-width: 24px;
@@ -532,19 +543,6 @@ $body-color: $secondary;
 
 .icon-image {
   height: 2em;
-}
-
-#modal1___BV_modal_footer_ {
-  display: none;
-}
-
-#modal1___BV_modal_header_ {
-  border-bottom: 0px solid red;
-  padding: 1rem 1rem 0 1rem !important;
-}
-
-#modal1___BV_modal_content_ {
-  background: #f9f7f3;
 }
 
 .radio-thing {
@@ -577,5 +575,19 @@ $body-color: $secondary;
     left: 50%;
     z-index: 0;
   }
+}
+</style>
+<style>
+#modal1___BV_modal_footer_ {
+  display: none;
+}
+
+#modal1___BV_modal_header_ {
+  border-bottom: 0px solid red;
+  padding: 1rem 1rem 0 1rem !important;
+}
+
+#modal1___BV_modal_content_ {
+  background: #f9f7f3;
 }
 </style>
