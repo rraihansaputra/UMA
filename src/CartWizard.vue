@@ -290,32 +290,14 @@ export default Vue.extend({
       },
       recommendation: {
         "<4days": {
-          light: {
-            OPR10SBP1: 3,
-            OPH10SBP1: 1,
-          },
-          medium: {
-            OPR10SBP1: 2,
-            OPH10SBP1: 2,
-          },
-          heavy: {
-            OPR10SBP1: 1,
-            OPH10SBP1: 3,
-          },
+          light: { OPR10SBP1: 3, OPH10SBP1: 1 },
+          medium: { OPR10SBP1: 2, OPH10SBP1: 2 },
+          heavy: { OPR10SBP1: 1, OPH10SBP1: 3 },
         },
         ">5days": {
-          light: {
-            OPR10SBP1: 4,
-            OPH10SBP1: 2,
-          },
-          medium: {
-            OPR10SBP1: 3,
-            OPH10SBP1: 3,
-          },
-          heavy: {
-            OPR10SBP1: 2,
-            OPH10SBP1: 4,
-          },
+          light: { OPR10SBP1: 4, OPH10SBP1: 2 },
+          medium: { OPR10SBP1: 3, OPH10SBP1: 3 },
+          heavy: { OPR10SBP1: 2, OPH10SBP1: 4 },
         },
       },
       variantQty: {
@@ -325,14 +307,8 @@ export default Vue.extend({
       // TODO a better way to do this is to have clean as null
       // instead of having a dirty property
       modalQty: {
-        OPR10SBP1: {
-          qty: 0,
-          dirty: false,
-        },
-        OPH10SBP1: {
-          qty: 0,
-          dirty: false,
-        },
+        OPR10SBP1: { qty: 0, dirty: false },
+        OPH10SBP1: { qty: 0, dirty: false },
       },
       variantDetail: {
         OPR10SBP1: { regular: 10, heavy: 0 }, // 10 REGULAR
