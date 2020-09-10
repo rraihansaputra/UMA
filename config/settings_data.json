@@ -1,7 +1,7 @@
 {
   "current": {
     "color_body_bg": "#ffffff",
-    "color_body_headings": "rgba(0,0,0,0)",
+    "color_body_headings": "#463a23",
     "color_body_text": "#463a23",
     "color_body_links": "#463a23",
     "color_button_bg": "#463a23",
@@ -15,8 +15,8 @@
     "color_action_bar_text_active": "rgba(0,0,0,0)",
     "color_drawer_bg": "#ffffff",
     "color_drawer_text": "#a09d96",
-    "color_footer_bg": "#f9f7f3",
-    "color_footer_text": "#a09d96",
+    "color_footer_bg": "#e6e9ed",
+    "color_footer_text": "#463a23",
     "type_header_family": "lato_n5",
     "type_header_base_size": "22px",
     "type_button_base_size": "16px",
@@ -131,7 +131,7 @@
       "footer": {
         "type": "footer",
         "settings": {
-          "footer_link_list": "footer",
+          "footer_link_list": "",
           "show_payment_icons": false
         }
       },
@@ -170,6 +170,42 @@
       "cart-template": {
         "type": "cart-template",
         "settings": {}
+      },
+      "rs-product-template": {
+        "type": "rs-product-template",
+        "blocks": {
+          "1599630740147": {
+            "type": "faq",
+            "settings": {
+              "title": "Subscription",
+              "content": "Subscription content",
+              "idTag": "subscription",
+              "open": false
+            }
+          },
+          "1599630767385": {
+            "type": "faqImage",
+            "settings": {
+              "title": "Ingridients",
+              "image": "shopify:\/\/shop_images\/pads_layer.jpg",
+              "idTag": "",
+              "open": false
+            }
+          }
+        },
+        "block_order": [
+          "1599630740147",
+          "1599630767385"
+        ],
+        "settings": {
+          "skip_first_product_image": false,
+          "product_image_type": "portrait",
+          "show_vendor": false,
+          "show_quantity_selector": false,
+          "social_sharing_products": false,
+          "enable_payment_button": true,
+          "product_form_width": "small"
+        }
       }
     },
     "content_for_index": [
