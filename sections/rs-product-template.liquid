@@ -16,97 +16,41 @@
 
   <div class="product grid grid--uniform grid--no-gutters" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
 
-    {% assign first_image = featured_image %}
+    <div class="product__photo grid__item">
+      <div class="grid grid--no-gutters">
+        <div class="grid__item {% if section.settings.product_form_width == 'large' %}medium-up--four-twelfths medium-up--push-three-tenths{% else %}large-up--one-half large-up--push-three-twelfths medium-up--six-twelfths medium-up--push-two-twelfths{% endif %}">
 
-    {% if product.images.size > 1 and section.settings.skip_first_product_image and first_image == product.featured_image %}
-      {% assign first_image = product.images[1] %}
-    {% endif %}
-
-    {% comment %}
-      Set variables for product image grid
-    {% endcomment %}
-    {% if section.settings.product_image_type == 'portrait' %}
-      {% if product.images.size == 1 %}
-        {% assign grid_item_width = '' %}
-      {% elsif product.images.size == 2 and section.settings.skip_first_product_image %}
-        {% assign grid_item_width = '' %}
-      {% else %}
-        {% assign grid_item_width = 'medium-up--one-half' %}
-      {% endif %}
-      {% assign is_portrait_image = true %}
-    {% else %}
-      {% assign grid_item_width = '' %}
-    {% endif %}
-
-    {% if product.images.size > 0 %}
-      <div class="product__photo grid__item {{ grid_item_width }}">
-        {% for image in product.images %}
-          {% assign img_url = image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
-          <div data-image-id="{{ image.id }}" class="product__photo--single product__photo--variant-wrapper
-          {% if product.images.size > 1 and section.settings.skip_first_product_image %}
-            fade-in
-            {% if forloop.first == true %} hide{% endif %}
-            {% if forloop.index != 2 %} hide{% endif %}
-          {% else %}
-            {% unless featured_image == image %} hide{% endunless %}
-          {% endif %}" style="padding-top:{{ 1 | divided_by: image.aspect_ratio | times: 100}}%;">
-            <img class="product__photo--variant lazyload"
-              src="{{ image | img_url: '300x' }}"
-              data-src="{{ img_url }}"
-              data-widths="[360, 540, 720, 900, 1080, 1296, 1512, 1728, 1944, 2048, 4472]"
-              data-aspectratio="{{ image.aspect_ratio }}"
-              data-sizes="auto"
-              alt="{{ image.alt | escape }}">
-          </div>
-        {% endfor %}
-
-        <noscript>
-          <img class="product__photo--variant" src="{{ first_image | img_url: '2048x2048' }}" alt="{{ image.alt | escape }}">
-        </noscript>
-      </div>
-
-      {% comment %}
-        Counting images shown on the page
-      {% endcomment %}
-      {% assign index = 1 %}
-
-      {% comment %}
-        If we have portrait images, we show two per row, so let's get a second image.
-        That image will be moved down below the description on mobile, hence why we'll use
-        `small--hide`. The image moved down is stored in the variable `duplicate_image`.
-      {% endcomment %}
-
-      {% if is_portrait_image %}
-        {% for image in product.images %}
-          {% unless image == first_image %}
-            {% unless section.settings.skip_first_product_image and image == product.featured_image %}
-              <div class="product__photo grid__item small--hide {{ grid_item_width }}">
-                <noscript>
-                  <img src="{{ image | img_url: '2048x2048' }}" alt="{{ image.alt | escape }}">
-                </noscript>
-                {% assign img_url = image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
-                <div class="product__photo--single" style="padding-top:{{ 1 | divided_by: image.aspect_ratio | times: 100}}%;">
-                  <img class="lazyload"
-                    src="{{ image | img_url: '300x' }}"
-                    data-src="{{ img_url }}"
-                    data-widths="[360, 540, 720, 900, 1080, 1296, 1512, 1728, 1944, 2048, 4472]"
-                    data-aspectratio="{{ image.aspect_ratio }}"
-                    data-sizes="auto"
-                    alt="{{ image.alt | escape }}">
-                </div>
+          <!-- START Swiper Product Image Slider -->
+          <div class="swiper-container" style="max-width: 100%; --swiper-theme-color: #eeeeee;">
+            <link rel="stylesheet" href="{{ 'swiper-bundle.css' | asset_url }}">
+            <script src="{{ 'swiper-bundle.min.js' | asset_url }}"></script>
+            <div id="slider" class="swiper-wrapper">
+              {% for image in product.images %}
+              <div class="swiper-slide product-image">
+                <img style="width: 100%" src="{{ image | img_url: '2048x2048'}}">
               </div>
-              {% assign index = index | plus: 1 %}
-              {% assign index_offset = forloop.index %}
-              {% assign duplicate_image = image %}
-              {% break %}
-            {% endunless %}
-          {% endunless %}
-        {% endfor %}
-      {% endif %}
+              {% endfor %}
+            </div>
+            <div class="swiper-pagination" style="text-align: start; margin: 0.5em 1em;"></div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+            <script>
+              var mySwiper = new Swiper('.swiper-container', {
+                // loop: true,
+                mousewheel: true,
+                grabCursor: true,
+                pagination: { el: '.swiper-pagination',},
+                navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev',},
+              })
+            </script>
+          </div>
+          <!-- END Swiper Product Image Slider -->
 
-    {% endif %}
+        </div>
+      </div>
+    </div>
 
-    <div class="product__details grid__item">
+    <div class="product__details grid__item" style="margin-top: 20px;">
       <div class="grid grid--no-gutters product__details-content">
         <!-- div class="grid__item {% if section.settings.product_form_width == 'large' %}medium-up--three-twelfths medium-up--push-one-fifth{% else %}large-up--two-twelfths large-up--push-two-twelfths medium-up--three-twelfths medium-up--push-one-twelfth{% endif %}">
         </div-->
