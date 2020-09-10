@@ -7567,5 +7567,6 @@ function headerSize() {
   $('#PageContainer').css('padding-top', $headerHeight);
 }
 
-$(window).on("load", headerSize);
-$(window).on("resize", $.debounce(500, headerSize));
+// Disable the padding header padding
+// $(window).on("load", headerSize);
+// $(window).on("resize", $.debounce(500, headerSize));
