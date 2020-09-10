@@ -1,7 +1,7 @@
 <template>
   <div class="my-4" id="container">
-    <div class="mb-4">
-      <p>
+    <div class="mb-3">
+      <p class="m-0">
         Get maximum comfort and protection from these ultra-soft, organic pads.
         Available in Regular and Heavy variant.
       </p>
@@ -10,7 +10,7 @@
     <div class="mb-3">
       <div class="mb-3">
         <b>Select your period cycle</b>
-        <div class="d-flex mt-3">
+        <div class="d-flex mt-2">
           <b-button
             variant="primary"
             class="text-uppercase mr-1 flex-grow-1"
@@ -41,7 +41,7 @@
       </div>
       <div :class="['mb-1', recommendationChoice.days ? false : 'text-muted']">
         <b>Select your flow</b>
-        <div class="d-flex justify-content-around text-uppercase lead mt-3">
+        <div class="d-flex justify-content-around text-uppercase lead mt-2">
           <div
             class="d-flex flex-column align-items-center radio-thing"
             style="flex:0 1 33%"
@@ -104,7 +104,9 @@
             <td class="border-0">
               <div class="d-flex align-items-center">
                 <div class="circle regular-color mr-1"></div>
-                <p class="m-0"><span class="h3">REGULAR</span> (10 counts)</p>
+                <p class="m-0">
+                  <span class="lead"><b>REGULAR</b></span> (10 counts)
+                </p>
               </div>
             </td>
             <td class="border-0">
@@ -123,7 +125,9 @@
             <td class="border-0">
               <div class="d-flex align-items-center">
                 <div class="circle heavy-color mr-1"></div>
-                <p class="m-0"><span class="h3">HEAVY</span> (10 counts)</p>
+                <p class="m-0">
+                  <span class="lead"><b>HEAVY</b></span> (10 counts)
+                </p>
               </div>
             </td>
             <td class="border-0">
@@ -165,19 +169,17 @@
 
     <div v-show="totalAssortmentQuantity" class="mb-3">
       <div class="p-3 pt-4 border border-secondary">
-        <h4 class="text-uppercase text-center lead flex-grow-1 mb-2">
+        <p class="text-uppercase text-center flex-grow-1 mb-2">
           Your three-month subscription:
-        </h4>
+        </p>
         <div class="d-flex justify-content-around mb-2">
           <div
             v-if="variantQty[VARIANT_SKU.REGULAR] > 0"
             class="d-flex align-items-center mr-2"
           >
             <div class="circle regular-color mr-1"></div>
-            <p class="mb-0">
-              <span class="h4"
-                >{{ variantQty[VARIANT_SKU.REGULAR] }} REGULAR</span
-              >
+            <p class="mb-0 lead">
+              <b> {{ variantQty[VARIANT_SKU.REGULAR] }} REGULAR </b>
             </p>
           </div>
           <div
@@ -185,8 +187,8 @@
             class="d-flex align-items-center"
           >
             <div class="circle heavy-color mr-1"></div>
-            <p class="mb-0">
-              <span class="h4">{{ variantQty[VARIANT_SKU.HEAVY] }} HEAVY</span>
+            <p class="mb-0 lead">
+              <b> {{ variantQty[VARIANT_SKU.HEAVY] }} HEAVY </b>
             </p>
           </div>
         </div>
@@ -470,8 +472,8 @@ export default Vue.extend({
       };
     },
     openSubscriptionDetails() {
-      document.getElementById('subscription').open = true
-    }
+      document.getElementById("subscription").open = true;
+    },
   },
   mounted() {
     // this.VARIANT_SKU = Object.freeze(VARIANT_SKU);
@@ -495,6 +497,14 @@ $body-color: $secondary;
 #container::v-deep {
   @import "~bootstrap";
   @import "~bootstrap-vue";
+
+  .btn {
+    font-size: inherit;
+  }
+
+  .btn-primary {
+    color: #463a23;
+  }
 }
 
 .circle {
