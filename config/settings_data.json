@@ -10,17 +10,17 @@
     "color_borders": "#eeeeee",
     "color_nav_bg": "#ffffff",
     "color_nav_text": "#463a23",
-    "color_action_bar_bg": "rgba(0,0,0,0)",
-    "color_action_bar_text": "rgba(0,0,0,0)",
-    "color_action_bar_text_active": "rgba(0,0,0,0)",
+    "color_action_bar_bg": "#ffffff",
+    "color_action_bar_text": "#463a23",
+    "color_action_bar_text_active": "#463a23",
     "color_drawer_bg": "#ffffff",
     "color_drawer_text": "#a09d96",
     "color_footer_bg": "#e6e9ed",
     "color_footer_text": "#463a23",
-    "type_header_family": "lato_n5",
-    "type_header_base_size": "22px",
-    "type_button_base_size": "16px",
-    "type_header_transform": true,
+    "type_header_family": "lato_n6",
+    "type_header_base_size": "20px",
+    "type_button_base_size": "14px",
+    "type_header_transform": false,
     "type_header_spacing": "0.05em",
     "type_base_family": "lato_n4",
     "type_base_size": "15px",
@@ -41,9 +41,9 @@
     "share_pinterest": true,
     "favicon": "shopify:\/\/shop_images\/UMA_Favicon_Silver_Sand.png",
     "checkout_header_image": "",
-    "checkout_logo_image": "",
+    "checkout_logo_image": "shopify:\/\/shop_images\/Logo_UMA_463A23_9b3f1b31-0f14-430e-b6c5-e7e9ede99ad5.png",
     "checkout_logo_position": "left",
-    "checkout_logo_size": "medium",
+    "checkout_logo_size": "small",
     "checkout_body_background_image": "",
     "checkout_body_background_color": "#fff",
     "checkout_input_background_color_mode": "white",
@@ -51,8 +51,8 @@
     "checkout_sidebar_background_color": "#fafafa",
     "checkout_heading_font": "Helvetica Neue",
     "checkout_body_font": "Helvetica Neue",
-    "checkout_accent_color": "#1a1a1a",
-    "checkout_button_color": "#1a1a1a",
+    "checkout_accent_color": "#637489",
+    "checkout_button_color": "#637489",
     "checkout_error_color": "#de2a2a",
     "checkout_logo": "",
     "checkout_use_body_background_image": false,
@@ -64,12 +64,12 @@
       "announcement-bar": {
         "type": "announcement-bar",
         "settings": {
-          "show_announcement": false,
+          "show_announcement": true,
           "home_page_only": false,
-          "text": "Announce something here",
+          "text": "FREE SHIPPING NATIONWIDE",
           "link": "",
-          "color_bg": "rgba(0,0,0,0)",
-          "color_text": "#fff"
+          "color_bg": "#8695a7",
+          "color_text": "#ffffff"
         }
       },
       "header": {
@@ -77,7 +77,7 @@
         "settings": {
           "logo": "shopify:\/\/shop_images\/Logo_UMA_463A23.png",
           "logo_slideshow": "shopify:\/\/shop_images\/Logo_UMA_463A23.png",
-          "logo_width": "60"
+          "logo_width": "55"
         }
       },
       "slideshow": {
@@ -125,7 +125,7 @@
       "action-bar": {
         "type": "action-bar",
         "settings": {
-          "action_bar_link_list": ""
+          "action_bar_link_list": "footer"
         }
       },
       "footer": {
@@ -206,6 +206,10 @@
           "enable_payment_button": true,
           "product_form_width": "small"
         }
+      },
+      "cart-template-noqty": {
+        "type": "cart-template-noqty",
+        "settings": {}
       }
     },
     "content_for_index": [

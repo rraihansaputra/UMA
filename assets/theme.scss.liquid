@@ -5949,3 +5949,20 @@ $z-index-giftcard-code: 5;
 
 span.icon.icon-search {    display: none;
 }
+
+// Added by Jon N @ Shopify - September 10 2020 
+.drawer__inner {
+  top: 95px;
+}
+.site-header__link, .site-header__toggle-nav .icon, .site-header__cart .icon, .site-header__search .icon, .site-header__inner {
+  height: 50px;
+  @include media-query($small) {
+    height: 40px;
+  }
+}
+@include media-query($small) {
+  .site-header-wrapper {
+    height: 44px !important;
+  }
+}
+// End of changes

@@ -14,7 +14,9 @@
     <div class="grid__item one-third medium-up--one-sixth">
       <button type="button" class="site-header__link text-link site-header__toggle-nav js-drawer-open-left">
         <span class="icon icon-hamburger" aria-hidden="true"></span>
+        {% comment %} Removed by Jon N @ Shopify | September 10 2020 
         <span class="icon__fallback-text">{{ 'layout.navigation.menu' | t }}</span>
+        {% endcomment %}
       </button>
     </div>
     <div class="grid__item one-third medium-up--two-thirds">
@@ -46,11 +48,15 @@
     <div class="grid__item one-third medium-up--one-sixth text-right">
       <a href="{{ routes.search_url }}" class="site-header__link site-header__search js-drawer-open-top">
         <span class="icon icon-search" aria-hidden="true"></span>
+        {% comment %} Removed by Jon N @ Shopify | September 10 2020 
         <span class="icon__fallback-text">{{ 'layout.navigation.search' | t }}</span>
+        {% endcomment %}
       </a>
       <a href="{{ routes.cart_url }}" class="site-header__link site-header__cart cart-link{% if settings.cart_type == 'drawer' %} js-drawer-open-right{% endif %}{% if cart.item_count > 0 %} cart-bubble--visible{% endif %}">
         <span class="icon icon-cart" aria-hidden="true"></span>
+        {% comment %} Removed by Jon N @ Shopify | September 10 2020 
         <span class="icon__fallback-text">{{ 'layout.cart.title' | t }}</span>
+        {% endcomment %}
       </a>
     </div>
   </div>
