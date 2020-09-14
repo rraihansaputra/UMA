@@ -7,9 +7,86 @@
       </p>
     </div>
 
-    <b-button v-b-modal.modal1 class="text-uppercase mb-2" block
-      >Find the perfect assortment</b-button
-    >
+    <div class="mb-3">
+      <div class="mb-3">
+        <b>Select your period cycle</b>
+        <div class="d-flex mt-2">
+          <b-button
+            variant="primary"
+            class="text-uppercase mr-1 flex-grow-1"
+            pill
+            @click="
+              recommendationChoice.days = '<4days';
+              recommendationChoice.flow = null;
+              resetVariantQty();
+            "
+            :pressed="recommendationChoice.days === '<4days'"
+          >
+            4 Days or less
+          </b-button>
+          <b-button
+            variant="primary"
+            class="text-uppercase mr-1 flex-grow-1"
+            pill
+            @click="
+              recommendationChoice.days = '>5days';
+              recommendationChoice.flow = null;
+              resetVariantQty();
+            "
+            :pressed="recommendationChoice.days === '>5days'"
+          >
+            5 Days or more
+          </b-button>
+        </div>
+      </div>
+      <div :class="['mb-1', recommendationChoice.days ? false : 'text-muted']">
+        <b>Select your flow</b>
+        <div class="d-flex justify-content-around text-uppercase lead mt-2">
+          <div
+            class="d-flex flex-column align-items-center radio-thing"
+            style="flex:0 1 33%"
+          >
+            <input
+              type="radio"
+              value="light"
+              @change="updateVariantQty('light')"
+              v-model="recommendationChoice.flow"
+              id="form_light"
+              :disabled="!recommendationChoice.days"
+            />
+            <label for="form_light">Light</label>
+          </div>
+          <div
+            class="d-flex flex-column align-items-center radio-thing"
+            style="flex:0 1 33%"
+          >
+            <input
+              type="radio"
+              value="medium"
+              v-model="recommendationChoice.flow"
+              @change="updateVariantQty('medium')"
+              id="form_medium"
+              :disabled="!recommendationChoice.days"
+            />
+            <label for="form_medium">Medium</label>
+          </div>
+          <div
+            class="d-flex flex-column align-items-center radio-thing"
+            style="flex:0 1 33%"
+          >
+            <input
+              type="radio"
+              value="heavy"
+              @change="updateVariantQty('heavy')"
+              v-model="recommendationChoice.flow"
+              id="form_heavy"
+              :disabled="!recommendationChoice.days"
+            />
+            <label for="form_heavy">Heavy</label>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <b-modal
       id="modal1"
@@ -20,89 +97,67 @@
       @hide="resetModalQty"
       static
     >
-      <form @submit.prevent="handleAssortmentForm" class="px-4 lead">
-        <div class="mb-3">
-          <b>Select your cycle:</b>
-          <div class="mt-2">
-            <div class="form-cycle d-flex align-items-center">
-              <input
-                type="radio"
-                name="assortment_days"
-                value="<4days"
-                id="form_<4days"
-                v-model="recommendationChoice.days"
-              /><label for="form_<4days" class="mb-0 ml-1"
-                >4 days or fewer</label
-              >
-            </div>
-            <div class="form-cycle d-flex align-items-center">
-              <input
-                type="radio"
-                name="assortment_days"
-                value=">5days"
-                id="form_>5days"
-                v-model="recommendationChoice.days"
-              /><label for="form_>5days" class="mb-0 ml-1"
-                >5 days or more</label
-              >
-            </div>
-          </div>
-        </div>
-        <div class="mb-3">
-          <div
-            :class="['mb-1', recommendationChoice.days ? false : 'text-muted']"
-          >
-            <b>Select your flow:</b>
-            <div class="d-flex justify-content-around text-uppercase lead mt-2">
-              <div
-                class="d-flex flex-column align-items-center radio-thing"
-                style="flex:0 1 33%"
-              >
-                <input
-                  type="radio"
-                  value="light"
-                  name="assortment_flow"
-                  v-model="recommendationChoice.flow"
-                  id="form_light"
-                  :disabled="!recommendationChoice.days"
-                />
-                <label for="form_light">Light</label>
+      <p class="lead text-center"><b>Select minimum three boxes:</b></p>
+      <form @submit.prevent="handleAssortmentForm">
+        <table class="mb-4">
+          <tr>
+            <td class="border-0">
+              <div class="d-flex align-items-center">
+                <div class="circle regular-color mr-1"></div>
+                <p class="m-0">
+                  <span class="lead"><b>REGULAR</b></span> (10 counts)
+                </p>
               </div>
-              <div
-                class="d-flex flex-column align-items-center radio-thing"
-                style="flex:0 1 33%"
-              >
-                <input
-                  type="radio"
-                  value="medium"
-                  name="assortment_flow"
-                  v-model="recommendationChoice.flow"
-                  id="form_medium"
-                  :disabled="!recommendationChoice.days"
-                />
-                <label for="form_medium">Medium</label>
+            </td>
+            <td class="border-0">
+              <b-form-spinbutton
+                id="Quantity-OPR10SBP1"
+                name="OPR10SBP1"
+                :value="variantQty.OPR10SBP1"
+                @change="updateModalQtyRegular"
+                min="0"
+                max="100"
+                data-quantity-input
+              ></b-form-spinbutton>
+            </td>
+          </tr>
+          <tr>
+            <td class="border-0">
+              <div class="d-flex align-items-center">
+                <div class="circle heavy-color mr-1"></div>
+                <p class="m-0">
+                  <span class="lead"><b>HEAVY</b></span> (10 counts)
+                </p>
               </div>
-              <div
-                class="d-flex flex-column align-items-center radio-thing"
-                style="flex:0 1 33%"
-              >
-                <input
-                  type="radio"
-                  value="heavy"
-                  name="assortment_flow"
-                  v-model="recommendationChoice.flow"
-                  id="form_heavy"
-                  :disabled="!recommendationChoice.days"
-                />
-                <label for="form_heavy">Heavy</label>
-              </div>
-            </div>
-          </div>
+            </td>
+            <td class="border-0">
+              <b-form-spinbutton
+                id="Quantity-OPH10SBP1"
+                name="OPH10SBP1"
+                :value="variantQty.OPH10SBP1"
+                @change="updateModalQtyHeavy"
+                min="0"
+                max="100"
+                data-quantity-input
+              ></b-form-spinbutton>
+            </td>
+          </tr>
+        </table>
+
+        <div
+          v-show="!modalIsEligibleForFreeShipping"
+          class="text-danger text-center"
+        >
+          <p><i>Free shippping requires at least 3 boxes</i></p>
         </div>
 
         <div class="d-flex justify-content-center">
-          <b-button type="submit" name="submit" class="px-4 text-uppercase"
-            >Adjust</b-button
+          <b-button
+            type="submit"
+            name="submit"
+            class="px-4 text-uppercase"
+            :disabled="this.totalModalQty < 1"
+            >Change</b-button
           >
         </div>
       </form>
@@ -160,11 +215,10 @@
       </p>
     </div>
 
-    <!-- hard disable button while in progress -->
     <b-button
       block
       @click="addToCart"
-      :disabled="!totalAssortmentQuantity || loading || true"
+      :disabled="!totalAssortmentQuantity || loading"
     >
       <b-spinner v-if="loading" small></b-spinner>
       PROCEED
@@ -253,7 +307,6 @@ export default Vue.extend({
         OPR10SBP1: 0, // 10 REGULAR
         OPH10SBP1: 0, // 10 HEAVY
       },
-      // TODO cleanup
       // TODO a better way to do this is to have clean as null
       // instead of having a dirty property
       modalQty: {
@@ -271,7 +324,7 @@ export default Vue.extend({
       },
       product: {},
       loading: false,
-      imageUrls: {}, // TODO cleanup
+      imageUrls: {},
       VARIANT_SKU: VARIANT_SKU,
       productGraphQLData: null,
       checkoutData: null,
@@ -302,11 +355,9 @@ export default Vue.extend({
       return totalCount > 0 ? totalCount : false;
     },
     isEligibleForFreeShipping() {
-      // TODO Cleanup
       return this.totalAssortmentQuantity >= 3;
     },
     totalModalQty() {
-      // TODO Cleanup
       const totalRegular = this.modalQty[VARIANT_SKU.REGULAR].dirty
         ? this.modalQty[VARIANT_SKU.REGULAR].qty
         : this.variantQty[VARIANT_SKU.REGULAR];
@@ -317,19 +368,16 @@ export default Vue.extend({
       return totalRegular + totalHeavy;
     },
     modalIsEligibleForFreeShipping() {
-      // TODO Cleanup
       return this.totalModalQty >= 3;
     },
   },
   methods: {
-    handleAssortmentForm(event) {
-      const formContent = event.currentTarget;
-
-      const days = formContent["assortment_days"].value;
-      const flow = formContent["assortment_flow"].value;
-
-      this.variantQty = { ...this.recommendation[days][flow] };
-      this.$bvModal.hide("modal1");
+    updateVariantQty(flow) {
+      // TODO clear radio when length button is pressed again
+      this.recommendationChoice.flow = flow;
+      this.variantQty = {
+        ...this.recommendation[this.recommendationChoice.days][flow],
+      };
     },
     resetVariantQty() {
       this.variantQty = {
@@ -338,11 +386,9 @@ export default Vue.extend({
       };
     },
     updateModalQtyRegular(qty) {
-      // TODO cleanup
       this.modalQty[VARIANT_SKU.REGULAR] = { qty, dirty: true };
     },
     updateModalQtyHeavy(qty) {
-      // TODO cleanup
       this.modalQty[VARIANT_SKU.HEAVY] = { qty, dirty: true };
     },
     async addToCart() {
@@ -404,8 +450,16 @@ export default Vue.extend({
       const imageUrlsData = document.getElementById("image-urls").innerText;
       this.imageUrls = JSON.parse(imageUrlsData);
     },
+    handleAssortmentForm(event) {
+      const formContent = event.currentTarget;
+      const newQty = {};
+      Object.keys(this.variantQty).map((sku) => {
+        newQty[sku] = parseInt(formContent[sku].value);
+      });
+      this.variantQty = { ...newQty };
+      this.$bvModal.hide("modal1");
+    },
     resetModalQty() {
-      // TODO cleanup
       this.modalQty = {
         OPR10SBP1: {
           qty: 0,
@@ -477,24 +531,6 @@ $body-color: $secondary;
   height: 2em;
 }
 
-.form-cycle {
-  input {
-    appearance: none;
-    border-radius: 50%;
-    width: 16px;
-    height: 16px;
-
-    border: 1px solid $secondary;
-
-    &:checked {
-      border: 0.4em solid $secondary;
-      & + label {
-        font-weight: bold;
-      }
-    }
-  }
-}
-
 .radio-thing {
   label {
     margin-top: 0.2em;
@@ -511,10 +547,6 @@ $body-color: $secondary;
 
     &:checked {
       border: 0.4em solid $secondary;
-
-      & + label {
-        font-weight: bold;
-      }
     }
   }
 }
