@@ -21,7 +21,7 @@
     "type_header_base_size": "20px",
     "type_button_base_size": "14px",
     "type_header_transform": false,
-    "type_header_spacing": "0.05em",
+    "type_header_spacing": "none",
     "type_base_family": "lato_n4",
     "type_base_size": "15px",
     "cart_type": "drawer",
@@ -66,10 +66,10 @@
         "settings": {
           "show_announcement": true,
           "home_page_only": false,
-          "text": "FREE SHIPPING NATIONWIDE",
+          "text": "Free shipping across Indonesia",
           "link": "",
-          "color_bg": "#8695a7",
-          "color_text": "#ffffff"
+          "color_bg": "#e6e9ed",
+          "color_text": "#463a23"
         }
       },
       "header": {
