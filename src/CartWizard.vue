@@ -101,7 +101,11 @@
         </div>
 
         <div class="d-flex justify-content-center">
-          <b-button type="submit" name="submit" class="px-4 text-uppercase"
+          <b-button
+            type="submit"
+            name="submit"
+            class="px-4 text-uppercase"
+            :disabled="!recommendationChoice.flow"
             >Adjust</b-button
           >
         </div>
@@ -112,43 +116,101 @@
       </template>
     </b-modal>
 
-    <div v-show="totalAssortmentQuantity" class="mb-3">
-      <div class="p-3 pt-4 border border-secondary">
-        <p class="text-uppercase text-center flex-grow-1 mb-2">
-          Your three-month subscription:
-        </p>
-        <div class="d-flex justify-content-around mb-2">
-          <div
-            v-if="variantQty[VARIANT_SKU.REGULAR] > 0"
-            class="d-flex align-items-center mr-2"
-          >
-            <div class="circle regular-color mr-1"></div>
-            <p class="mb-0 lead">
-              <b> {{ variantQty[VARIANT_SKU.REGULAR] }} REGULAR </b>
-            </p>
-          </div>
-          <div
-            v-if="variantQty[VARIANT_SKU.HEAVY] > 0"
-            class="d-flex align-items-center"
-          >
-            <div class="circle heavy-color mr-1"></div>
-            <p class="mb-0 lead">
-              <b> {{ variantQty[VARIANT_SKU.HEAVY] }} HEAVY </b>
-            </p>
-          </div>
-        </div>
+    <!-- TODO refactor
+      - cleanup into v-for component (includes decomposing copy into object)
+      - add stack to CSS
+      - cleanup stack
+    -->
+    <div class="mb-3" v-if="recommendationDisplay">
+      <b>Your subscription:</b>
 
-        <div class="d-flex justify-content-center">
-          <a
-            v-b-modal.modal1
-            variant="link-secondary"
-            class="text-reset text-center"
-            style="text-decoration: underline;"
-          >
-            customize your assortment
-          </a>
+      <div
+        @click="selectVariant(recommendationDisplay['trial'])"
+        :class="[
+          'p-3', 'border', 'd-flex', 'mb-3',
+          selectedVariant === recommendationDisplay['trial']
+            ? 'border-secondary bg-primary'
+            : null,
+        ]"
+      >
+        <div class="flex-grow-1">
+          <b>Trial Set</b><br />
+          <span class="text-muted">
+            Try an assortment of UMA pads for
+            {{ getPrice(recommendationDisplay["trial"]) }}k </span
+          ><br />
+          <span class="text-muted text-uppercase">
+            {{ getQtyString(recommendationDisplay["trial"]) }}
+          </span>
+        </div>
+        <div>
+          <p class="h5">
+            {{ getPrice(recommendationDisplay["trial"]) / 1 }}k/month
+          </p>
         </div>
       </div>
+
+      <div
+        @click="selectVariant(recommendationDisplay['3m'])"
+        :class="[
+          'p-3', 'border', 'd-flex', 'mb-3',
+          selectedVariant === recommendationDisplay['3m']
+            ? 'bg-primary border-secondary'
+            : null,
+        ]"
+      >
+        <div class="flex-grow-1">
+          <b>3-month</b><br />
+          <span class="text-muted">
+            IDR {{ getPrice(recommendationDisplay["3m"]) }}k total, all shipped
+            upfront</span
+          ><br />
+          <span class="text-muted text-uppercase">
+            {{ getQtyString(recommendationDisplay["3m"]) }}
+          </span>
+        </div>
+        <div>
+          <p class="h5">
+            {{ getPrice(recommendationDisplay["3m"]) / 3 }}k/month
+          </p>
+        </div>
+      </div>
+
+      <div
+        @click="selectVariant(recommendationDisplay['6m'])"
+        :class="[
+          'p-3', 'border', 'd-flex',
+          selectedVariant === recommendationDisplay['6m']
+            ? 'bg-primary border-secondary'
+            : null,
+        ]"
+      >
+        <div class="flex-grow-1">
+          <b>6-month</b><br />
+          <span class="text-muted">
+            IDR {{ getPrice(recommendationDisplay["6m"]) }}k paid upfront,
+            delivered every three months </span
+          ><br />
+          <span class="text-muted text-uppercase">
+            {{ getQtyString(recommendationDisplay["6m"]) }}
+          </span>
+        </div>
+        <div>
+          <p class="h5">
+            {{ getPrice(recommendationDisplay["6m"]) / 6 }}k/month
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex justify-content-center">
+      <a
+        v-b-modal.modal1
+        variant="link-secondary"
+        class="text-reset text-center"
+        style="text-decoration: underline;"
+      >
+        customize your assortment
+      </a>
     </div>
 
     <div v-if="isEligibleForFreeShipping" class="d-flex justify-content-end">
@@ -164,14 +226,10 @@
     <b-button
       block
       @click="addToCart"
-      :disabled="!totalAssortmentQuantity || loading || true"
+      :disabled="!selectedVariant || loading"
     >
       <b-spinner v-if="loading" small></b-spinner>
       PROCEED
-      <span v-if="totalAssortmentQuantity"
-        >- IDR {{ (totalPrice / 100) | numeral("0,0.00") }}
-        {{ isEligibleForFreeShipping ? "" : "+ shipping" }}
-      </span>
     </b-button>
 
     <div class="pt-2">
@@ -223,6 +281,22 @@ const VARIANT_SKU = {
   HEAVY: "OPH10SBP1",
 };
 
+const SKU_INFO = {
+  "TRIAL-SET": { regular: 1, heavy: 1 },
+  "3M-4D-L": { regular: 3, heavy: 1 },
+  "6M-4D-L": { regular: 6, heavy: 2 },
+  "3M-4D-M": { regular: 2, heavy: 2 },
+  "6M-4D-M": { regular: 4, heavy: 4 },
+  "3M-4D-H": { regular: 1, heavy: 3 },
+  "6M-4D-H": { regular: 2, heavy: 6 },
+  "3M-5D-L": { regular: 4, heavy: 2 },
+  "6M-5D-L": { regular: 8, heavy: 4 },
+  "3M-5D-M": { regular: 3, heavy: 3 },
+  "6M-5D-M": { regular: 6, heavy: 6 },
+  "3M-5D-H": { regular: 2, heavy: 4 },
+  "6M-5D-H": { regular: 4, heavy: 8 },
+};
+
 export default Vue.extend({
   components: {
     BButton,
@@ -239,16 +313,17 @@ export default Vue.extend({
       },
       recommendation: {
         "<4days": {
-          light: { OPR10SBP1: 3, OPH10SBP1: 1 },
-          medium: { OPR10SBP1: 2, OPH10SBP1: 2 },
-          heavy: { OPR10SBP1: 1, OPH10SBP1: 3 },
+          light: { trial: "TRIAL-SET", "3m": "3M-4D-L", "6m": "6M-4D-L" },
+          medium: { trial: "TRIAL-SET", "3m": "3M-4D-M", "6m": "6M-4D-M" },
+          heavy: { trial: "TRIAL-SET", "3m": "3M-4D-M", "6m": "6M-4D-M" },
         },
         ">5days": {
-          light: { OPR10SBP1: 4, OPH10SBP1: 2 },
-          medium: { OPR10SBP1: 3, OPH10SBP1: 3 },
-          heavy: { OPR10SBP1: 2, OPH10SBP1: 4 },
+          light: { trial: "TRIAL-SET", "3m": "3M-5D-L", "6m": "6M-5D-L" },
+          medium: { trial: "TRIAL-SET", "3m": "3M-5D-M", "6m": "6M-5D-M" },
+          heavy: { trial: "TRIAL-SET", "3m": "3M-5D-H", "6m": "6M-5D-H" },
         },
       },
+      recommendationDisplay: null,
       variantQty: {
         OPR10SBP1: 0, // 10 REGULAR
         OPH10SBP1: 0, // 10 HEAVY
@@ -266,8 +341,6 @@ export default Vue.extend({
       },
       skuMap: {
         // Updated to the GraphQL ID on mounted (updateProducts())
-        OPR10SBP1: "34520384569497", // 10 REGULAR
-        OPH10SBP1: "34520384602265", // 10 HEAVY
       },
       product: {},
       loading: false,
@@ -275,6 +348,7 @@ export default Vue.extend({
       VARIANT_SKU: VARIANT_SKU,
       productGraphQLData: null,
       checkoutData: null,
+      selectedVariant: null,
     };
   },
   computed: {
@@ -328,8 +402,22 @@ export default Vue.extend({
       const days = formContent["assortment_days"].value;
       const flow = formContent["assortment_flow"].value;
 
-      this.variantQty = { ...this.recommendation[days][flow] };
+      this.recommendationDisplay = this.recommendation[days][flow];
       this.$bvModal.hide("modal1");
+    },
+    getPrice(sku) {
+      return (
+        this.product.variants.filter((variant) => variant.sku === sku)[0]
+          ?.price / 100000
+      );
+    },
+    getQtyString(sku) {
+      const qty = SKU_INFO[sku];
+
+      return `${qty.regular * 10} Regular + ${qty.heavy * 10} Heavy`;
+    },
+    selectVariant(sku) {
+      this.selectedVariant = sku
     },
     resetVariantQty() {
       this.variantQty = {
@@ -346,29 +434,37 @@ export default Vue.extend({
       this.modalQty[VARIANT_SKU.HEAVY] = { qty, dirty: true };
     },
     async addToCart() {
-      const cartItems = Object.keys(this.variantQty).map((variantId) => ({
-        variantId: this.skuMap[variantId],
-        quantity: this.variantQty[variantId],
-      }));
+      const cartItems = [
+        {
+          variantId: this.skuMap[this.selectedVariant],
+          quantity: 1,
+          customAttributes: [
+            {
+              key: "Contents",
+              value: this.getQtyString(this.selectedVariant)
+            }
+          ]
+        },
+      ];
 
-      const checkoutAttributes = {
-        customAttributes: [
-          { key: "Subscription interval", value: "3 months" },
-          { key: "_subscription_order", value: "" },
-          { key: "Cycle Days", value: this.recommendationChoice.days },
-          { key: "Cycle Flow", value: this.recommendationChoice.flow },
-        ],
-      };
+      // const checkoutAttributes = {
+      //   customAttributes: [
+      //     { key: "Subscription interval", value: "3 months" },
+      //     { key: "_subscription_order", value: "" },
+      //     { key: "Cycle Days", value: this.recommendationChoice.days },
+      //     { key: "Cycle Flow", value: this.recommendationChoice.flow },
+      //   ],
+      // };
 
       this.loading = true;
 
       try {
         this.checkoutData = await client.checkout.create();
 
-        this.checkoutData = await client.checkout.updateAttributes(
-          this.checkoutData.id,
-          checkoutAttributes
-        );
+        // this.checkoutData = await client.checkout.updateAttributes(
+        //   this.checkoutData.id,
+        //   checkoutAttributes
+        // );
 
         this.checkoutData = await client.checkout.addLineItems(
           this.checkoutData.id,
@@ -395,10 +491,10 @@ export default Vue.extend({
         this.productGraphQLData?.variants.find((variant) => variant.sku === SKU)
           ?.id;
 
-      this.skuMap = {
-        OPR10SBP1: getGraphQLID("OPR10SBP1"),
-        OPH10SBP1: getGraphQLID("OPH10SBP1"),
-      };
+      this.skuMap = {};
+      Object.keys(SKU_INFO).map((sku) => {
+        this.skuMap[sku] = getGraphQLID(sku);
+      })
     },
     updateImageUrls() {
       const imageUrlsData = document.getElementById("image-urls").innerText;
@@ -475,6 +571,12 @@ $body-color: $secondary;
 
 .icon-image {
   height: 2em;
+}
+
+.subscription-box {
+  padding: 1 rem;
+  border: 1px solid #dee2e6;
+  display: flex;
 }
 
 .form-cycle {
