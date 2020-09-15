@@ -16,8 +16,6 @@
       ok-disabled
       cancel-disabled
       centered
-      @show="resetModalQty"
-      @hide="resetModalQty"
       static
     >
       <form @submit.prevent="handleAssortmentForm" class="px-4 lead">
@@ -202,17 +200,8 @@
         </div>
       </div>
     </div>
-    <div class="d-flex justify-content-center">
-      <a
-        v-b-modal.modal1
-        variant="link-secondary"
-        class="text-reset text-center"
-        style="text-decoration: underline;"
-      >
-        customize your assortment
-      </a>
-    </div>
 
+    <!-- TODO Move into 6mo -->
     <div v-if="isEligibleForFreeShipping" class="d-flex justify-content-end">
       <p
         class="px-3 mb-n2"
@@ -222,7 +211,6 @@
       </p>
     </div>
 
-    <!-- hard disable button while in progress -->
     <b-button
       block
       @click="addToCart"
@@ -276,11 +264,6 @@ Vue.use(vueNumeralFilterInstaller, { locale: "en-gb" });
 Vue.use(ModalPlugin);
 Vue.directive("b-modal", VBModal);
 
-const VARIANT_SKU = {
-  REGULAR: "OPR10SBP1",
-  HEAVY: "OPH10SBP1",
-};
-
 const SKU_INFO = {
   "TRIAL-SET": { regular: 1, heavy: 1 },
   "3M-4D-L": { regular: 3, heavy: 1 },
@@ -324,76 +307,15 @@ export default Vue.extend({
         },
       },
       recommendationDisplay: null,
-      variantQty: {
-        OPR10SBP1: 0, // 10 REGULAR
-        OPH10SBP1: 0, // 10 HEAVY
-      },
-      // TODO cleanup
-      // TODO a better way to do this is to have clean as null
-      // instead of having a dirty property
-      modalQty: {
-        OPR10SBP1: { qty: 0, dirty: false },
-        OPH10SBP1: { qty: 0, dirty: false },
-      },
-      variantDetail: {
-        OPR10SBP1: { regular: 10, heavy: 0 }, // 10 REGULAR
-        OPH10SBP1: { regular: 0, heavy: 10 }, // 10 HEAVY
-      },
-      skuMap: {
-        // Updated to the GraphQL ID on mounted (updateProducts())
-      },
+      selectedVariant: null,
+
+      // Updated to the GraphQL ID on mounted (updateProducts())
+      skuMap: {},
       product: {},
-      loading: false,
-      imageUrls: {}, // TODO cleanup
-      VARIANT_SKU: VARIANT_SKU,
       productGraphQLData: null,
       checkoutData: null,
-      selectedVariant: null,
+      loading: false,
     };
-  },
-  computed: {
-    totalPrice() {
-      if (!this.product.variants) return 0;
-      const variantPrices = Object.keys(this.variantQty).map((sku) => {
-        const skuPrice = this.product.variants.filter((x) => x.sku === sku)[0]
-          .price;
-        const skuQty = this.variantQty[sku];
-        return skuPrice * skuQty;
-      });
-      const total = variantPrices.reduce(
-        (accumulator, cur) => accumulator + cur
-      );
-      return total;
-    },
-    totalAssortmentQuantity() {
-      let totalCount = 0;
-
-      // TODO use reduce...
-      Object.keys(this.variantQty).map((sku) => {
-        totalCount += this.variantQty[sku];
-      });
-
-      return totalCount > 0 ? totalCount : false;
-    },
-    isEligibleForFreeShipping() {
-      // TODO Cleanup
-      return this.totalAssortmentQuantity >= 3;
-    },
-    totalModalQty() {
-      // TODO Cleanup
-      const totalRegular = this.modalQty[VARIANT_SKU.REGULAR].dirty
-        ? this.modalQty[VARIANT_SKU.REGULAR].qty
-        : this.variantQty[VARIANT_SKU.REGULAR];
-      const totalHeavy = this.modalQty[VARIANT_SKU.HEAVY].dirty
-        ? this.modalQty[VARIANT_SKU.HEAVY].qty
-        : this.variantQty[VARIANT_SKU.HEAVY];
-
-      return totalRegular + totalHeavy;
-    },
-    modalIsEligibleForFreeShipping() {
-      // TODO Cleanup
-      return this.totalModalQty >= 3;
-    },
   },
   methods: {
     handleAssortmentForm(event) {
@@ -418,20 +340,6 @@ export default Vue.extend({
     },
     selectVariant(sku) {
       this.selectedVariant = sku
-    },
-    resetVariantQty() {
-      this.variantQty = {
-        OPR10SBP1: 0, // 10 REGULAR
-        OPH10SBP1: 0, // 10 HEAVY
-      };
-    },
-    updateModalQtyRegular(qty) {
-      // TODO cleanup
-      this.modalQty[VARIANT_SKU.REGULAR] = { qty, dirty: true };
-    },
-    updateModalQtyHeavy(qty) {
-      // TODO cleanup
-      this.modalQty[VARIANT_SKU.HEAVY] = { qty, dirty: true };
     },
     async addToCart() {
       const cartItems = [
@@ -480,6 +388,7 @@ export default Vue.extend({
       }
     },
     async updateProducts() {
+      // TODO remove the JSON dependency, just use GraphQL
       const productJsonData = document.getElementById("ProductJsonData")
         .innerText;
       this.product = JSON.parse(productJsonData);
@@ -496,33 +405,14 @@ export default Vue.extend({
         this.skuMap[sku] = getGraphQLID(sku);
       })
     },
-    updateImageUrls() {
-      const imageUrlsData = document.getElementById("image-urls").innerText;
-      this.imageUrls = JSON.parse(imageUrlsData);
-    },
-    resetModalQty() {
-      // TODO cleanup
-      this.modalQty = {
-        OPR10SBP1: {
-          qty: 0,
-          dirty: false,
-        },
-        OPH10SBP1: {
-          qty: 0,
-          dirty: false,
-        },
-      };
-    },
     openSubscriptionDetails() {
       document.getElementById("subscription").open = true;
     },
   },
   mounted() {
-    // this.VARIANT_SKU = Object.freeze(VARIANT_SKU);
     document.onreadystatechange = () => {
       if (document.readyState == "complete") {
         this.updateProducts();
-        this.updateImageUrls();
       }
     };
   },
@@ -547,30 +437,6 @@ $body-color: $secondary;
   .btn-primary {
     color: #463a23;
   }
-}
-
-.circle {
-  min-width: 24px;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: black;
-}
-
-.regular-color {
-  background: #96bbd8 !important;
-}
-
-.heavy-color {
-  background: #5f81b2 !important;
-}
-
-.gtk-image {
-  height: 4em;
-}
-
-.icon-image {
-  height: 2em;
 }
 
 .subscription-box {
