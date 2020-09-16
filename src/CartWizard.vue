@@ -30,7 +30,15 @@
       Customize my assortment
     </b-button>
 
-    <b-modal id="modal1" ok-disabled cancel-disabled centered static>
+    <b-modal
+      id="modal1"
+      ok-disabled
+      cancel-disabled
+      centered
+      static
+      @show="loadParams"
+      @hide="loadParams"
+    >
       <form @submit.prevent="handleAssortmentForm" class="px-4 lead">
         <div class="mb-3">
           <b>Select your cycle:</b>
@@ -218,6 +226,7 @@
 
 <script>
 import Vue from "vue";
+import VueRouter from "vue-router";
 import Axios from "axios";
 import { BButton, BModal, VBModal, ModalPlugin, BSpinner } from "bootstrap-vue";
 
@@ -227,6 +236,7 @@ const client = Client.buildClient({
   storefrontAccessToken: "eb9af665e31356249e1a3eb3be18754e",
 });
 
+Vue.use(VueRouter);
 Vue.use(ModalPlugin);
 Vue.directive("b-modal", VBModal);
 
@@ -307,6 +317,7 @@ export default Vue.extend({
       product: {},
       checkoutData: null,
       loading: false,
+      dataLoaded: false,
     };
   },
   methods: {
@@ -316,17 +327,22 @@ export default Vue.extend({
       const days = formContent["assortment_days"].value;
       const flow = formContent["assortment_flow"].value;
 
-      this.recommendationDisplay = this.recommendation[days][flow];
+      this.$router.push({
+        query: { ...this.$route.query, days, flow, sku: null },
+      });
+
       this.$bvModal.hide("modal1");
     },
     getSkuPrice(sku) {
+      if (!this.dataLoaded) return 0;
       return (
-        this.product.variants.find((variant) => variant.sku === sku)?.price /
+        this.product.variants.find((variant) => variant.sku === sku).price /
         1000
       );
     },
     getSkuGraphQLID(sku) {
-      return this.product.variants.find((variant) => variant.sku === sku)?.id;
+      if (!this.dataLoaded) return 0;
+      return this.product.variants.find((variant) => variant.sku === sku).id;
     },
     getQtyString(sku) {
       const qty = SKU_INFO[sku];
@@ -334,13 +350,38 @@ export default Vue.extend({
       return `${qty.regular * 10} Regular + ${qty.heavy * 10} Heavy`;
     },
     selectVariant(sku, key) {
-      this.selectedVariant = sku;
-      this.productAttributeCopy = this.displayMeta[key].productAttributeCopy;
+      this.$router.push({ query: { ...this.$route.query, sku: sku } });
+    },
+    productAttributeCopyFunction(sku) {
+      let key = "";
+
+      if (sku.startsWith("TRIAL")) key = "trial";
+      else if (sku.startsWith("3M")) key = "3m";
+      else if (sku.startsWith("6M")) key = "6m";
+      else {
+        window.alert(
+          "Something went wrong. Please notify the store owner. (Copy function)"
+        );
+        return;
+      }
+
+      return this.displayMeta[key].productAttributeCopy;
     },
     async addToCart() {
-      const variantId = this.getSkuGraphQLID(this.selectedVariant);
-      const productAttributeCopy = this.productAttributeCopy(
-        this.getQtyString(this.selectedVariant)
+      // Prepare information
+      const sku = this.selectedVariant;
+
+      if (!Object.keys(SKU_INFO).includes(sku)) {
+        console.error("sku doesn't exist");
+        window.alert(
+          "Something went wrong. Please notify the store owner. (SKU Mismatch)"
+        );
+        return;
+      }
+
+      const variantId = this.getSkuGraphQLID(sku);
+      const productAttributeCopy = this.productAttributeCopyFunction(sku)(
+        this.getQtyString(sku)
       );
 
       const cartItems = [
@@ -348,14 +389,12 @@ export default Vue.extend({
           variantId,
           quantity: 1,
           customAttributes: [
-            {
-              key: "Description",
-              value: productAttributeCopy,
-            },
+            { key: "Description", value: productAttributeCopy },
           ],
         },
       ];
 
+      // Actually adding to cart
       this.loading = true;
 
       try {
@@ -375,13 +414,34 @@ export default Vue.extend({
     },
     async updateProducts() {
       this.product = await client.product.fetchByHandle("organic-period-pads");
+      this.dataLoaded = true;
     },
     openSubscriptionDetails() {
       document.getElementById("subscription").open = true;
     },
+    loadParams() {
+      const { days, flow, sku } = this.$route.query;
+      if (sku) this.selectedVariant = sku;
+      else this.selectedVariant = null;
+      if (days && flow) {
+        this.recommendationChoice = { days, flow };
+        this.recommendationDisplay = this.recommendation[days][flow];
+      } else {
+        this.recommendationChoice = { days: null, flow: null };
+        this.recommendationDisplay = null;
+      }
+    },
   },
-  mounted() {
-    this.updateProducts();
+  async created() {
+    await this.updateProducts();
+  },
+  watch: {
+    "$route.query": {
+      handler() {
+        this.loadParams();
+      },
+      immediate: true,
+    },
   },
 });
 </script>
@@ -427,6 +487,11 @@ $spacers: map-merge(
 @import "~bootstrap/scss/functions";
 @import "~bootstrap/scss/variables";
 
+b,
+strong {
+  font-weight: bold;
+}
+
 // inject deep to enable modals
 // TODO cleanup only inject modal related instead of all
 #container::v-deep {
@@ -453,6 +518,11 @@ $spacers: map-merge(
     }
   }
 
+  b,
+  strong {
+    font-weight: bold;
+  }
+
   .btn {
     font-size: inherit;
   }
@@ -468,12 +538,14 @@ $spacers: map-merge(
   border-color: $gray-200 !important;
   box-shadow: 0 0.2rem 0.3rem rgba(37, 40, 43, 0.32) !important;
   font-weight: bold !important;
+  transition: unset !important;
   &__active {
     color: $white !important;
     background-color: $gray-500 !important;
     border-color: $gray-500 !important;
     box-shadow: 0 0.2rem 0.3rem rgba(37, 40, 43, 0.32) !important;
     font-weight: bold !important;
+    transition: unset !important;
   }
 }
 
