@@ -251,18 +251,13 @@ import {
   VBModal,
   ModalPlugin,
   BSpinner,
-  BFormCheckbox,
-  BFormSpinbutton,
 } from "bootstrap-vue";
-import vueNumeralFilterInstaller from "vue-numeral-filter";
 
 import Client from "shopify-buy";
 const client = Client.buildClient({
   domain: "umawomen.myshopify.com",
   storefrontAccessToken: "eb9af665e31356249e1a3eb3be18754e",
 });
-
-Vue.use(vueNumeralFilterInstaller, { locale: "en-gb" });
 
 Vue.use(ModalPlugin);
 Vue.directive("b-modal", VBModal);
@@ -288,8 +283,6 @@ export default Vue.extend({
     BButton,
     BModal,
     BSpinner,
-    BFormCheckbox,
-    BFormSpinbutton,
   },
   data() {
     return {
