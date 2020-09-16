@@ -11,13 +11,7 @@
       >Find the perfect assortment</b-button
     >
 
-    <b-modal
-      id="modal1"
-      ok-disabled
-      cancel-disabled
-      centered
-      static
-    >
+    <b-modal id="modal1" ok-disabled cancel-disabled centered static>
       <form @submit.prevent="handleAssortmentForm" class="px-4 lead">
         <div class="mb-3">
           <b>Select your cycle:</b>
@@ -125,7 +119,10 @@
       <div
         @click="selectVariant(recommendationDisplay['trial'])"
         :class="[
-          'p-3', 'border', 'd-flex', 'mb-3',
+          'p-3',
+          'border',
+          'd-flex',
+          'mb-3',
           selectedVariant === recommendationDisplay['trial']
             ? 'border-secondary bg-primary'
             : null,
@@ -151,7 +148,10 @@
       <div
         @click="selectVariant(recommendationDisplay['3m'])"
         :class="[
-          'p-3', 'border', 'd-flex', 'mb-3',
+          'p-3',
+          'border',
+          'd-flex',
+          'mb-3',
           selectedVariant === recommendationDisplay['3m']
             ? 'bg-primary border-secondary'
             : null,
@@ -160,8 +160,8 @@
         <div class="flex-grow-1">
           <b>3-month</b><br />
           <span class="text-muted">
-            IDR {{ getSkuPrice(recommendationDisplay["3m"]) }}k total, all shipped
-            upfront</span
+            IDR {{ getSkuPrice(recommendationDisplay["3m"]) }}k total, all
+            shipped upfront</span
           ><br />
           <span class="text-muted text-uppercase">
             {{ getQtyString(recommendationDisplay["3m"]) }}
@@ -177,7 +177,9 @@
       <div
         @click="selectVariant(recommendationDisplay['6m'])"
         :class="[
-          'p-3', 'border', 'd-flex',
+          'p-3',
+          'border',
+          'd-flex',
           selectedVariant === recommendationDisplay['6m']
             ? 'bg-primary border-secondary'
             : null,
@@ -202,7 +204,7 @@
     </div>
 
     <!-- TODO Move into 6mo -->
-    <div v-if="isEligibleForFreeShipping" class="d-flex justify-content-end">
+    <div v-if="false" class="d-flex justify-content-end">
       <p
         class="px-3 mb-n2"
         style="color: #F9F7F3; background: #B8C3CC; z-index: 1"
@@ -212,6 +214,7 @@
     </div>
 
     <b-button
+      v-show="recommendationDisplay"
       block
       @click="addToCart"
       :disabled="!selectedVariant || loading"
@@ -220,7 +223,7 @@
       PROCEED
     </b-button>
 
-    <div class="pt-2">
+    <div class="pt-2" v-show="recommendationDisplay">
       <p class="text-center text-reset">
         <a
           href="#subscription"
@@ -328,12 +331,12 @@ export default Vue.extend({
     },
     getSkuPrice(sku) {
       return (
-        this.product.variants.find((variant) => variant.sku === sku)
-          ?.price / 1000
+        this.product.variants.find((variant) => variant.sku === sku)?.price /
+        1000
       );
     },
     getSkuGraphQLID(sku) {
-      return this.product.variants.find((variant) => variant.sku === sku)?.id
+      return this.product.variants.find((variant) => variant.sku === sku)?.id;
     },
     getQtyString(sku) {
       const qty = SKU_INFO[sku];
@@ -341,7 +344,7 @@ export default Vue.extend({
       return `${qty.regular * 10} Regular + ${qty.heavy * 10} Heavy`;
     },
     selectVariant(sku) {
-      this.selectedVariant = sku
+      this.selectedVariant = sku;
     },
     async addToCart() {
       const cartItems = [
@@ -351,37 +354,22 @@ export default Vue.extend({
           customAttributes: [
             {
               key: "Contents",
-              value: this.getQtyString(this.selectedVariant)
-            }
-          ]
+              value: this.getQtyString(this.selectedVariant),
+            },
+          ],
         },
       ];
-
-      // const checkoutAttributes = {
-      //   customAttributes: [
-      //     { key: "Subscription interval", value: "3 months" },
-      //     { key: "_subscription_order", value: "" },
-      //     { key: "Cycle Days", value: this.recommendationChoice.days },
-      //     { key: "Cycle Flow", value: this.recommendationChoice.flow },
-      //   ],
-      // };
 
       this.loading = true;
 
       try {
         this.checkoutData = await client.checkout.create();
 
-        // this.checkoutData = await client.checkout.updateAttributes(
-        //   this.checkoutData.id,
-        //   checkoutAttributes
-        // );
-
         this.checkoutData = await client.checkout.addLineItems(
           this.checkoutData.id,
           cartItems
         );
 
-        this.loading = false;
         window.location.href = this.checkoutData.webUrl;
       } catch (e) {
         this.loading = false;
@@ -390,9 +378,7 @@ export default Vue.extend({
       }
     },
     async updateProducts() {
-      this.product = await client.product.fetchByHandle(
-        "organic-period-pads"
-      );
+      this.product = await client.product.fetchByHandle("organic-period-pads");
     },
     openSubscriptionDetails() {
       document.getElementById("subscription").open = true;
