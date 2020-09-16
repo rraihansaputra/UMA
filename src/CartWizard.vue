@@ -2,8 +2,7 @@
   <div class="my-4 stack-3" id="container">
     <div>
       <p class="m-0">
-        Get maximum comfort and protection from these ultra-soft, organic pads.
-        Available in Regular and Heavy variant.
+        Ultra soft period pads for maximum comfort andprotection.
       </p>
     </div>
 
@@ -69,6 +68,7 @@
         </div>
         <div class="mb-3">
           <div
+            v-show="recommendationChoice.days"
             :class="['mb-1', recommendationChoice.days ? false : 'text-muted']"
           >
             <b>Select your flow:</b>
@@ -163,12 +163,12 @@
             'stack-h-3',
             selectedVariant === sku ? 'border-secondary bg-primary' : null,
           ]"
+          style="cursor: pointer;"
         >
           <div class="flex-grow-1">
             <b>{{ displayMeta[key].title }}</b
             ><br />
             <span class="text-muted">
-              <!-- TODO displayMeta.copy + function -->
               {{ displayMeta[key].description(getSkuPrice(sku)) }} </span
             ><br />
             <span v-show="isQtyDisplayed" class="text-muted text-uppercase">
@@ -177,7 +177,6 @@
           </div>
           <div>
             <p class="h5">
-              <!-- displayMeta.subLength -->
               {{ getSkuPrice(sku) / displayMeta[key].subLength }}k/month
             </p>
           </div>
@@ -547,12 +546,6 @@ strong {
     font-weight: bold !important;
     transition: unset !important;
   }
-}
-
-.subscription-box {
-  padding: 1 rem;
-  border: 1px solid #dee2e6;
-  display: flex;
 }
 
 .form-cycle {
