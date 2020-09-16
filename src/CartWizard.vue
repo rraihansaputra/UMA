@@ -1,13 +1,13 @@
 <template>
-  <div class="my-4" id="container">
-    <div class="mb-3">
+  <div class="my-4 stack-3" id="container">
+    <div>
       <p class="m-0">
         Get maximum comfort and protection from these ultra-soft, organic pads.
         Available in Regular and Heavy variant.
       </p>
     </div>
 
-    <b-button v-b-modal.modal1 class="text-uppercase mb-2" block
+    <b-button v-b-modal.modal1 class="text-uppercase" block
       >Find the perfect assortment</b-button
     >
 
@@ -108,97 +108,50 @@
       </template>
     </b-modal>
 
-    <!-- TODO refactor
-      - cleanup into v-for component (includes decomposing copy into object)
-      - add stack to CSS
-      - cleanup stack
-    -->
-    <div class="mb-3" v-if="recommendationDisplay">
-      <b>Your subscription:</b>
-
-      <div
-        @click="selectVariant(recommendationDisplay['trial'])"
-        :class="[
-          'p-3',
-          'border',
-          'd-flex',
-          'mb-3',
-          selectedVariant === recommendationDisplay['trial']
-            ? 'border-secondary bg-primary'
-            : null,
-        ]"
-      >
-        <div class="flex-grow-1">
-          <b>Trial Set</b><br />
-          <span class="text-muted">
-            Try an assortment of UMA pads for
-            {{ getSkuPrice(recommendationDisplay["trial"]) }}k </span
-          ><br />
-          <span class="text-muted text-uppercase">
-            {{ getQtyString(recommendationDisplay["trial"]) }}
-          </span>
-        </div>
-        <div>
-          <p class="h5">
-            {{ getSkuPrice(recommendationDisplay["trial"]) / 1 }}k/month
-          </p>
-        </div>
+    <div class="stack-2" v-if="recommendationDisplay">
+      <div>
+        <b>Your subscription:</b>
+        <span
+          style="float: right; text-decoration: underline"
+          class="text-muted"
+        >
+          <a @click="isQtyDisplayed = !isQtyDisplayed">
+            <span v-if="!isQtyDisplayed">What is included?</span>
+            <span v-else>Show less</span>
+          </a>
+        </span>
       </div>
 
-      <div
-        @click="selectVariant(recommendationDisplay['3m'])"
-        :class="[
-          'p-3',
-          'border',
-          'd-flex',
-          'mb-3',
-          selectedVariant === recommendationDisplay['3m']
-            ? 'bg-primary border-secondary'
-            : null,
-        ]"
-      >
-        <div class="flex-grow-1">
-          <b>3-month</b><br />
-          <span class="text-muted">
-            IDR {{ getSkuPrice(recommendationDisplay["3m"]) }}k total, all
-            shipped upfront</span
-          ><br />
-          <span class="text-muted text-uppercase">
-            {{ getQtyString(recommendationDisplay["3m"]) }}
-          </span>
-        </div>
-        <div>
-          <p class="h5">
-            {{ getSkuPrice(recommendationDisplay["3m"]) / 3 }}k/month
-          </p>
-        </div>
-      </div>
-
-      <div
-        @click="selectVariant(recommendationDisplay['6m'])"
-        :class="[
-          'p-3',
-          'border',
-          'd-flex',
-          selectedVariant === recommendationDisplay['6m']
-            ? 'bg-primary border-secondary'
-            : null,
-        ]"
-      >
-        <div class="flex-grow-1">
-          <b>6-month</b><br />
-          <span class="text-muted">
-            IDR {{ getSkuPrice(recommendationDisplay["6m"]) }}k paid upfront,
-            delivered every three months </span
-          ><br />
-          <span class="text-muted text-uppercase">
-            {{ getQtyString(recommendationDisplay["6m"]) }}
-          </span>
-        </div>
-        <div>
-          <p class="h5">
-            {{ getSkuPrice(recommendationDisplay["6m"]) / 6 }}k/month
-          </p>
+      <div class="stack-3">
+        <div
+          v-for="(sku, key) in recommendationDisplay"
+          :key="key"
+          @click="selectVariant(sku, key)"
+          :class="[
+            'p-3',
+            'border',
+            'd-flex',
+            'stack-h-3',
+            selectedVariant === sku ? 'border-secondary bg-primary' : null,
+          ]"
+        >
+          <div class="flex-grow-1">
+            <b>{{ displayMeta[key].title }}</b
+            ><br />
+            <span class="text-muted">
+              <!-- TODO displayMeta.copy + function -->
+              {{ displayMeta[key].description(getSkuPrice(sku)) }} </span
+            ><br />
+            <span v-show="isQtyDisplayed" class="text-muted text-uppercase">
+              {{ getQtyString(sku) }}
+            </span>
+          </div>
+          <div>
+            <p class="h5">
+              <!-- displayMeta.subLength -->
+              {{ getSkuPrice(sku) / displayMeta[key].subLength }}k/month
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -223,7 +176,7 @@
       PROCEED
     </b-button>
 
-    <div class="pt-2" v-show="recommendationDisplay">
+    <div v-show="recommendationDisplay">
       <p class="text-center text-reset">
         <a
           href="#subscription"
@@ -245,13 +198,7 @@
 <script>
 import Vue from "vue";
 import Axios from "axios";
-import {
-  BButton,
-  BModal,
-  VBModal,
-  ModalPlugin,
-  BSpinner,
-} from "bootstrap-vue";
+import { BButton, BModal, VBModal, ModalPlugin, BSpinner } from "bootstrap-vue";
 
 import Client from "shopify-buy";
 const client = Client.buildClient({
@@ -303,7 +250,36 @@ export default Vue.extend({
         },
       },
       recommendationDisplay: null,
+      isQtyDisplayed: false,
       selectedVariant: null,
+      selectedSubLength: null,
+      displayMeta: {
+        trial: {
+          title: "Trial set",
+          description: (price) =>
+            `Total ${price}k for an assortment of UMA pads`,
+          subLength: 1,
+          productAttributeCopy: (qtyString) =>
+            `An assortment of UMA pads. Includes ${qtyString} pads.`,
+        },
+        "3m": {
+          title: "Quarterly",
+          description: (price) =>
+            `Total ${price}k for three-month supply, shipped upfront`,
+          subLength: 3,
+          productAttributeCopy: (qtyString) =>
+            `Three-month supply for your flow. Includes ${qtyString} pads.`,
+        },
+        "6m": {
+          title: "Semi-anually",
+          description: (price) =>
+            `Total ${price}k for six-month supply, shipped upfront`,
+          subLength: 6,
+          productAttributeCopy: (qtyString) =>
+            `Six-month supply for your flow. Includes ${qtyString} pads.`,
+        },
+      },
+      productAttributeCopy: null,
 
       // Updated to the GraphQL ID on mounted (updateProducts())
       skuMap: {},
@@ -336,18 +312,24 @@ export default Vue.extend({
 
       return `${qty.regular * 10} Regular + ${qty.heavy * 10} Heavy`;
     },
-    selectVariant(sku) {
+    selectVariant(sku, key) {
       this.selectedVariant = sku;
+      this.productAttributeCopy = this.displayMeta[key].productAttributeCopy;
     },
     async addToCart() {
+      const variantId = this.getSkuGraphQLID(this.selectedVariant);
+      const productAttributeCopy = this.productAttributeCopy(
+        this.getQtyString(this.selectedVariant)
+      );
+
       const cartItems = [
         {
-          variantId: this.getSkuGraphQLID(this.selectedVariant),
+          variantId,
           quantity: 1,
           customAttributes: [
             {
-              key: "Contents",
-              value: this.getQtyString(this.selectedVariant),
+              key: "Description",
+              value: productAttributeCopy,
             },
           ],
         },
@@ -378,25 +360,66 @@ export default Vue.extend({
     },
   },
   mounted() {
-    document.onreadystatechange = () => {
-      if (document.readyState == "complete") {
-        this.updateProducts();
-      }
-    };
+    this.updateProducts();
   },
 });
 </script>
 <style lang="scss" scoped>
-// TODO might have to switch out primary and secondary..
+
 $primary: #f5ede4;
 $secondary: #463a23;
 
 $body-color: $secondary;
 
+$spacer: 1rem !default;
+$spacers: () !default;
+// stylelint-disable-next-line scss/dollar-variable-default
+$spacers: map-merge(
+  (
+    0: 0,
+    1: ($spacer * .25),
+    2: ($spacer * .5),
+    3: $spacer,
+    4: ($spacer * 1.5),
+    5: ($spacer * 3)
+  ),
+  $spacers
+);
+
+// Add stack-* to have automatic margins
+// for children nodes in vertical stacks.
+@each $size, $value in $spacers {
+  .stack-#{$size} {
+    > *:not(:last-child) {
+      margin-bottom: $value !important;
+    }
+  }
+}
+
 // inject deep to enable modals
 #container::v-deep {
   @import "~bootstrap";
   @import "~bootstrap-vue";
+
+  // Add stack-* to have automatic margins
+  // for children nodes in vertical stacks.
+  @each $size, $value in $spacers {
+    .stack-#{$size} {
+      > *:not(:last-child) {
+        margin-bottom: $value !important;
+      }
+    }
+  }
+
+  // Add stack-h-* to have automatic margins
+  // for children nodes in horizontal stacks.
+  @each $size, $value in $spacers {
+    .stack-h-#{$size} {
+      > *:not(:last-child) {
+        margin-right: $value !important;
+      }
+    }
+  }
 
   .btn {
     font-size: inherit;
