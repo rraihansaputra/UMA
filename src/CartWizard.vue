@@ -135,7 +135,7 @@
           <b>Trial Set</b><br />
           <span class="text-muted">
             Try an assortment of UMA pads for
-            {{ getPrice(recommendationDisplay["trial"]) }}k </span
+            {{ getSkuPrice(recommendationDisplay["trial"]) }}k </span
           ><br />
           <span class="text-muted text-uppercase">
             {{ getQtyString(recommendationDisplay["trial"]) }}
@@ -143,7 +143,7 @@
         </div>
         <div>
           <p class="h5">
-            {{ getPrice(recommendationDisplay["trial"]) / 1 }}k/month
+            {{ getSkuPrice(recommendationDisplay["trial"]) / 1 }}k/month
           </p>
         </div>
       </div>
@@ -160,7 +160,7 @@
         <div class="flex-grow-1">
           <b>3-month</b><br />
           <span class="text-muted">
-            IDR {{ getPrice(recommendationDisplay["3m"]) }}k total, all shipped
+            IDR {{ getSkuPrice(recommendationDisplay["3m"]) }}k total, all shipped
             upfront</span
           ><br />
           <span class="text-muted text-uppercase">
@@ -169,7 +169,7 @@
         </div>
         <div>
           <p class="h5">
-            {{ getPrice(recommendationDisplay["3m"]) / 3 }}k/month
+            {{ getSkuPrice(recommendationDisplay["3m"]) / 3 }}k/month
           </p>
         </div>
       </div>
@@ -186,7 +186,7 @@
         <div class="flex-grow-1">
           <b>6-month</b><br />
           <span class="text-muted">
-            IDR {{ getPrice(recommendationDisplay["6m"]) }}k paid upfront,
+            IDR {{ getSkuPrice(recommendationDisplay["6m"]) }}k paid upfront,
             delivered every three months </span
           ><br />
           <span class="text-muted text-uppercase">
@@ -195,7 +195,7 @@
         </div>
         <div>
           <p class="h5">
-            {{ getPrice(recommendationDisplay["6m"]) / 6 }}k/month
+            {{ getSkuPrice(recommendationDisplay["6m"]) / 6 }}k/month
           </p>
         </div>
       </div>
@@ -312,7 +312,6 @@ export default Vue.extend({
       // Updated to the GraphQL ID on mounted (updateProducts())
       skuMap: {},
       product: {},
-      productGraphQLData: null,
       checkoutData: null,
       loading: false,
     };
@@ -327,11 +326,14 @@ export default Vue.extend({
       this.recommendationDisplay = this.recommendation[days][flow];
       this.$bvModal.hide("modal1");
     },
-    getPrice(sku) {
+    getSkuPrice(sku) {
       return (
-        this.product.variants.filter((variant) => variant.sku === sku)[0]
-          ?.price / 100000
+        this.product.variants.find((variant) => variant.sku === sku)
+          ?.price / 1000
       );
+    },
+    getSkuGraphQLID(sku) {
+      return this.product.variants.find((variant) => variant.sku === sku)?.id
     },
     getQtyString(sku) {
       const qty = SKU_INFO[sku];
@@ -344,7 +346,7 @@ export default Vue.extend({
     async addToCart() {
       const cartItems = [
         {
-          variantId: this.skuMap[this.selectedVariant],
+          variantId: this.getSkuGraphQLID(this.selectedVariant),
           quantity: 1,
           customAttributes: [
             {
@@ -388,22 +390,9 @@ export default Vue.extend({
       }
     },
     async updateProducts() {
-      // TODO remove the JSON dependency, just use GraphQL
-      const productJsonData = document.getElementById("ProductJsonData")
-        .innerText;
-      this.product = JSON.parse(productJsonData);
-
-      this.productGraphQLData = await client.product.fetchByHandle(
+      this.product = await client.product.fetchByHandle(
         "organic-period-pads"
       );
-      const getGraphQLID = (SKU) =>
-        this.productGraphQLData?.variants.find((variant) => variant.sku === SKU)
-          ?.id;
-
-      this.skuMap = {};
-      Object.keys(SKU_INFO).map((sku) => {
-        this.skuMap[sku] = getGraphQLID(sku);
-      })
     },
     openSubscriptionDetails() {
       document.getElementById("subscription").open = true;
