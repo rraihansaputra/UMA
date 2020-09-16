@@ -7,9 +7,28 @@
       </p>
     </div>
 
-    <b-button v-b-modal.modal1 class="text-uppercase" block
-      >Find the perfect assortment</b-button
+    <b-button
+      v-if="!this.recommendationChoice.flow"
+      v-b-modal.modal1
+      id="assortment-button"
+      class="text-uppercase"
+      block
+      pill
+      dark
     >
+      Find the perfect assortment
+    </b-button>
+    <b-button
+      v-else
+      v-b-modal.modal1
+      id="assortment-button__active"
+      class="text-uppercase"
+      block
+      pill
+      dark
+    >
+      Customize my assortment
+    </b-button>
 
     <b-modal id="modal1" ok-disabled cancel-disabled centered static>
       <form @submit.prevent="handleAssortmentForm" class="px-4 lead">
@@ -98,8 +117,10 @@
             name="submit"
             class="px-4 text-uppercase"
             :disabled="!recommendationChoice.flow"
-            >Adjust</b-button
           >
+            <span v-show="!this.recommendationDisplay">Find out</span>
+            <span v-show="!!this.recommendationDisplay">Adjust</span>
+          </b-button>
         </div>
       </form>
 
@@ -110,7 +131,7 @@
 
     <div class="stack-2" v-if="recommendationDisplay">
       <div>
-        <b>Your subscription:</b>
+        <b>Subscribe and save</b>
         <span
           style="float: right; text-decoration: underline"
           class="text-muted"
@@ -365,7 +386,6 @@ export default Vue.extend({
 });
 </script>
 <style lang="scss" scoped>
-
 $primary: #f5ede4;
 $secondary: #463a23;
 
@@ -377,11 +397,19 @@ $spacers: () !default;
 $spacers: map-merge(
   (
     0: 0,
-    1: ($spacer * .25),
-    2: ($spacer * .5),
+    1: (
+      $spacer * 0.25,
+    ),
+    2: (
+      $spacer * 0.5,
+    ),
     3: $spacer,
-    4: ($spacer * 1.5),
-    5: ($spacer * 3)
+    4: (
+      $spacer * 1.5,
+    ),
+    5: (
+      $spacer * 3,
+    ),
   ),
   $spacers
 );
@@ -396,7 +424,11 @@ $spacers: map-merge(
   }
 }
 
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+
 // inject deep to enable modals
+// TODO cleanup only inject modal related instead of all
 #container::v-deep {
   @import "~bootstrap";
   @import "~bootstrap-vue";
@@ -427,6 +459,21 @@ $spacers: map-merge(
 
   .btn-primary {
     color: #463a23;
+  }
+}
+
+#assortment-button {
+  color: $secondary !important;
+  background-color: $gray-200 !important;
+  border-color: $gray-200 !important;
+  box-shadow: 0 0.2rem 0.3rem rgba(37, 40, 43, 0.32) !important;
+  font-weight: bold !important;
+  &__active {
+    color: $white !important;
+    background-color: $gray-500 !important;
+    border-color: $gray-500 !important;
+    box-shadow: 0 0.2rem 0.3rem rgba(37, 40, 43, 0.32) !important;
+    font-weight: bold !important;
   }
 }
 
