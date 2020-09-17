@@ -18,7 +18,7 @@
     "color_footer_bg": "#e6e9ed",
     "color_footer_text": "#463a23",
     "type_header_family": "lato_n6",
-    "type_header_base_size": "20px",
+    "type_header_base_size": "22px",
     "type_button_base_size": "14px",
     "type_header_transform": false,
     "type_header_spacing": "none",
@@ -178,7 +178,7 @@
             "type": "faq",
             "settings": {
               "title": "Subscription",
-              "content": "Subscription content",
+              "content": "What's in it for you?\n\n35k < 70k\nIt’s simple math: Opt in for subscription at checkout and save up to 50% off your monthly order.\n\nEasy routine\nWhen it comes to building a healthy routine, consistency is key. Subscribing keeps you going.\n\nPerfect timing\nGet your period care when —and where—you need them. We will send you a reminder every three or six months, and with a few quick clicks, a fresh supply will arrive at your door.",
               "idTag": "subscription",
               "open": false
             }
@@ -186,7 +186,7 @@
           "1599630767385": {
             "type": "faqImage",
             "settings": {
-              "title": "Ingridients",
+              "title": "Ingredients",
               "image": "shopify:\/\/shop_images\/pads_layer.jpg",
               "idTag": "",
               "open": false
