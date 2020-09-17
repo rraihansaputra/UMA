@@ -1,8 +1,8 @@
 <template>
-  <div class="my-4 stack-3" id="container">
+  <div class="mt-4 stack-3" id="container" style="margin-bottom: 1.5em;">
     <div>
       <p class="m-0">
-        Ultra soft period pads for maximum comfort andprotection.
+        Ultra soft period pads for maximum comfort and protection.
       </p>
     </div>
 
@@ -26,7 +26,7 @@
       pill
       dark
     >
-      Customize my assortment
+      Adjust my assortment
     </b-button>
 
     <b-modal
@@ -38,8 +38,8 @@
       @show="loadParams"
       @hide="loadParams"
     >
-      <form @submit.prevent="handleAssortmentForm" class="px-4 lead">
-        <div class="mb-3">
+      <form @submit.prevent="handleAssortmentForm" class="px-4 lead stack-4">
+        <div>
           <b>Select your cycle:</b>
           <div class="mt-2">
             <div class="form-cycle d-flex align-items-center">
@@ -66,13 +66,13 @@
             </div>
           </div>
         </div>
-        <div class="mb-3">
+        <div>
           <div
             v-show="recommendationChoice.days"
             :class="['mb-1', recommendationChoice.days ? false : 'text-muted']"
           >
             <b>Select your flow:</b>
-            <div class="d-flex justify-content-around text-uppercase lead mt-2">
+            <div class="d-flex justify-content-around lead mt-2">
               <div
                 class="d-flex flex-column align-items-center radio-thing"
                 style="flex:0 1 33%"
@@ -141,7 +141,7 @@
       <div>
         <b>Subscribe and save</b>
         <span
-          style="float: right; text-decoration: underline"
+          style="float: right; text-decoration: underline; cursor: pointer;"
           class="text-muted"
         >
           <a @click="isQtyDisplayed = !isQtyDisplayed">
@@ -171,7 +171,7 @@
             <span class="text-muted">
               {{ displayMeta[key].description(getSkuPrice(sku)) }} </span
             ><br />
-            <span v-show="isQtyDisplayed" class="text-muted text-uppercase">
+            <span v-show="isQtyDisplayed" class="text-muted">
               {{ getQtyString(sku) }}
             </span>
           </div>
@@ -532,19 +532,22 @@ strong {
 }
 
 #assortment-button {
-  color: $secondary !important;
-  background-color: $gray-200 !important;
-  border-color: $gray-200 !important;
+  color: $white !important;
+  background-color: $gray-500 !important;
+  border-color: $gray-500 !important;
   box-shadow: 0 0.2rem 0.3rem rgba(37, 40, 43, 0.32) !important;
   font-weight: bold !important;
   transition: unset !important;
   &__active {
-    color: $white !important;
-    background-color: $gray-500 !important;
-    border-color: $gray-500 !important;
-    box-shadow: 0 0.2rem 0.3rem rgba(37, 40, 43, 0.32) !important;
+    color: #848c94 !important;
+    background-color: white !important;
+    border-color: #848c94 !important;
     font-weight: bold !important;
     transition: unset !important;
+
+    &:focus {
+      box-shadow: 0 0 0 0.2rem rgba(184, 195, 204, 0.5) !important;
+    }
   }
 }
 
