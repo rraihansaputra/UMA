@@ -29,113 +29,118 @@
       Adjust my assortment
     </b-button>
 
-    <b-modal
-      id="modal1"
-      ok-disabled
-      cancel-disabled
-      centered
-      static
-      @show="loadParams"
-      @hide="loadParams"
-    >
-      <form @submit.prevent="handleAssortmentForm" class="px-4 stack-4">
-        <div>
-          <b>Select your cycle:</b>
-          <div class="mt-2">
-            <div class="form-cycle d-flex align-items-center">
-              <input
-                type="radio"
-                name="assortment_days"
-                value="<4days"
-                id="form_<4days"
-                v-model="recommendationChoice.days"
-              /><label for="form_<4days" class="mb-0 ml-1"
-                >4 days or fewer</label
-              >
-            </div>
-            <div class="form-cycle d-flex align-items-center">
-              <input
-                type="radio"
-                name="assortment_days"
-                value=">5days"
-                id="form_>5days"
-                v-model="recommendationChoice.days"
-              /><label for="form_>5days" class="mb-0 ml-1"
-                >5 days or more</label
-              >
-            </div>
-          </div>
-        </div>
-        <div>
-          <div
-            v-show="recommendationChoice.days"
-            :class="['mb-1', recommendationChoice.days ? false : 'text-muted']"
-          >
-            <b>Select your flow:</b>
-            <div class="d-flex justify-content-around mt-2">
-              <div
-                class="d-flex flex-column align-items-center radio-thing"
-                style="flex:0 1 33%"
-              >
+    <div id="modal-style-target">
+      <b-modal
+        id="modal1"
+        ok-disabled
+        cancel-disabled
+        centered
+        static
+        @show="loadParams"
+        @hide="loadParams"
+      >
+        <form @submit.prevent="handleAssortmentForm" class="px-4 stack-4">
+          <div>
+            <b>Select your cycle:</b>
+            <div class="mt-2">
+              <div class="form-cycle d-flex align-items-center">
                 <input
                   type="radio"
-                  value="light"
-                  name="assortment_flow"
-                  v-model="recommendationChoice.flow"
-                  id="form_light"
-                  :disabled="!recommendationChoice.days"
-                />
-                <label for="form_light">Light</label>
+                  name="assortment_days"
+                  value="<4days"
+                  id="form_<4days"
+                  v-model="recommendationChoice.days"
+                /><label for="form_<4days" class="mb-0 ml-1"
+                  >4 days or fewer</label
+                >
               </div>
-              <div
-                class="d-flex flex-column align-items-center radio-thing"
-                style="flex:0 1 33%"
-              >
+              <div class="form-cycle d-flex align-items-center">
                 <input
                   type="radio"
-                  value="medium"
-                  name="assortment_flow"
-                  v-model="recommendationChoice.flow"
-                  id="form_medium"
-                  :disabled="!recommendationChoice.days"
-                />
-                <label for="form_medium">Medium</label>
-              </div>
-              <div
-                class="d-flex flex-column align-items-center radio-thing"
-                style="flex:0 1 33%"
-              >
-                <input
-                  type="radio"
-                  value="heavy"
-                  name="assortment_flow"
-                  v-model="recommendationChoice.flow"
-                  id="form_heavy"
-                  :disabled="!recommendationChoice.days"
-                />
-                <label for="form_heavy">Heavy</label>
+                  name="assortment_days"
+                  value=">5days"
+                  id="form_>5days"
+                  v-model="recommendationChoice.days"
+                /><label for="form_>5days" class="mb-0 ml-1"
+                  >5 days or more</label
+                >
               </div>
             </div>
           </div>
-        </div>
+          <div>
+            <div
+              v-show="recommendationChoice.days"
+              :class="[
+                'mb-1',
+                recommendationChoice.days ? false : 'text-muted',
+              ]"
+            >
+              <b>Select your flow:</b>
+              <div class="d-flex justify-content-around mt-2">
+                <div
+                  class="d-flex flex-column align-items-center radio-thing"
+                  style="flex:0 1 33%"
+                >
+                  <input
+                    type="radio"
+                    value="light"
+                    name="assortment_flow"
+                    v-model="recommendationChoice.flow"
+                    id="form_light"
+                    :disabled="!recommendationChoice.days"
+                  />
+                  <label for="form_light">Light</label>
+                </div>
+                <div
+                  class="d-flex flex-column align-items-center radio-thing"
+                  style="flex:0 1 33%"
+                >
+                  <input
+                    type="radio"
+                    value="medium"
+                    name="assortment_flow"
+                    v-model="recommendationChoice.flow"
+                    id="form_medium"
+                    :disabled="!recommendationChoice.days"
+                  />
+                  <label for="form_medium">Medium</label>
+                </div>
+                <div
+                  class="d-flex flex-column align-items-center radio-thing"
+                  style="flex:0 1 33%"
+                >
+                  <input
+                    type="radio"
+                    value="heavy"
+                    name="assortment_flow"
+                    v-model="recommendationChoice.flow"
+                    id="form_heavy"
+                    :disabled="!recommendationChoice.days"
+                  />
+                  <label for="form_heavy">Heavy</label>
+                </div>
+              </div>
+            </div>
+          </div>
 
-        <div class="d-flex justify-content-center">
-          <b-button
-            type="submit"
-            name="submit"
-            class="px-4 "
-            :disabled="!recommendationChoice.flow"
-          >
-            <span v-show="!this.recommendationDisplay">Find out</span>
-            <span v-show="!!this.recommendationDisplay">Adjust</span>
-          </b-button>
-        </div>
-      </form>
+          <div class="d-flex justify-content-center">
+            <b-button
+              type="submit"
+              name="submit"
+              class="px-4 "
+              :disabled="!recommendationChoice.flow"
+            >
+              <span v-show="!this.recommendationDisplay">Find out</span>
+              <span v-show="!!this.recommendationDisplay">Adjust</span>
+            </b-button>
+          </div>
+        </form>
 
-      <template v-slot:modal-footer>
-        <div>&nbsp;</div>
-      </template>
-    </b-modal>
+        <template v-slot:modal-footer>
+          <div>&nbsp;</div>
+        </template>
+      </b-modal>
+    </div>
 
     <div class="stack-2" v-if="recommendationDisplay">
       <div>
@@ -161,7 +166,9 @@
             'border',
             'd-flex',
             'stack-h-3',
-            selectedVariant === sku ? 'border-secondary sku-select__active' : null,
+            selectedVariant === sku
+              ? 'border-secondary sku-select__active'
+              : null,
           ]"
           style="cursor: pointer;"
         >
@@ -473,6 +480,25 @@ $spacers: map-merge(
   $spacers
 );
 
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins";
+@import "~bootstrap/scss/root";
+@import "~bootstrap/scss/reboot";
+@import "~bootstrap/scss/type";
+@import "~bootstrap/scss/grid";
+@import "~bootstrap/scss/forms";
+@import "~bootstrap/scss/buttons";
+@import "~bootstrap/scss/spinners";
+@import "~bootstrap/scss/utilities";
+
+@import "~bootstrap-vue/src/variables";
+@import "~bootstrap-vue/src/utilities";
+@import "~bootstrap-vue/src/components/form-tags";
+@import "~bootstrap-vue/src/components/input-group";
+@import "~bootstrap-vue/src/components/modal";
+@import "~bootstrap-vue/src/icons";
+
 // Add stack-* to have automatic margins
 // for children nodes in vertical stacks.
 @each $size, $value in $spacers {
@@ -483,9 +509,6 @@ $spacers: map-merge(
   }
 }
 
-@import "~bootstrap/scss/functions";
-@import "~bootstrap/scss/variables";
-
 b,
 strong {
   font-weight: bold;
@@ -493,9 +516,15 @@ strong {
 
 // inject deep to enable modals
 // TODO cleanup only inject modal related instead of all
-#container::v-deep {
-  @import "~bootstrap";
-  @import "~bootstrap-vue";
+#modal-style-target::v-deep {
+
+  @import "~bootstrap/scss/functions";
+  @import "~bootstrap/scss/variables";
+  @import "~bootstrap/scss/buttons";
+  @import "~bootstrap/scss/transitions";
+  @import "~bootstrap/scss/close";
+  @import "~bootstrap/scss/modal";
+  @import "~bootstrap-vue/src/components/modal";
 
   // Add stack-* to have automatic margins
   // for children nodes in vertical stacks.
@@ -503,16 +532,6 @@ strong {
     .stack-#{$size} {
       > *:not(:last-child) {
         margin-bottom: $value !important;
-      }
-    }
-  }
-
-  // Add stack-h-* to have automatic margins
-  // for children nodes in horizontal stacks.
-  @each $size, $value in $spacers {
-    .stack-h-#{$size} {
-      > *:not(:last-child) {
-        margin-right: $value !important;
       }
     }
   }
@@ -532,25 +551,25 @@ strong {
 }
 
 .sku-select__active {
-  background: #B8C3CC !important;
+  background: #b8c3cc;
 }
 
 #assortment-button {
-  color: $white !important;
-  background-color: $gray-500 !important;
-  border-color: $gray-500 !important;
-  box-shadow: 0 0.2rem 0.3rem rgba(37, 40, 43, 0.32) !important;
-  font-weight: bold !important;
-  transition: unset !important;
+  color: $white;
+  background-color: $gray-500;
+  border-color: $gray-500;
+  box-shadow: 0 0.2rem 0.3rem rgba(37, 40, 43, 0.32);
+  font-weight: bold;
+  transition: unset;
   &__active {
-    color: #848c94 !important;
-    background-color: white !important;
-    border-color: #848c94 !important;
-    font-weight: bold !important;
-    transition: unset !important;
+    color: #848c94;
+    background-color: white;
+    border-color: #848c94;
+    font-weight: bold;
+    transition: unset;
 
     &:focus {
-      box-shadow: 0 0 0 0.2rem rgba(184, 195, 204, 0.5) !important;
+      box-shadow: 0 0 0 0.2rem rgba(184, 195, 204, 0.5);
     }
   }
 }
