@@ -10,7 +10,7 @@
       v-if="!this.recommendationChoice.flow"
       v-b-modal.modal1
       id="assortment-button"
-      class="text-uppercase"
+      class=""
       block
       pill
       dark
@@ -21,7 +21,7 @@
       v-else
       v-b-modal.modal1
       id="assortment-button__active"
-      class="text-uppercase"
+      class=""
       block
       pill
       dark
@@ -38,7 +38,7 @@
       @show="loadParams"
       @hide="loadParams"
     >
-      <form @submit.prevent="handleAssortmentForm" class="px-4 lead stack-4">
+      <form @submit.prevent="handleAssortmentForm" class="px-4 stack-4">
         <div>
           <b>Select your cycle:</b>
           <div class="mt-2">
@@ -72,7 +72,7 @@
             :class="['mb-1', recommendationChoice.days ? false : 'text-muted']"
           >
             <b>Select your flow:</b>
-            <div class="d-flex justify-content-around lead mt-2">
+            <div class="d-flex justify-content-around mt-2">
               <div
                 class="d-flex flex-column align-items-center radio-thing"
                 style="flex:0 1 33%"
@@ -123,7 +123,7 @@
           <b-button
             type="submit"
             name="submit"
-            class="px-4 text-uppercase"
+            class="px-4 "
             :disabled="!recommendationChoice.flow"
           >
             <span v-show="!this.recommendationDisplay">Find out</span>
@@ -201,7 +201,7 @@
       :disabled="!selectedVariant || loading"
     >
       <b-spinner v-if="loading" small></b-spinner>
-      PROCEED
+      Proceed
     </b-button>
 
     <div v-show="recommendationDisplay">

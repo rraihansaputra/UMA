@@ -10,14 +10,15 @@ $body-color: $secondary;
 
   // hack to get hash navigation (#) not be displayed up top
   // https://css-tricks.com/hash-tag-links-padding/#fancier-clean-html-method
-  &::before {
-    display: block;
-    content: " ";
-    margin-top: -150px;
-    height: 150px;
-    visibility: hidden;
-    pointer-events: none;
-  }
+  // interferes with summary click
+  // &::before {
+  //   display: block;
+  //   content: " ";
+  //   margin-top: -150px;
+  //   height: 150px;
+  //   visibility: hidden;
+  //   pointer-events: none;
+  // }
 
   // add + and - instead the default detail triangle
   summary:after {
