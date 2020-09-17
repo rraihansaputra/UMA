@@ -161,7 +161,7 @@
             'border',
             'd-flex',
             'stack-h-3',
-            selectedVariant === sku ? 'border-secondary bg-primary' : null,
+            selectedVariant === sku ? 'border-secondary sku-select__active' : null,
           ]"
           style="cursor: pointer;"
         >
@@ -412,7 +412,7 @@ export default Vue.extend({
       }
     },
     async updateProducts() {
-      this.product = await client.product.fetchByHandle("organic-period-pads");
+      this.product = await client.product.fetchByHandle("organic-pads");
       this.dataLoaded = true;
     },
     openSubscriptionDetails() {
@@ -529,6 +529,10 @@ strong {
   .btn-primary {
     color: #463a23;
   }
+}
+
+.sku-select__active {
+  background: #B8C3CC !important;
 }
 
 #assortment-button {
