@@ -41,85 +41,44 @@
       >
         <form @submit.prevent="handleAssortmentForm" class="px-4 stack-4">
           <div>
-            <b>Select your cycle:</b>
-            <div class="mt-2">
-              <div class="form-cycle d-flex align-items-center">
-                <input
-                  type="radio"
-                  name="assortment_days"
-                  value="<4days"
-                  id="form_<4days"
-                  v-model="recommendationChoice.days"
-                /><label for="form_<4days" class="mb-0 ml-1"
-                  >4 days or fewer</label
-                >
-              </div>
-              <div class="form-cycle d-flex align-items-center">
-                <input
-                  type="radio"
-                  name="assortment_days"
-                  value=">5days"
-                  id="form_>5days"
-                  v-model="recommendationChoice.days"
-                /><label for="form_>5days" class="mb-0 ml-1"
-                  >5 days or more</label
-                >
-              </div>
-            </div>
-          </div>
-          <div>
-            <div
-              v-show="recommendationChoice.days"
-              :class="[
-                'mb-1',
-                recommendationChoice.days ? false : 'text-muted',
-              ]"
+            <b>How long does your average period last?</b>
+            <b-form-radio-group
+              v-model="recommendationChoice.days"
+              stacked
+              buttons
+              :options="daysRadioChoices"
+              name="assortment_days"
+              class="mt-2 stack-2 c-radio-stacked-buttons"
+              button-variant="outline-info"
             >
-              <b>Select your flow:</b>
-              <div class="d-flex justify-content-around mt-2">
-                <div
-                  class="d-flex flex-column align-items-center radio-thing"
-                  style="flex:0 1 33%"
-                >
-                  <input
-                    type="radio"
-                    value="light"
-                    name="assortment_flow"
-                    v-model="recommendationChoice.flow"
-                    id="form_light"
-                    :disabled="!recommendationChoice.days"
-                  />
-                  <label for="form_light">Light</label>
-                </div>
-                <div
-                  class="d-flex flex-column align-items-center radio-thing"
-                  style="flex:0 1 33%"
-                >
-                  <input
-                    type="radio"
-                    value="medium"
-                    name="assortment_flow"
-                    v-model="recommendationChoice.flow"
-                    id="form_medium"
-                    :disabled="!recommendationChoice.days"
-                  />
-                  <label for="form_medium">Medium</label>
-                </div>
-                <div
-                  class="d-flex flex-column align-items-center radio-thing"
-                  style="flex:0 1 33%"
-                >
-                  <input
-                    type="radio"
-                    value="heavy"
-                    name="assortment_flow"
-                    v-model="recommendationChoice.flow"
-                    id="form_heavy"
-                    :disabled="!recommendationChoice.days"
-                  />
-                  <label for="form_heavy">Heavy</label>
-                </div>
-              </div>
+            </b-form-radio-group>
+          </div>
+
+          <div v-show="recommendationChoice.days" class="mb-1">
+            <b>How would you describe your flow?</b>
+            <b-form-radio-group
+              v-model="recommendationChoice.flow"
+              stacked
+              buttons
+              :options="flowRadioChoices"
+              name="assortment_flow"
+              class="mt-2 stack-2 c-radio-stacked-buttons"
+              button-variant="outline-info"
+            >
+            </b-form-radio-group>
+          </div>
+
+          <div v-if="modalMonthlyAssortment">
+            <b>Your monthly assortment</b>
+            <div class="d-flex stack-h-3">
+              <span class="d-flex align-items-center">
+                <div class="monthly-assortment-pill regular mr-2"></div>
+                {{ modalMonthlyAssortment.regular }} Regular
+              </span>
+              <span class="d-flex align-items-center">
+                <div class="monthly-assortment-pill heavy mr-2"></div>
+                {{ modalMonthlyAssortment.heavy }} Heavy
+              </span>
             </div>
           </div>
 
@@ -129,8 +88,9 @@
               name="submit"
               class="px-4 "
               :disabled="!recommendationChoice.flow"
+              variant="outline-secondary"
             >
-              <span v-show="!this.recommendationDisplay">Find out</span>
+              <span v-show="!this.recommendationDisplay">Get started</span>
               <span v-show="!!this.recommendationDisplay">Adjust</span>
             </b-button>
           </div>
@@ -143,6 +103,19 @@
     </div>
 
     <div class="stack-2" v-if="recommendationDisplay">
+      <div v-if="recommendationMonthlyAssortment">
+        <b>Your average monthly assortment</b>
+        <div class="d-flex stack-h-3">
+          <span class="d-flex align-items-center">
+            <div class="monthly-assortment-pill regular mr-2"></div>
+            {{ recommendationMonthlyAssortment.regular }} Regular
+          </span>
+          <span class="d-flex align-items-center">
+            <div class="monthly-assortment-pill heavy mr-2"></div>
+            {{ recommendationMonthlyAssortment.heavy }} Heavy
+          </span>
+        </div>
+      </div>
       <div>
         <b>Subscribe and save</b>
         <span
@@ -234,7 +207,15 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Axios from "axios";
-import { BButton, BModal, VBModal, ModalPlugin, BSpinner } from "bootstrap-vue";
+import {
+  BButton,
+  BModal,
+  VBModal,
+  ModalPlugin,
+  BSpinner,
+  BFormRadio,
+  BFormRadioGroup,
+} from "bootstrap-vue";
 
 import Client from "shopify-buy";
 const client = Client.buildClient({
@@ -262,14 +243,38 @@ const SKU_INFO = {
   "6M-5D-H": { regular: 4, heavy: 8 },
 };
 
+const AVG_MONTHLY_ASSORTMENT = {
+  "<4days": {
+    light: { regular: 10, heavy: 3 },
+    medium: { regular: 7, heavy: 6 },
+    heavy: { regular: 3, heavy: 10 },
+  },
+  ">5days": {
+    light: { regular: 14, heavy: 6 },
+    medium: { regular: 10, heavy: 10 },
+    heavy: { regular: 6, heavy: 14 },
+  },
+};
+
 export default Vue.extend({
   components: {
     BButton,
     BModal,
     BSpinner,
+    BFormRadio,
+    BFormRadioGroup,
   },
   data() {
     return {
+      daysRadioChoices: [
+        { text: "4 days or fewer", value: "<4days" },
+        { text: "5 days or fewer", value: ">5days" },
+      ],
+      flowRadioChoices: [
+        { text: "Light", value: "light" },
+        { text: "Medium", value: "medium" },
+        { text: "Heavy", value: "heavy" },
+      ],
       recommendationChoice: {
         days: null,
         flow: null,
@@ -287,6 +292,8 @@ export default Vue.extend({
         },
       },
       recommendationDisplay: null,
+      recommendationMonthlyAssortment: null,
+
       isQtyDisplayed: false,
       selectedVariant: null,
       selectedSubLength: null,
@@ -432,14 +439,25 @@ export default Vue.extend({
       if (days && flow) {
         this.recommendationChoice = { days, flow };
         this.recommendationDisplay = this.recommendation[days][flow];
+        this.recommendationMonthlyAssortment = AVG_MONTHLY_ASSORTMENT[days][flow];
       } else {
         this.recommendationChoice = { days: null, flow: null };
         this.recommendationDisplay = null;
+        this.recommendationMonthlyAssortment = null;
       }
     },
   },
   async created() {
     await this.updateProducts();
+  },
+  computed: {
+    modalMonthlyAssortment() {
+      if (!this.recommendationChoice.days || !this.recommendationChoice.flow)
+        return null;
+      return AVG_MONTHLY_ASSORTMENT[this.recommendationChoice.days][
+        this.recommendationChoice.flow
+      ];
+    },
   },
   watch: {
     "$route.query": {
@@ -454,6 +472,7 @@ export default Vue.extend({
 <style lang="scss" scoped>
 $primary: #f5ede4;
 $secondary: #463a23;
+$info: #405d85;
 
 $body-color: $secondary;
 
@@ -509,19 +528,28 @@ $spacers: map-merge(
   }
 }
 
-b,
-strong {
-  font-weight: bold;
+// Add stack-h-* to have automatic margins
+// for children nodes in horizontal stacks.
+@each $size, $value in $spacers {
+  .stack-h-#{$size} {
+    > *:not(:last-child) {
+      margin-right: $value !important;
+    }
+  }
 }
+
+b, strong { font-weight: bold; }
 
 // inject deep to enable modals
 // TODO cleanup only inject modal related instead of all
 #modal-style-target::v-deep {
-
+  // @import "~bootstrap";
+  // @import "~bootstrap-vue";
   @import "~bootstrap/scss/functions";
   @import "~bootstrap/scss/variables";
   @import "~bootstrap/scss/buttons";
   @import "~bootstrap/scss/transitions";
+  @import "~bootstrap/scss/button-group";
   @import "~bootstrap/scss/close";
   @import "~bootstrap/scss/modal";
   @import "~bootstrap-vue/src/components/modal";
@@ -536,18 +564,52 @@ strong {
     }
   }
 
-  b,
-  strong {
-    font-weight: bold;
+  b, strong { font-weight: bold; }
+
+  .btn { font-size: inherit; }
+
+  // .btn-primary {
+  //   color: #463a23;
+  // }
+
+  .c-radio-stacked-buttons {
+    width: 100%;
+
+    > .btn {
+      border-radius: 50rem !important; // from .rounded-pill
+      border: 1px solid $gray-500 !important;
+      background-color: $white !important;
+      width: 100%;
+
+      &.active {
+        color: $info !important;
+        background-color: RGBA(64, 93, 133, 0.15) !important; // rgb is $info
+      }
+    }
   }
 
-  .btn {
-    font-size: inherit;
-  }
+  .monthly-assortment-pill {
+    width: 2em;
+    height: 0.5em;
+    border-radius: 50em;
+    background: black;
+    display: inline-block;
 
-  .btn-primary {
-    color: #463a23;
+    &.heavy { background: $info; }
+    &.regular { background: #93BBD5 }
   }
+}
+
+// need to be synced with above
+.monthly-assortment-pill {
+  width: 2em;
+  height: 0.5em;
+  border-radius: 50em;
+  background: black;
+  display: inline-block;
+
+  &.heavy { background: $info; }
+  &.regular { background: #93BBD5 }
 }
 
 .sku-select__active {
@@ -556,20 +618,22 @@ strong {
 
 #assortment-button {
   color: $white;
-  background-color: $gray-500;
-  border-color: $gray-500;
+  background-color: $info;
+  border-color: $info;
   box-shadow: 0 0.2rem 0.3rem rgba(37, 40, 43, 0.32);
   font-weight: bold;
   transition: unset;
+
   &__active {
-    color: #848c94;
+    color: $info;
     background-color: white;
-    border-color: #848c94;
+    border-color: $info;
     font-weight: bold;
     transition: unset;
 
     &:focus {
-      box-shadow: 0 0 0 0.2rem rgba(184, 195, 204, 0.5);
+      box-shadow: 0 0 0 0.2rem #A5B8D3;
+      // box-shadow: 0 0 0 0.2rem rgba(184, 195, 204, 0.5);
     }
   }
 }
@@ -585,17 +649,14 @@ strong {
 
     &:checked {
       border: 0.4em solid $secondary;
-      & + label {
-        font-weight: bold;
-      }
+      & + label { font-weight: bold; }
     }
   }
 }
 
 .radio-thing {
-  label {
-    margin-top: 0.2em;
-  }
+  label { margin-top: 0.2em; }
+
   input {
     z-index: 1;
     appearance: none;
@@ -609,9 +670,7 @@ strong {
     &:checked {
       border: 0.4em solid $secondary;
 
-      & + label {
-        font-weight: bold;
-      }
+      & + label { font-weight: bold; }
     }
   }
 }
@@ -644,7 +703,7 @@ strong {
   }
 
   &___BV_modal_content_ {
-    background: #f9f7f3 !important;
+    background: #fafafa !important;
   }
 }
 </style>
