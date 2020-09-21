@@ -86,12 +86,15 @@
             <b-button
               type="submit"
               name="submit"
-              class="px-4 "
-              :disabled="!recommendationChoice.flow"
+              block
+              :v-show="!recommendationChoice.flow"
               variant="outline-secondary"
+              style="border-width: 2px;"
             >
-              <span v-show="!this.recommendationDisplay">Get started</span>
-              <span v-show="!!this.recommendationDisplay">Adjust</span>
+              <b>
+                <span v-show="!this.recommendationDisplay">Get started</span>
+                <span v-show="!!this.recommendationDisplay">Adjust</span>
+              </b>
             </b-button>
           </div>
         </form>
@@ -267,8 +270,8 @@ export default Vue.extend({
   data() {
     return {
       daysRadioChoices: [
-        { text: "4 days or fewer", value: "<4days" },
-        { text: "5 days or fewer", value: ">5days" },
+        { text: "4 days or less", value: "<4days" },
+        { text: "5 days or more", value: ">5days" },
       ],
       flowRadioChoices: [
         { text: "Light", value: "light" },
@@ -439,7 +442,8 @@ export default Vue.extend({
       if (days && flow) {
         this.recommendationChoice = { days, flow };
         this.recommendationDisplay = this.recommendation[days][flow];
-        this.recommendationMonthlyAssortment = AVG_MONTHLY_ASSORTMENT[days][flow];
+        this.recommendationMonthlyAssortment =
+          AVG_MONTHLY_ASSORTMENT[days][flow];
       } else {
         this.recommendationChoice = { days: null, flow: null };
         this.recommendationDisplay = null;
@@ -538,13 +542,13 @@ $spacers: map-merge(
   }
 }
 
-b, strong { font-weight: bold; }
+b,
+strong {
+  font-weight: bold;
+}
 
 // inject deep to enable modals
-// TODO cleanup only inject modal related instead of all
 #modal-style-target::v-deep {
-  // @import "~bootstrap";
-  // @import "~bootstrap-vue";
   @import "~bootstrap/scss/functions";
   @import "~bootstrap/scss/variables";
   @import "~bootstrap/scss/buttons";
@@ -564,13 +568,14 @@ b, strong { font-weight: bold; }
     }
   }
 
-  b, strong { font-weight: bold; }
+  b,
+  strong {
+    font-weight: bold;
+  }
 
-  .btn { font-size: inherit; }
-
-  // .btn-primary {
-  //   color: #463a23;
-  // }
+  .btn {
+    font-size: inherit;
+  }
 
   .c-radio-stacked-buttons {
     width: 100%;
@@ -580,6 +585,11 @@ b, strong { font-weight: bold; }
       border: 1px solid $gray-500 !important;
       background-color: $white !important;
       width: 100%;
+      letter-spacing: 0.04em;
+
+      &:hover {
+        color: $info !important;
+      }
 
       &.active {
         color: $info !important;
@@ -594,9 +604,14 @@ b, strong { font-weight: bold; }
     border-radius: 50em;
     background: black;
     display: inline-block;
+    letter-spacing: 0.1em;
 
-    &.heavy { background: $info; }
-    &.regular { background: #93BBD5 }
+    &.heavy {
+      background: $info;
+    }
+    &.regular {
+      background: #93bbd5;
+    }
   }
 }
 
@@ -608,8 +623,12 @@ b, strong { font-weight: bold; }
   background: black;
   display: inline-block;
 
-  &.heavy { background: $info; }
-  &.regular { background: #93BBD5 }
+  &.heavy {
+    background: $info;
+  }
+  &.regular {
+    background: #93bbd5;
+  }
 }
 
 .sku-select__active {
@@ -632,7 +651,7 @@ b, strong { font-weight: bold; }
     transition: unset;
 
     &:focus {
-      box-shadow: 0 0 0 0.2rem #A5B8D3;
+      box-shadow: 0 0 0 0.2rem #a5b8d3;
       // box-shadow: 0 0 0 0.2rem rgba(184, 195, 204, 0.5);
     }
   }
@@ -649,13 +668,17 @@ b, strong { font-weight: bold; }
 
     &:checked {
       border: 0.4em solid $secondary;
-      & + label { font-weight: bold; }
+      & + label {
+        font-weight: bold;
+      }
     }
   }
 }
 
 .radio-thing {
-  label { margin-top: 0.2em; }
+  label {
+    margin-top: 0.2em;
+  }
 
   input {
     z-index: 1;
@@ -670,7 +693,9 @@ b, strong { font-weight: bold; }
     &:checked {
       border: 0.4em solid $secondary;
 
-      & + label { font-weight: bold; }
+      & + label {
+        font-weight: bold;
+      }
     }
   }
 }
