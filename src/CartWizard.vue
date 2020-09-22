@@ -118,10 +118,10 @@
     </div>
 
     <div class="stack-2" v-if="recommendationDisplay">
-      <div v-if="recommendationMonthlyAssortment">
+      <div class="mb-3" v-if="recommendationMonthlyAssortment">
         <b>Your average monthly assortment</b>
         <div class="d-flex stack-h-3">
-          <span class="d-flex align-items-center">
+          <span class="d-flex align-items-center mt-1">
             <div class="monthly-assortment-pill regular mr-2"></div>
             {{ recommendationMonthlyAssortment.regular }} Regular
           </span>
@@ -131,15 +131,24 @@
           </span>
         </div>
       </div>
+
       <div>
         <b>Subscribe and save</b>
         <span
           style="float: right; text-decoration: underline; cursor: pointer;"
           class="text-muted"
         >
-          <a @click="isQtyDisplayed = !isQtyDisplayed">
+          <!-- <a @click="isQtyDisplayed = !isQtyDisplayed">
             <span v-if="!isQtyDisplayed">What is included?</span>
             <span v-else>Show less</span>
+          </a> -->
+          <a
+            href="#subscription"
+            class="text-secondary"
+            style="text-decoration: underline;"
+            @click="openSubscriptionDetails"
+          >
+            What is subscription?
           </a>
         </span>
       </div>
@@ -148,45 +157,52 @@
         <div
           v-for="(sku, key) in recommendationDisplay"
           :key="key"
-          @click="selectVariant(sku, key)"
-          :class="[
-            'p-3',
-            'border',
-            'd-flex',
-            'stack-h-3',
-            selectedVariant === sku
-              ? 'border-secondary sku-select__active'
-              : null,
-          ]"
-          style="cursor: pointer;"
+          :class="key === 'trial' ? 'mt-n1' : ''"
         >
-          <div class="flex-grow-1">
-            <b>{{ displayMeta[key].title }}</b
-            ><br />
-            <span class="text-muted">
-              {{ displayMeta[key].description(getSkuPrice(sku)) }} </span
-            ><br />
-            <span v-show="isQtyDisplayed" class="text-muted">
-              {{ getQtyString(sku) }}
-            </span>
-          </div>
-          <div>
-            <p class="h5">
-              {{ getSkuPrice(sku) / displayMeta[key].subLength }}k/month
+          <b v-if="key === 'trial'">Not ready to subscribe?</b>
+          <div v-if="key === '6m'" class="d-flex justify-content-end mt-n2">
+            <p
+              class="px-3 mb-n3"
+              style="color: white; background: #405D85; z-index: 1"
+            >
+              <i>Best value</i>
             </p>
+          </div>
+
+          <div
+            @click="selectVariant(sku, key)"
+            :class="[
+              'p-3',
+              'border',
+              'd-flex',
+              'stack-h-3',
+              selectedVariant === sku ? 'sku-select__active' : null,
+              key === 'trial' ? 'mt-2' : null,
+            ]"
+            style="cursor: pointer;"
+          >
+            <div class="flex-grow-1">
+              <b>{{ displayMeta[key].title }}</b
+              ><br />
+              <span class="text-muted">
+                {{ displayMeta[key].description(getSkuPrice(sku)) }} </span
+              ><br />
+              <span v-show="isQtyDisplayed" class="text-muted">
+                {{ getQtyString(sku) }}
+              </span>
+            </div>
+
+            <div>
+              <p v-if="key === 'trial'" class="h5">
+                {{ getSkuPrice(sku) / displayMeta[key].subLength }}k/set
+              </p>
+              <p v-else class="h5">
+                {{ getSkuPrice(sku) / displayMeta[key].subLength }}k/month
+              </p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-
-    <!-- TODO Move into 6mo -->
-    <div v-if="false" class="d-flex justify-content-end">
-      <p
-        class="px-3 mb-n2"
-        style="color: #F9F7F3; background: #B8C3CC; z-index: 1"
-      >
-        <i>Free shipping!</i>
-      </p>
     </div>
 
     <b-button
@@ -199,7 +215,7 @@
       Proceed
     </b-button>
 
-    <div v-show="recommendationDisplay">
+    <!-- <div v-show="recommendationDisplay">
       <p class="text-center text-reset">
         <a
           href="#subscription"
@@ -209,7 +225,7 @@
           >What is subscription?</a
         >
       </p>
-    </div>
+    </div> -->
 
     <div
       id="sealsubscriptions-default-widget-target-element"
@@ -296,14 +312,14 @@ export default Vue.extend({
       },
       recommendation: {
         "<4days": {
-          light: { trial: "TRIAL-SET", "3m": "3M-4D-L", "6m": "6M-4D-L" },
-          medium: { trial: "TRIAL-SET", "3m": "3M-4D-M", "6m": "6M-4D-M" },
-          heavy: { trial: "TRIAL-SET", "3m": "3M-4D-M", "6m": "6M-4D-M" },
+          light: { "3m": "3M-4D-L", "6m": "6M-4D-L", trial: "TRIAL-SET" },
+          medium: { "3m": "3M-4D-M", "6m": "6M-4D-M", trial: "TRIAL-SET" },
+          heavy: { "3m": "3M-4D-M", "6m": "6M-4D-M", trial: "TRIAL-SET" },
         },
         ">5days": {
-          light: { trial: "TRIAL-SET", "3m": "3M-5D-L", "6m": "6M-5D-L" },
-          medium: { trial: "TRIAL-SET", "3m": "3M-5D-M", "6m": "6M-5D-M" },
-          heavy: { trial: "TRIAL-SET", "3m": "3M-5D-H", "6m": "6M-5D-H" },
+          light: { "3m": "3M-5D-L", "6m": "6M-5D-L", trial: "TRIAL-SET" },
+          medium: { "3m": "3M-5D-M", "6m": "6M-5D-M", trial: "TRIAL-SET" },
+          heavy: { "3m": "3M-5D-H", "6m": "6M-5D-H", trial: "TRIAL-SET" },
         },
       },
       recommendationDisplay: null,
@@ -316,21 +332,21 @@ export default Vue.extend({
         trial: {
           title: "Trial set",
           description: (price) =>
-            `Total ${price}k for an assortment of UMA pads`,
+            `Total ${price}k for 10 Regular and 10 Heavy pads`,
           subLength: 1,
           productAttributeCopy: (qtyString) =>
             `An assortment of UMA pads. Includes ${qtyString} pads.`,
         },
         "3m": {
-          title: "Quarterly",
+          title: "Every 3 month",
           description: (price) =>
-            `Total ${price}k for three-month supply, shipped upfront`,
+            `Total ${price}k for three month supply, shipped upfront`,
           subLength: 3,
           productAttributeCopy: (qtyString) =>
             `Three-month supply for your flow. Includes ${qtyString} pads.`,
         },
         "6m": {
-          title: "Semi-anually",
+          title: "Every 6 month",
           description: (price) =>
             `Total ${price}k for six-month supply, shipped upfront`,
           subLength: 6,
@@ -616,7 +632,6 @@ strong {
     border-radius: 50em;
     background: black;
     display: inline-block;
-    letter-spacing: 0.1em;
 
     &.heavy {
       background: $info;
@@ -659,7 +674,8 @@ strong {
 }
 
 .sku-select__active {
-  background: #b8c3cc;
+  // background: #b8c3cc;
+  background: #f4f6fa;
 }
 
 #assortment-button {
@@ -669,6 +685,7 @@ strong {
   box-shadow: 0 0.2rem 0.3rem rgba(37, 40, 43, 0.32);
   font-weight: bold;
   transition: unset;
+  letter-spacing: 0.04em;
 
   &__active {
     color: $info;
