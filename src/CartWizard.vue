@@ -39,64 +39,76 @@
         @show="loadParams"
         @hide="loadParams"
       >
-        <form @submit.prevent="handleAssortmentForm" class="px-4 stack-4">
-          <div>
-            <b>How long does your average period last?</b>
-            <b-form-radio-group
-              v-model="recommendationChoice.days"
-              stacked
-              buttons
-              :options="daysRadioChoices"
-              name="assortment_days"
-              class="mt-2 stack-2 c-radio-stacked-buttons"
-              button-variant="outline-info"
-            >
-            </b-form-radio-group>
-          </div>
-
-          <div v-show="recommendationChoice.days" class="mb-1">
-            <b>How would you describe your flow?</b>
-            <b-form-radio-group
-              v-model="recommendationChoice.flow"
-              stacked
-              buttons
-              :options="flowRadioChoices"
-              name="assortment_flow"
-              class="mt-2 stack-2 c-radio-stacked-buttons"
-              button-variant="outline-info"
-            >
-            </b-form-radio-group>
-          </div>
-
-          <div v-if="modalMonthlyAssortment">
-            <b>Your monthly assortment</b>
-            <div class="d-flex stack-h-3">
-              <span class="d-flex align-items-center">
-                <div class="monthly-assortment-pill regular mr-2"></div>
-                {{ modalMonthlyAssortment.regular }} Regular
-              </span>
-              <span class="d-flex align-items-center">
-                <div class="monthly-assortment-pill heavy mr-2"></div>
-                {{ modalMonthlyAssortment.heavy }} Heavy
-              </span>
+        <form @submit.prevent="handleAssortmentForm" class="px-4">
+          <transition-group name="modal-form" tag="div" class="stack-4">
+            <div key="days" class="modal-form-item">
+              <b>How long does your average period last?</b>
+              <b-form-radio-group
+                v-model="recommendationChoice.days"
+                stacked
+                buttons
+                :options="daysRadioChoices"
+                name="assortment_days"
+                class="mt-2 stack-2 c-radio-stacked-buttons"
+                button-variant="outline-info"
+              >
+              </b-form-radio-group>
             </div>
-          </div>
-
-          <div class="d-flex justify-content-center">
-            <b-button
-              type="submit"
-              name="submit"
-              block
-              :v-show="!recommendationChoice.flow"
-              variant="outline-secondary"
-              style="border-width: 2px;"
+            <div
+              v-if="recommendationChoice.days"
+              class="mb-1 modal-form-item"
+              key="flow"
             >
-              <b>
-                <span v-show="!this.recommendationDisplay">Get started</span>
-                <span v-show="!!this.recommendationDisplay">Adjust</span>
-              </b>
-            </b-button>
-          </div>
+              <b>How would you describe your flow?</b>
+              <b-form-radio-group
+                v-model="recommendationChoice.flow"
+                stacked
+                buttons
+                :options="flowRadioChoices"
+                name="assortment_flow"
+                class="mt-2 stack-2 c-radio-stacked-buttons"
+                button-variant="outline-info"
+              >
+              </b-form-radio-group>
+            </div>
+
+            <div
+              v-if="modalMonthlyAssortment"
+              key="monthlyAssortment"
+              class="modal-form-item"
+            >
+              <b>Your monthly assortment</b>
+              <div class="d-flex stack-h-3">
+                <span class="d-flex align-items-center">
+                  <div class="monthly-assortment-pill regular mr-2"></div>
+                  {{ modalMonthlyAssortment.regular }} Regular
+                </span>
+                <span class="d-flex align-items-center">
+                  <div class="monthly-assortment-pill heavy mr-2"></div>
+                  {{ modalMonthlyAssortment.heavy }} Heavy
+                </span>
+              </div>
+            </div>
+
+            <div
+              class="d-flex justify-content-center modal-form-item"
+              v-if="recommendationChoice.flow"
+              key="button"
+            >
+              <b-button
+                type="submit"
+                name="submit"
+                block
+                variant="outline-secondary"
+                style="border-width: 2px;"
+              >
+                <b>
+                  <span v-show="!recommendationDisplay">Get started</span>
+                  <span v-show="!!recommendationDisplay">Adjust</span>
+                </b>
+              </b-button>
+            </div>
+          </transition-group>
         </form>
 
         <template v-slot:modal-footer>
@@ -613,6 +625,21 @@ strong {
       background: #93bbd5;
     }
   }
+
+  .modal-form-item {
+    transition: all 0.5s;
+    display: block;
+  }
+
+  .modal-form-enter,
+  .modal-form-leave-to {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+
+  .modal-form-leave-active {
+    position: absolute;
+  }
 }
 
 // need to be synced with above
@@ -717,6 +744,7 @@ strong {
 #modal1 {
   opacity: 1;
   background: unset;
+  transition: all 0.5s ease;
 
   &___BV_modal_footer_ {
     display: none !important;
@@ -725,6 +753,10 @@ strong {
   &___BV_modal_header_ {
     border-bottom: 0px solid red !important;
     padding: 1rem 1rem 0 1rem !important;
+  }
+
+  &___BV_modal_body_ {
+    transition: all 1s;
   }
 
   &___BV_modal_content_ {
