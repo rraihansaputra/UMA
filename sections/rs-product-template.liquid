@@ -24,11 +24,19 @@
           <div style="display: flex;">
             <link rel="stylesheet" href="{{ 'swiper-bundle.css' | asset_url }}">
             <script src="{{ 'swiper-bundle.min.js' | asset_url }}"></script>
+            <style>
+              @media only screen and (max-width: 749px) {
+                .swiper-container-thumbs {
+                  display: none;
+                }
+              }
+            </style>
 
             <div class="swiper-container-thumbs" style="margin-right: 0.25em;">
               <div class="swiper-wrapper">
+                <!--<style>.c-thumbnail-sliders {height: fit-content !important;}</style>-->
                 {% for image in product.images %}
-                <div class="swiper-slide">
+                <div class="swiper-slide c-thumbnail-sliders">
                   <img src="{{ image | img_url: '200x200'}}">
                 </div>
                 {% endfor %}
