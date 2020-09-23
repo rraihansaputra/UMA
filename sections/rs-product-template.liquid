@@ -16,9 +16,9 @@
 
   <div class="product grid grid--uniform grid--no-gutters" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
 
-    <div class="product__photo grid__item">
+    <div class="product__photo grid__item medium-up--one-half">
       <div class="grid grid--no-gutters">
-        <div class="grid__item {% if section.settings.product_form_width == 'large' %}medium-up--four-twelfths medium-up--push-three-tenths{% else %}large-up--one-half large-up--push-three-twelfths medium-up--six-twelfths medium-up--push-two-twelfths{% endif %}">
+        <div class="grid__item grid__item medium-up--ten-twelfths medium-up--push-one-twelfth six-eighths push-one-eighth">
 
           <!-- START Swiper Product Image Slider -->
           <div class="swiper-container" style="max-width: 100%; --swiper-theme-color: #eeeeee;">
@@ -47,11 +47,11 @@
       </div>
     </div>
 
-    <div class="product__details grid__item" style="margin-top: 20px;">
+    <div class="product__details grid__item medium-up--one-half" style="margin-top: 20px;">
       <div class="grid grid--no-gutters product__details-content">
         <!-- div class="grid__item {% if section.settings.product_form_width == 'large' %}medium-up--three-twelfths medium-up--push-one-fifth{% else %}large-up--two-twelfths large-up--push-two-twelfths medium-up--three-twelfths medium-up--push-one-twelfth{% endif %}">
         </div-->
-        <div class="grid__item {% if section.settings.product_form_width == 'large' %}medium-up--four-twelfths medium-up--push-three-tenths{% else %}large-up--one-half large-up--push-three-twelfths medium-up--six-twelfths medium-up--push-two-twelfths{% endif %}">
+        <div class="grid__item medium-up--eleven-twelfths">
           {% if section.settings.show_vendor %}
             <p class="product-item__vendor small--text-center">{{ product.vendor }}</p>
           {% endif %}

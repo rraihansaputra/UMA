@@ -67,7 +67,7 @@ $widescreen: 'widescreen';
     - Default is no push classes
 ==============================================================================*/
 $grid-breakpoint-has-widths: ($small, $medium, $medium-up, $large-up, $widescreen);
-$grid-breakpoint-has-push: ($medium-up, $large-up);
+$grid-breakpoint-has-push: ($small, $medium-up, $large-up);
 
 
 /*================ #Color Variables ================*/
@@ -794,6 +794,7 @@ $grid-breakpoints: (
 
 /*================ Build Base Grid Classes ================*/
 @include grid-column-generator();
+@include grid-push-generator();
 @include responsive-display-helper();
 @include responsive-text-align-helper();
 
@@ -3659,7 +3660,7 @@ $slick-opacity-not-active: 0.25;
   color: $color-drawers-text;
   background-color: $color-drawers;
   border-bottom: 1px solid rgba(0,0,0,0.1);
-  height: $height-site-header;  
+  height: $height-site-header;
   padding: 0 ($gutter-site / 2);
 }
 
@@ -5950,7 +5951,7 @@ $z-index-giftcard-code: 5;
 span.icon.icon-search {    display: none;
 }
 
-// Added by Jon N @ Shopify - September 10 2020 
+// Added by Jon N @ Shopify - September 10 2020
 .drawer__inner {
   top: 95px;
 }
