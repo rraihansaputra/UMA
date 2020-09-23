@@ -21,23 +21,45 @@
         <div class="grid__item grid__item medium-up--ten-twelfths medium-up--push-one-twelfth six-eighths push-one-eighth">
 
           <!-- START Swiper Product Image Slider -->
-          <div class="swiper-container" style="max-width: 100%; --swiper-theme-color: #eeeeee;">
+          <div style="display: flex;">
             <link rel="stylesheet" href="{{ 'swiper-bundle.css' | asset_url }}">
             <script src="{{ 'swiper-bundle.min.js' | asset_url }}"></script>
-            <div id="slider" class="swiper-wrapper">
-              {% for image in product.images %}
-              <div class="swiper-slide product-image">
-                <img style="width: 100%" src="{{ image | img_url: '2048x2048'}}">
+
+            <div class="swiper-container-thumbs" style="margin-right: 0.25em;">
+              <div class="swiper-wrapper">
+                {% for image in product.images %}
+                <div class="swiper-slide">
+                  <img src="{{ image | img_url: '200x200'}}">
+                </div>
+                {% endfor %}
               </div>
-              {% endfor %}
             </div>
-            <div class="swiper-pagination" style="text-align: start; margin: 0.5em 1em;"></div>
+
+            <div class="swiper-container" style="max-width: 100%; --swiper-theme-color: #eeeeee;">
+              <div id="slider" class="swiper-wrapper">
+                {% for image in product.images %}
+                <div class="swiper-slide product-image">
+                  <img style="width: 100%" src="{{ image | img_url: '2048x2048'}}">
+                </div>
+                {% endfor %}
+              </div>
+              <div class="swiper-pagination" style="text-align: start; margin: 0.5em 1em;"></div>
+            </div>
+
             <script>
               var mySwiper = new Swiper('.swiper-container', {
                 // loop: true,
                 mousewheel: true,
                 grabCursor: true,
                 pagination: { el: '.swiper-pagination',},
+                navigation: { el: '.swiper-navigation',},
+                thumbs: {
+                  swiper: {
+                    el: '.swiper-container-thumbs',
+                    slidesPerView: 6,
+                    direction: 'vertical'
+                  }
+                }
               })
             </script>
           </div>
