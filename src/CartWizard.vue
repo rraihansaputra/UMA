@@ -15,7 +15,7 @@
       pill
       dark
     >
-      Find the perfect assortment
+      Get started
     </b-button>
     <b-button
       v-else
@@ -165,7 +165,7 @@
               class="px-3 mb-n3"
               style="color: white; background: #405D85; z-index: 1"
             >
-              <i>Best value</i>
+              Best value
             </p>
           </div>
 
@@ -182,7 +182,7 @@
             style="cursor: pointer;"
           >
             <div class="flex-grow-1">
-              <b>{{ displayMeta[key].title }}</b
+              <span>{{ displayMeta[key].title }}</span
               ><br />
               <span class="text-muted">
                 {{ displayMeta[key].description(getSkuPrice(sku)) }} </span
@@ -614,6 +614,7 @@ strong {
       background-color: $white !important;
       width: 100%;
       letter-spacing: 0.04em;
+      font-size: 1.25em;
 
       &:hover {
         color: $info !important;
@@ -683,9 +684,9 @@ strong {
   background-color: $info;
   border-color: $info;
   box-shadow: 0 0.2rem 0.3rem rgba(37, 40, 43, 0.32);
-  font-weight: bold;
+  font-weight: 600;
   transition: unset;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
 
   &__active {
     color: $info;
@@ -764,7 +765,8 @@ strong {
   transition: all 0.5s ease;
 
   &___BV_modal_footer_ {
-    display: none !important;
+    border-top: 0px solid red !important;
+    padding: 0rem 1rem !important;
   }
 
   &___BV_modal_header_ {
