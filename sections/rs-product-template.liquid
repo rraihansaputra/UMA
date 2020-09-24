@@ -32,13 +32,10 @@
               }
             </style>
 
-            <div class="swiper-container-thumbs" style="margin-right: 0.25em;">
-              <div class="swiper-wrapper">
-                <!--<style>.c-thumbnail-sliders {height: fit-content !important;}</style>-->
+            <div class="swiper-container-thumbs " style="margin-right: 0.25em;">
+              <div class="swiper-wrapper c-thumbs" id="c-thumbs" style=" display: flex; flex-direction: column;">
                 {% for image in product.images %}
-                <div class="swiper-slide c-thumbnail-sliders">
-                  <img src="{{ image | img_url: '200x200'}}">
-                </div>
+                <img style="margin-bottom: 0.25em" src="{{ image | img_url: '200x200'}}">
                 {% endfor %}
               </div>
             </div>
@@ -61,14 +58,34 @@
                 grabCursor: true,
                 pagination: { el: '.swiper-pagination',},
                 navigation: { el: '.swiper-navigation',},
-                thumbs: {
-                  swiper: {
-                    el: '.swiper-container-thumbs',
-                    slidesPerView: 6,
-                    direction: 'vertical'
+                // thumbs: {
+                //  swiper: {
+                //    el: '.swiper-container-thumbs',
+                //    slidesPerView: 6,
+                //    direction: 'vertical'
+                //  }
+                // }
+              });
+
+              function addEvent(element, evnt, funct){
+                if (element.attachEvent)
+                return element.attachEvent('on'+evnt, funct);
+                else
+                return element.addEventListener(evnt, funct, false);
+              }
+
+              addEvent(
+                  document.getElementById('c-thumbs'),
+                  'click',
+                  function (event) {
+                    // console.log(event);
+                    const el = event.srcElement;
+                    const index = [...el.parentElement.children].indexOf(el)
+                    // console.log({event, el, index})
+                    mySwiper.slideTo(index, 500);
                   }
-                }
-              })
+              );
+
             </script>
           </div>
           <!-- END Swiper Product Image Slider -->
