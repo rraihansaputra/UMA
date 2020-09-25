@@ -6,28 +6,42 @@
       </p>
     </div>
 
-    <b-button
-      v-if="!this.recommendationChoice.flow"
-      v-b-modal.modal1
-      id="assortment-button"
-      class=""
-      block
-      pill
-      dark
-    >
-      Get started
-    </b-button>
-    <b-button
-      v-else
-      v-b-modal.modal1
-      id="assortment-button__active"
-      class=""
-      block
-      pill
-      dark
-    >
-      Adjust my assortment
-    </b-button>
+    <div>
+      <b-button
+        v-if="!this.recommendationChoice.flow"
+        v-b-modal.modal1
+        id="assortment-button"
+        class=""
+        block
+        pill
+        dark
+      >
+        Subscribe now
+      </b-button>
+      <b-button
+        v-else
+        v-b-modal.modal1
+        id="assortment-button__active"
+        class=""
+        block
+        pill
+        dark
+      >
+        Adjust my assortment
+      </b-button>
+      <p style="text-align: center; margin-top: 0.5em;">
+        <a
+          href="#subscription"
+          class="text-secondary"
+          style="text-decoration: underline;"
+          @click="openSubscriptionDetails"
+        >
+          What is subscription?
+        </a>
+      </p>
+
+      <p></p>
+    </div>
 
     <div id="modal-style-target">
       <b-modal
@@ -163,7 +177,13 @@
           <div v-if="key === '6m'" class="d-flex justify-content-end mt-n2">
             <p
               class="px-3 mb-n3"
-              style="color: white; background: #405D85; z-index: 1"
+              style="
+                color: white;
+                background: #405D85;
+                z-index: 1;
+                margin-right: 0.25em;
+                font-size: 0.95em;
+                "
             >
               Best value
             </p>
@@ -450,6 +470,7 @@ export default Vue.extend({
         );
 
         window.location.href = this.checkoutData.webUrl;
+        this.loading = false;
       } catch (e) {
         this.loading = false;
         console.error(e);

@@ -34,9 +34,13 @@ $body-color: $secondary;
   &__summary {
     background: $tertiary;
     color: $secondary;
-    text-transform: uppercase;
+    // text-transform: uppercase;
     margin-bottom: 0.5em;
     padding: 0.5em;
+
+    &:focus {
+      outline: none;
+    }
 
     // disable the default detail triangle
     &::-webkit-details-marker {
