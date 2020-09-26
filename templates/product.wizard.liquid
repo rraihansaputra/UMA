@@ -14,13 +14,19 @@
   {% assign back_text = collection.title %}
 {% endif %}
 
-<div class="back-button grid">
+<!-- disable back to home button -->
+<!--<div class="back-button grid">
   <div class="grid__item"></div>
     <a href="{{ back_url }}" class="btn back-button__link">
       <span class="icon icon-arrow-left" aria-hidden="true"></span>
       <span>{{ back_text }}</span>
     </a>
   </div>
+</div>-->
+
+<!-- replacement content to keep spacing -->
+<div class="back-button grid">
+  <div class="grid__item"></div>
 </div>
 
 <script>
