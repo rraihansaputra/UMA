@@ -18,7 +18,7 @@
 
     <div class="product__photo grid__item medium-up--one-half">
       <div class="grid grid--no-gutters">
-        <div class="grid__item grid__item medium-up--ten-twelfths medium-up--push-one-twelfth six-eighths push-one-eighth">
+        <div class="grid__item grid__item large-up--eight-twelfths large-up--push-three-twelfths medium-up--ten-twelfths medium-up--push-one-twelfth">
 
           <!-- START Swiper Product Image Slider -->
           <div style="display: flex;">
@@ -56,6 +56,16 @@
                 // loop: true,
                 mousewheel: true,
                 grabCursor: true,
+                slidesPerView: 1.5,
+                loop: true,
+                breakpoints: {
+                  '@0.5': {
+                    slidesPerView: 2,
+                  },
+                  '@1.00': {
+                  slidesPerView: 1,
+                  }
+                },
                 pagination: { el: '.swiper-pagination',},
                 navigation: { el: '.swiper-navigation',},
                 // thumbs: {
@@ -82,7 +92,7 @@
                     const el = event.srcElement;
                     const index = [...el.parentElement.children].indexOf(el)
                     // console.log({event, el, index})
-                    mySwiper.slideTo(index, 500);
+                    mySwiper.slideTo(index + 1, 500); // loop shifts the index
                   }
               );
 
@@ -98,7 +108,7 @@
       <div class="grid grid--no-gutters product__details-content">
         <!-- div class="grid__item {% if section.settings.product_form_width == 'large' %}medium-up--three-twelfths medium-up--push-one-fifth{% else %}large-up--two-twelfths large-up--push-two-twelfths medium-up--three-twelfths medium-up--push-one-twelfth{% endif %}">
         </div-->
-        <div class="grid__item medium-up--eleven-twelfths">
+        <div class="grid__item large-up--two-thirds medium-up--eleven-twelfths">
           {% if section.settings.show_vendor %}
             <p class="product-item__vendor small--text-center">{{ product.vendor }}</p>
           {% endif %}
