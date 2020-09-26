@@ -1,12 +1,6 @@
 <template>
   <div class="mt-4 stack-3" id="container" style="margin-bottom: 1.5em;">
     <div>
-      <p class="m-0">
-        Ultra soft period pads for maximum comfort and protection.
-      </p>
-    </div>
-
-    <div>
       <b-button
         v-if="!this.recommendationChoice.flow"
         v-b-modal.modal1

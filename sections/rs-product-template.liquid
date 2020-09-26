@@ -119,6 +119,11 @@
             product__form--add-to-cart{% if section.settings.product_form_width == 'large' %} product__form--full-width{% endif %}
           {%- endcapture -%}
           <div class="product-single__errors"></div>
+          {% for block in section.blocks %}
+            {% if block.type == 'top-description' %}
+            <p>{{ block.settings.content }}</p>
+            {% endif %}
+          {% endfor %}
           <!-- CUSTOM VUE PART FOR OPTION RECOMMENDATION AND ADD TO CART-->
           <div id="app" class="vue-form vue" style="margin-top: 1.5em">
             <p>Loading...</p>
@@ -284,6 +289,17 @@
     "zh-TW": "產品"
   },
   "blocks": [
+    {
+      "type": "top-description",
+      "name": "Top Desicrption",
+      "settings": [
+        {
+          "id": "content",
+          "type": "text",
+          "label": "Content"
+        }
+      ]
+    },
     {
       "type": "faq",
       "name": "FAQ Text",
