@@ -1,0 +1,61 @@
+<script>
+   //获取店铺语言环境对象函数
+  	 function getLanguageListD() {
+      return [
+        {%- for locale in shop.published_locales %}
+        {
+          name: '{{locale.name}}',
+          endonym_name: '{{locale.endonym_name}}',
+          iso_code: '{{locale.iso_code}}',
+          primary: {{locale.primary}},
+        }{% unless forloop.last %},{% endunless -%}
+        {%- endfor %}
+      	];
+  	  }
+
+
+    //获取店铺默认语言
+    var shopDomain = 'https://{{shop.domain}}';
+	var languageListD = getLanguageListD();
+  	var primaryLanguageD = languageListD.find(function (x) { return x.primary; });
+    var defaultLocale = primaryLanguageD ? primaryLanguageD.iso_code : 'en';
+    var pathname = window.location.pathname;
+  	var str = pathname.substring(pathname.indexOf('/') +1, find(pathname, '/', 1)) // "12311232"
+    var str_two = pathname.substring(pathname.indexOf('/') +1) // "12311232"
+    var lan_code = localStorage.getItem('lan_code');
+   	var subUrl =	window.location.search;
+	//获取已经push的语言
+  	var lang_code_array=new Array();
+    //   	const selectorConfigF = JSON.parse('{{shop.metafields.etranslate.selector_config | json}}')
+    //     const lang_array = selectorConfigF.languages;
+    //存入语言简码到数组
+    languageListD.map(function(v){
+    	lang_code_array.push(v.iso_code);
+    });
+    if(!in_array(str,lang_code_array) && !in_array(str_two,lang_code_array) && defaultLocale != lan_code){
+        if(lan_code != null){
+		   link = shopDomain + '/' +lan_code+pathname+subUrl;
+           window.location.assign(link);
+        }
+    }
+
+     //截取字符函数
+   function find(str,cha,num){
+     var x=str.indexOf(cha);
+     for(var i=0;i<num;i++){
+       x=str.indexOf(cha,x+1);
+     }
+     return x;
+   }
+
+   //数组判断字符是否存在函数
+   function in_array(stringToSearch, arrayToSearch) {
+     for (s = 0; s < arrayToSearch.length; s++) {
+          thisEntry = arrayToSearch[s].toString();
+          if (thisEntry.toLowerCase() == stringToSearch.toLowerCase()) {
+           		return true;
+          }
+     }
+     return false;
+   }
+</script>

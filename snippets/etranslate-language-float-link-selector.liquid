@@ -1,0 +1,370 @@
+<style>
+  .etranslate-LanguageList-link {
+    position: absolute;
+  	z-index: 2147483647;
+    font-size:13px;
+    direction: ltr;
+  }
+  .etranslate-language-float-link {
+    border: 1px solid rgb(224, 226, 228);
+    background-color: white;
+  }
+
+  .etranslate-language-list-link {
+  padding: 0px;
+  overflow: auto;
+  background: white;
+  user-select: none;
+  position: absolute;
+  z-index: 516;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  margin: 0px;
+  transition: max-height 0.3s, visibility 0.2s, opacity 0.2s;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+  overflow: -moz-scrollbars-none;
+  display: block;
+  border: 1px solid rgba(224, 224, 224, 1);
+  }
+
+.select-dropdown-flag-icon-link {
+        font-size: 20px;
+        box-sizing: content-box;
+        background-size: contain;
+        background-position: 50%;
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: 50%;
+        background-repeat: no-repeat;
+        position: relative;
+        display: inline-block;
+        width: 1.33333333em;
+        line-height: 1em;
+    }
+
+.select-dropdown-flag-icon-link:before {
+        content: "\00a0";
+    }
+
+.etranslate-language-float-link>ul{
+        margin: 0px !important;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        padding-right: 1rem;
+        padding: 5px 8px 5px 4px !important;
+        -webkit-transition: max-height 0.3s, visibility 0.2s, opacity 0.2s;
+        -moz-transition: max-height 0.3s, visibility 0.2s, opacity 0.2s;
+        -ms-transition: max-height 0.3s, visibility 0.2s, opacity 0.2s;
+        -o-transition: max-height 0.3s, visibility 0.2s, opacity 0.2s;
+        transition: all 0.2s;
+}
+
+
+.etranslate-link-content {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            padding: 5px 10px;
+  			white-space:normal;
+        }
+  .etranslate-link-content:hover {
+            opacity: 0.7
+        }
+
+
+  .etranslate-language-arrow {
+      width: 0.5em;
+      height: 0.5em;
+      border-right: 1.5px solid currentColor;
+      border-top: 1.5px solid currentColor;
+      transform: rotate(45deg);
+      position: relative;
+      top: -1px;
+    }
+
+.etranslate-language-float-link-code {
+            margin-left: 5px;
+        }
+
+  .etranslate-link-content {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            padding: 5px 10px;
+        }
+
+    .rectangle_flag:before {
+    content: "\00a0";
+	}
+
+  .flag-icon-link {
+    background-size: contain;
+    background-position: 50%;
+    background-repeat: no-repeat;
+    position: relative;
+    display: inline-block;
+    width: 1.33333333em;
+    line-height: 1em;
+    border-radius: 4px;
+  }
+
+  .circle_flag {
+  	border-radius: 50%;
+  	box-sizing: content-box !important;
+    width: 1em;
+	}
+
+.etranslate-flag-wrapper-link {
+    display: flex;
+  	align-items: center;
+  	height: 28px;
+  	margin-right: 3px;
+  }
+.etranslate-language-list-link-li{
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+</style>
+<div id='localiser-translate-etranslate-link' class='etranslate-LanguageList-link etranslate-language-float-link' style='display:none'>
+  <ul id='etranslate-language-list-link' class='etranslate-language-list-link' style='' >
+    {%- for locale in shop.published_locales -%}
+  <li class='etranslate-language-list-link-li' data-code="{{ locale.iso_code }}" data-name="{{ locale.endonym_name }}">
+    <div class='etranslate-link-content'>
+          <div class="etranslate-flag-wrapper">
+          	<span class='flag-icon-link select-dropdown-flag-icon-link'></span>
+          </div>
+          <span class='etranslate-language-name-link'>
+
+          </span>
+    </div>
+    </li>
+    {%- endfor %}
+  </ul>
+</div>
+
+<script>
+
+  var flag_min_link_width = {
+    rectangle_flag: 60,
+    square_flag: 45,
+    circle_flag: 45,
+    without_flag: 3,
+    no_flag: 3
+ }
+
+  var language_min_link_width = {
+    language_code: 30,
+    language_name: 60,
+    native_language_name: 60,
+    no_labels: 0
+ }
+
+
+
+  function getLanguageList() {
+      return [
+        {%- for locale in shop.published_locales %}
+        {
+          name: '{{locale.name}}',
+          endonym_name: '{{locale.endonym_name}}',
+          iso_code: '{{locale.iso_code}}',
+          primary: {{locale.primary}},
+        }{% unless forloop.last %},{% endunless -%}
+        {%- endfor %}
+      ];
+  }
+
+function setLinkSelectorUlStyle(f,g,b){var a=b.flags_type;var d=b.labels_type;var e=b.selector_width;var c=g&&g[0]?g.length:0;var h=(flag_min_link_width[a]+language_min_link_width[d]+2)*c+Number(e)+"px";return h};
+
+function setLinkSelectorStyle(f,h,j){var p=h&&h[0]?h.length:0;var q=j.position_lr;var n=j.position_tb;var b=j.labels_type;var m=j.flags_type;var k=n==="fixed_top"||n==="fixed_bottom"?"fixed":"absolute";var g=q==="right"?"right":"left";var o=n==="bottom"||n==="fixed_bottom"?"bottom":"top";var l=j.selector_width;var a;var c=(flag_min_link_width[m]+language_min_link_width[b]+2)*p+Number(l);if(g==="right"){a=Number(j.horizontal)+c-1}else{var a=Number(j.horizontal)-1}var e=Number(j.vertical)-1;if(o==="bottom"){e=e+45}var l=j.selector_width;var i=j.font_color;var b=j.labels_type;var m=j.flags_type;var d="top: auto;bottom: auto;left: auto;right: auto;"+g+":"+a+"px;"+o+":"+e+"px;color:"+i+";position:"+k+";";return d};
+
+function getLinkCurrentLocale(c,b){var a=window.location.pathname.split("/").filter(function(d){return d});if(a&&a.length>0&&c.find(function(d){return d.iso_code.toLowerCase()===a[0].toLowerCase()})){return a[0]}else{return b}};
+
+function createLanguageFloatLinkSelector(shopDomain, languageList, defaultLocale, currentLocale, etranslateDom, metaFiles){
+
+     var position_lr=metaFiles.position_lr
+     var position_tb=metaFiles.position_tb
+     var position_type=position_tb==='fixed_top'||position_tb==='fixed_bottom'?'fixed':'absolute'
+     var right_or_left=position_lr==='right'?'right':'left'
+     var top_or_button=position_tb==='top'||position_tb==='fixed_bottom'?'bottom':'top'
+     var selector_width=metaFiles.selector_width
+     var horizontal=metaFiles.horizontal
+     var vertical=metaFiles.vertical
+     var selector_width=metaFiles.selector_width
+     var font_color=metaFiles.font_color
+     var labels_type=metaFiles.labels_type
+     var flags_type=metaFiles.flags_type
+     var language_flags=metaFiles.language_flags
+     var border_width=metaFiles.border_width
+     var bg_rgba=transformationRgb(metaFiles.background_color,metaFiles.background_opacity)
+
+     var dropdownDom=etranslateDom.getElementsByClassName('etranslate-language-list-link')[0]
+
+     var size = flags_type !== 'rectangle_flag' ? '1x1' : '4x3'
+     var flags_type_display = flags_type === 'no_flag' || flags_type === 'without_flag' ? true : false
+     var no_labels =  labels_type === 'no_labels' ? true: false
+     var flagUrl = "https://www.parcelpanel.com/assets/other/flags/" + size
+
+
+     var select_children=dropdownDom.children
+
+
+     for (var i = 0; i < select_children.length; i++) {
+       		var select_dom_flag = select_children[i].getElementsByClassName('select-dropdown-flag-icon-link')[0]
+       		var select_dom_link_flag = select_children[i].getElementsByClassName('etranslate-flag-wrapper')[0]
+            var language_code = select_children[i].dataset.code;
+            var language_native_name = select_children[i].dataset.name;
+       		var flags_svg=findLanguageFlags(language_flags,language_code)
+            if(flags_type_display){
+                 select_dom_link_flag.style.display='none'
+            }else{
+                 select_dom_flag.style.backgroundImage='url('+flagUrl+'/'+flags_svg.toLowerCase()+'.svg)'
+                 flags_type === 'circle_flag'?select_dom_flag.classList.add('circle_flag'):''
+            }
+    		select_children[i].onclick = languageLinkChange(languageList.find(function (x) { return x.iso_code.toLowerCase() === language_code.toLowerCase(); }),defaultLocale);
+       		var select_labels=select_children[i].getElementsByClassName('etranslate-language-name-link')[0]
+            if(no_labels){
+        		select_labels.style.display='none'
+      		}else{
+          		if (labels_type === 'language_name'){
+            		select_labels.innerHTML = langCodeToLangArray[language_code]?langCodeToLangArray[language_code]:select_labels.text()
+          		} else if (labels_type === 'native_language_name'){
+          		    language_native_name = language_native_name=='français'?'Français':language_native_name
+          		    select_labels.innerHTML = language_native_name?language_native_name:langCodeToLangArray[language_code]
+          		} else {
+                  	select_labels.innerHTML = language_code?language_code.toLocaleUpperCase():language_code
+          		}
+      		}
+          }
+     var selector_ul_style=setLinkSelectorUlStyle(etranslateDom, languageList, metaFiles)
+     dropdownDom.setAttribute('style','width:'+selector_ul_style+';border-width:'+border_width+'px; background-color:'+bg_rgba+';')
+     var selector_style=setLinkSelectorStyle(dropdownDom, languageList, metaFiles)
+     var horizontal=Number(horizontal)+Number(dropdownDom.offsetWidth)
+     etranslateDom.setAttribute('style',selector_style)
+
+
+
+    function languageLinkChange(lang,defaultLocale) {
+            return function () {
+              var protocol=window.location.protocol
+              var host=window.location.host
+              var search_info=window.location.search
+              var pathname = window.location.pathname
+              var lan_code=lang.iso_code.toLowerCase()
+              var url_lan_code = (pathname.match(/\/(\S*?)\//) || pathname.match(/\/(\S*)/))[1]
+              localStorage.setItem('lan_code', lan_code);
+
+              //点击当前语言刷新
+              if(currentLocale===lan_code){
+                location.reload();
+              }
+
+              //切换为默认语言
+              if(currentLocale!==lan_code && url_lan_code.toLowerCase()!==lan_code && defaultLocale===lan_code){
+                var new_pathname
+                if (!url_lan_code) {
+                    new_pathname = '/' + lan_code
+                } else {
+                    new_pathname = pathname.replace('/' + url_lan_code, '')
+                }
+                window.location.href = `${window.location.protocol}//${window.location.host}${new_pathname}${window.location.search}`
+              }
+
+              //切换为非默认
+              if(currentLocale!==lan_code && url_lan_code.toLowerCase()!==lan_code && defaultLocale!==lan_code){
+                //插入url_lan_code
+            	var new_pathname
+                if (lan_code === url_lan_code.toLowerCase()) {
+                	new_pathname = pathname
+            	} else {
+                	if (!url_lan_code) {
+                    	new_pathname = '/' + lan_code
+                	} else {
+                  		var find_lan_code=false;
+                  		languageList.map((v,k)=>{
+                    		if(v.iso_code.toLowerCase()===url_lan_code.toLowerCase()){
+                      		find_lan_code=true
+                    	}
+                  		})
+                		if(find_lan_code){
+                   			new_pathname = pathname.replace(url_lan_code, lan_code)
+                		} else {
+                   	 		new_pathname = '/' + lan_code + pathname
+                		}
+                	}
+                }
+                window.location.href = `${window.location.protocol}//${window.location.host}${new_pathname}${window.location.search}`
+              }
+            }
+          }
+     return etranslateDom
+  }
+
+
+  function setLanguageLinkSelector(){
+  	var languageList = getLanguageList();
+    var shopDomain = 'https://{{shop.domain}}';
+    var primaryLanguage = languageList.find(function (x) { return x.primary; });
+    var defaultLocale = primaryLanguage ? primaryLanguage.iso_code : 'en';
+    var currentLocale = getLinkCurrentLocale(languageList, defaultLocale);
+    var metaFiles = {{shop.metafields.etranslate.selector_config | json}}
+    var etranslateDom = document.getElementById('localiser-translate-etranslate-link')
+    if( Number(metaFiles.status) === 1){
+      	if(metaFiles.style_of_the_selector === 'links' && metaFiles.choose_language_selector === 'floating_selector'){
+      		createLanguageFloatLinkSelector(shopDomain, languageList, defaultLocale, currentLocale, etranslateDom, metaFiles)
+        }else{
+          	etranslateDom.remove()
+        }
+    }else{
+      	etranslateDom.remove()
+    }
+  }
+
+  function transformationRgb(color_value, aipha) {
+    if(color_value == undefined && aipha == undefined){
+       	return 'rgba(255,255,255,1)'
+     }
+    var a
+    if(aipha===undefined){
+      a=1
+    }else{
+      a= aipha / 100 ? aipha / 100 : 1
+    }
+    var reg = /^#([0-9a-fA-f]{3}|[0-9a-fA-f]{6})$/;
+
+    if (!color_value) {
+        return "rgba(255,255,255,"+a+")"
+    }
+    var color = color_value.toLowerCase();
+    if (reg.test(color)) {
+        if (color.length === 4) {
+            var colorNew = "#";
+            for (let i = 1; i < 4; i += 1) {
+                colorNew += color.slice(i, i + 1).concat(color.slice(i, i + 1));
+            }
+            color = colorNew;
+        }
+        var colorChange = [];
+        for (let i = 1; i < 7; i += 2) {
+            colorChange.push(parseInt("0x" + color.slice(i, i + 2)));
+        }
+        return "rgba(" + colorChange.join(",") + "," + a + ")";
+    } else {
+        return color;
+    }
+}
+
+
+  documentReady(setLanguageLinkSelector);
+  function documentReady(fu) {
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+      setTimeout(documentReady(setLanguageLinkSelector), 1);
+    } else {
+      document.addEventListener('DOMContentLoaded', fu);
+    }
+  }
+</script>
