@@ -2,7 +2,7 @@
   <div class="mt-4 stack-3" id="container" style="margin-bottom: 1.5em;">
     <div>
       <b-button
-        v-if="!this.recommendationChoice.flow"
+        v-if="!this.recommendationSubmitted.flow"
         v-b-modal.modal1
         id="assortment-button"
         class=""
@@ -47,8 +47,8 @@
         cancel-disabled
         centered
         static
-        @show="loadParams"
-        @hide="loadParams"
+        @show="resetModal"
+        @hide="resetModal"
         @hidden="scrollToRecommendationDisplay"
       >
         <form @submit.prevent="handleAssortmentForm" class="px-4">
@@ -120,6 +120,7 @@
                 pill
                 variant="info"
                 style="border-width: 2px;"
+                :disabled="!!recommendationDisplay ? modalIsNotChanged : false"
               >
                 <b>
                   <span v-show="!recommendationDisplay">Proceed</span>
@@ -356,6 +357,7 @@ export default Vue.extend({
       },
       recommendationDisplay: null,
       recommendationMonthlyAssortment: null,
+      recommendationSubmitted: { days: null, flow: null },
 
       isQtyDisplayed: false,
       selectedVariant: null,
@@ -403,18 +405,27 @@ export default Vue.extend({
       const days = formContent["assortment_days"].value;
       const flow = formContent["assortment_flow"].value;
 
-      this.$router.push({
-        query: { ...this.$route.query, days, flow, sku: null },
-      });
+      this.recommendationSubmitted = { days, flow };
+      this.recommendationDisplay = this.recommendation[days][flow];
+      this.recommendationMonthlyAssortment = AVG_MONTHLY_ASSORTMENT[days][flow];
+
+      // this.$router.push({
+      //   query: { ...this.$route.query, days, flow, sku: null },
+      // });
 
       this.$bvModal.hide("modal1");
+    },
+    resetModal() {
+      this.recommendationChoice = { ...this.recommendationSubmitted };
     },
     scrollToRecommendationDisplay() {
       this.$nextTick(() => {
         const assortmentButtonElement = document.getElementById(
           "assortment-button__active"
         );
-        assortmentButtonElement.scrollIntoView({ behavior: "smooth" });
+
+        if (assortmentButtonElement)
+          assortmentButtonElement.scrollIntoView({ behavior: "smooth" });
       });
     },
     getSkuPrice(sku) {
@@ -434,7 +445,8 @@ export default Vue.extend({
       return `${qty.regular * 10} Regular + ${qty.heavy * 10} Heavy`;
     },
     selectVariant(sku, key) {
-      this.$router.push({ query: { ...this.$route.query, sku: sku } });
+      // this.$router.push({ query: { ...this.$route.query, sku: sku } });
+      this.selectedVariant = sku;
     },
     productAttributeCopyFunction(sku) {
       let key = "";
@@ -478,6 +490,16 @@ export default Vue.extend({
         },
       ];
 
+      // save state on query
+      this.$router.push({
+        query: {
+          ...this.$route.query,
+          days: this.recommendationSubmitted.days,
+          flow: this.recommendationSubmitted.flow,
+          sku,
+        },
+      });
+
       // Actually adding to cart
       this.loading = true;
 
@@ -509,12 +531,12 @@ export default Vue.extend({
       if (sku) this.selectedVariant = sku;
       else this.selectedVariant = null;
       if (days && flow) {
-        this.recommendationChoice = { days, flow };
+        this.recommendationSubmitted = { days, flow };
         this.recommendationDisplay = this.recommendation[days][flow];
         this.recommendationMonthlyAssortment =
           AVG_MONTHLY_ASSORTMENT[days][flow];
       } else {
-        this.recommendationChoice = { days: null, flow: null };
+        this.recommendationSubmitted = { days: null, flow: null };
         this.recommendationDisplay = null;
         this.recommendationMonthlyAssortment = null;
       }
@@ -530,6 +552,15 @@ export default Vue.extend({
       return AVG_MONTHLY_ASSORTMENT[this.recommendationChoice.days][
         this.recommendationChoice.flow
       ];
+    },
+    modalIsNotChanged() {
+      if (!this.recommendationSubmitted || !this.recommendationChoice)
+        return false;
+
+      return (
+        JSON.stringify(this.recommendationSubmitted) ===
+        JSON.stringify(this.recommendationChoice)
+      );
     },
   },
   watch: {
@@ -750,7 +781,7 @@ strong {
     transition: unset;
 
     &:focus {
-      box-shadow: 0 0 0 0.2rem #E6EFF5;
+      box-shadow: 0 0 0 0.2rem #e6eff5;
       // box-shadow: 0 0 0 0.2rem #a5b8d3;
       // box-shadow: 0 0 0 0.2rem rgba(184, 195, 204, 0.5);
     }
