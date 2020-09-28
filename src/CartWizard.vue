@@ -23,7 +23,10 @@
       >
         Adjust my assortment
       </b-button>
-      <p style="text-align: center; margin-top: 0.5em;">
+      <p
+        style="text-align: center; margin-top: 0.5em;"
+        v-if="!recommendationDisplay"
+      >
         <a
           href="#subscription"
           class="text-secondary"
@@ -46,10 +49,13 @@
         static
         @show="loadParams"
         @hide="loadParams"
+        @hidden="scrollToRecommendationDisplay"
       >
         <form @submit.prevent="handleAssortmentForm" class="px-4">
           <transition-group name="modal-form" tag="div" class="stack-4">
             <div key="days" class="modal-form-item">
+              <b>To get started, let's find the perfect assortment for you.</b
+              ><br />
               <b>How long does your average period last?</b>
               <b-form-radio-group
                 v-model="recommendationChoice.days"
@@ -87,11 +93,15 @@
             >
               <b>Your monthly assortment</b>
               <div class="d-flex stack-h-3">
-                <span class="d-flex align-items-center">
+                <span
+                  class="d-flex align-items-center monthly-assortment-pill-text"
+                >
                   <div class="monthly-assortment-pill regular mr-2"></div>
                   {{ modalMonthlyAssortment.regular }} Regular
                 </span>
-                <span class="d-flex align-items-center">
+                <span
+                  class="d-flex align-items-center monthly-assortment-pill-text"
+                >
                   <div class="monthly-assortment-pill heavy mr-2"></div>
                   {{ modalMonthlyAssortment.heavy }} Heavy
                 </span>
@@ -107,11 +117,12 @@
                 type="submit"
                 name="submit"
                 block
-                variant="outline-secondary"
+                pill
+                variant="info"
                 style="border-width: 2px;"
               >
                 <b>
-                  <span v-show="!recommendationDisplay">Get started</span>
+                  <span v-show="!recommendationDisplay">Proceed</span>
                   <span v-show="!!recommendationDisplay">Adjust</span>
                 </b>
               </b-button>
@@ -125,7 +136,11 @@
       </b-modal>
     </div>
 
-    <div class="stack-2" v-if="recommendationDisplay">
+    <div
+      class="stack-2"
+      v-if="recommendationDisplay"
+      id="recommendation-display"
+    >
       <div class="mb-3" v-if="recommendationMonthlyAssortment">
         <b>Your average monthly assortment</b>
         <div class="d-flex stack-h-3">
@@ -173,7 +188,7 @@
               class="px-3 mb-n3"
               style="
                 color: white;
-                background: #405D85;
+                background: #4854AD;
                 z-index: 1;
                 margin-right: 0.25em;
                 font-size: 0.95em;
@@ -190,6 +205,7 @@
               'border',
               'd-flex',
               'stack-h-3',
+              'sku-select',
               selectedVariant === sku ? 'sku-select__active' : null,
               key === 'trial' ? 'mt-2' : null,
             ]"
@@ -222,11 +238,13 @@
     <b-button
       v-show="recommendationDisplay"
       block
+      pill
+      variant="info"
       @click="addToCart"
       :disabled="!selectedVariant || loading"
     >
       <b-spinner v-if="loading" small></b-spinner>
-      Proceed
+      <b>Subscribe now</b>
     </b-button>
 
     <!-- <div v-show="recommendationDisplay">
@@ -391,6 +409,14 @@ export default Vue.extend({
 
       this.$bvModal.hide("modal1");
     },
+    scrollToRecommendationDisplay() {
+      this.$nextTick(() => {
+        const assortmentButtonElement = document.getElementById(
+          "assortment-button__active"
+        );
+        assortmentButtonElement.scrollIntoView({ behavior: "smooth" });
+      });
+    },
     getSkuPrice(sku) {
       if (!this.dataLoaded) return 0;
       return (
@@ -519,7 +545,7 @@ export default Vue.extend({
 <style lang="scss" scoped>
 $primary: #f5ede4;
 $secondary: #463a23;
-$info: #405d85;
+$info: #12212b;
 
 $body-color: $secondary;
 
@@ -649,8 +675,13 @@ strong {
     background: black;
     display: inline-block;
 
+    &-text {
+      font-size: 1.25em;
+    }
+
     &.heavy {
-      background: $info;
+      // background: $info;
+      background: #405d85;
     }
     &.regular {
       background: #93bbd5;
@@ -682,16 +713,24 @@ strong {
   display: inline-block;
 
   &.heavy {
-    background: $info;
+    // background: $info;
+    background: #405d85;
   }
   &.regular {
     background: #93bbd5;
   }
 }
 
-.sku-select__active {
-  // background: #b8c3cc;
-  background: #f4f6fa;
+.sku-select {
+  background: $white;
+  &__active {
+    // background: #b8c3cc;
+    // background: #f4f6fa;
+    background: #e6eff5;
+  }
+  & .text-muted {
+    color: #b2ada7 !important;
+  }
 }
 
 #assortment-button {
@@ -711,7 +750,8 @@ strong {
     transition: unset;
 
     &:focus {
-      box-shadow: 0 0 0 0.2rem #a5b8d3;
+      box-shadow: 0 0 0 0.2rem #E6EFF5;
+      // box-shadow: 0 0 0 0.2rem #a5b8d3;
       // box-shadow: 0 0 0 0.2rem rgba(184, 195, 204, 0.5);
     }
   }
