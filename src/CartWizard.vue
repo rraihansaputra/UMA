@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-4 stack-3" id="container" style="margin-bottom: 1.5em;">
+  <div class="mt-3 stack-3" id="container" style="margin-bottom: 1.5em;">
     <div>
       <b-button
         v-if="!this.recommendationSubmitted.flow"
@@ -51,11 +51,56 @@
         @hide="resetModal"
         @hidden="scrollToRecommendationDisplay"
       >
+        <template v-slot:modal-header="{ close }">
+          <div
+            :class="[
+              'progress-bullet',
+              recommendationIntroButton ? 'active' : null,
+            ]"
+          ></div>
+          <div
+            :class="[
+              'progress-bullet',
+              recommendationChoice.days ? 'active' : null,
+            ]"
+          ></div>
+          <div
+            :class="[
+              'progress-bullet',
+              recommendationChoice.flow ? 'active' : null,
+            ]"
+          ></div>
+          <button type="button" aria-label="Close" class="close" @click="close">
+            ×
+          </button>
+        </template>
         <form @submit.prevent="handleAssortmentForm" class="px-4">
           <transition-group name="modal-form" tag="div" class="stack-4">
-            <div key="days" class="modal-form-item">
-              <b>To get started, let's find the perfect assortment for you.</b
-              ><br />
+            <div
+              key="intro"
+              class="mt-2"
+              v-if="!recommendationIntroButton && !recommendationChoice.days"
+            >
+              <p>
+                <b>
+                  To get started, let's find the perfect assortment for you.
+                </b>
+              </p>
+              <b-button
+                variant="info"
+                dark
+                block
+                pill
+                @click="recommendationIntroButton = true"
+              >
+                Let's go
+              </b-button>
+            </div>
+            <div
+              key="days"
+              v-if="recommendationIntroButton || recommendationChoice.days"
+              class="modal-form-item"
+            >
               <b>How long does your average period last?</b>
               <b-form-radio-group
                 v-model="recommendationChoice.days"
@@ -138,7 +183,7 @@
     </div>
 
     <div
-      class="stack-2"
+      class="stack-3"
       v-if="recommendationDisplay"
       id="recommendation-display"
     >
@@ -330,6 +375,7 @@ export default Vue.extend({
   },
   data() {
     return {
+      recommendationIntroButton: false,
       daysRadioChoices: [
         { text: "4 days or less", value: "<4days" },
         { text: "5 days or more", value: ">5days" },
@@ -416,6 +462,8 @@ export default Vue.extend({
       this.$bvModal.hide("modal1");
     },
     resetModal() {
+      if (!this.recommendationChoice.days)
+        this.recommendationIntroButton = false;
       this.recommendationChoice = { ...this.recommendationSubmitted };
     },
     scrollToRecommendationDisplay() {
@@ -675,6 +723,24 @@ strong {
 
   .btn {
     font-size: inherit;
+    &.disabled {
+      background: $gray-400 !important;
+      border-color: $gray-400 !important;
+    }
+  }
+
+  .progress-bullet {
+    width: 0.6em;
+    height: 0.6em;
+    margin-right: 0.2em;
+    display: inline-block;
+    border-radius: 100%;
+    border: 1px solid $info;
+    background: transparent;
+
+    &.active {
+      background: $info;
+    }
   }
 
   .c-radio-stacked-buttons {
@@ -732,6 +798,12 @@ strong {
 
   .modal-form-leave-active {
     position: absolute;
+  }
+}
+.btn {
+  &.disabled {
+    background: $gray-400 !important;
+    border-color: $gray-400 !important;
   }
 }
 
@@ -858,6 +930,7 @@ strong {
   &___BV_modal_header_ {
     border-bottom: 0px solid red !important;
     padding: 1rem 1rem 0 1rem !important;
+    align-items: center !important;
   }
 
   &___BV_modal_body_ {
