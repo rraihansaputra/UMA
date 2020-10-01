@@ -574,6 +574,7 @@ export default Vue.extend({
       this.dataLoaded = true;
     },
     openSubscriptionDetails() {
+      // TODO scrollIntoView with center?
       document.getElementById("subscription").open = true;
     },
     loadParams() {
