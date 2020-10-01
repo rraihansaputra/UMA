@@ -33,9 +33,11 @@ $body-color: $secondary;
 
   &__summary {
     // background: $tertiary;
-    background: #EFEEEC;
+    // background: #EFEEEC;
+    background: #F4F4F4;
     // color: $secondary;
     // text-transform: uppercase;
+    font-weight: bold;
     margin-bottom: 0.5em;
     padding: 0.5em;
 

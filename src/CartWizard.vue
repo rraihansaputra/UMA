@@ -29,7 +29,7 @@
       >
         <a
           href="#subscription"
-          class="text-secondary"
+          class="text-info"
           style="text-decoration: underline;"
           @click="openSubscriptionDetails"
         >
@@ -92,6 +92,7 @@
                 block
                 pill
                 @click="recommendationIntroButton = true"
+                style="font-size: 1.25em;"
               >
                 Let's go
               </b-button>
@@ -213,7 +214,7 @@
           </a> -->
           <a
             href="#subscription"
-            class="text-secondary"
+            class="text-info"
             style="text-decoration: underline;"
             @click="openSubscriptionDetails"
           >
@@ -420,7 +421,7 @@ export default Vue.extend({
         "3m": {
           title: "Every 3 month",
           description: (price) =>
-            `Total ${price}k for three month supply, shipped upfront`,
+            `Total ${price}k for three months, shipped upfront`,
           subLength: 3,
           productAttributeCopy: (qtyString) =>
             `Three-month supply for your flow. Includes ${qtyString} pads.`,
@@ -428,7 +429,7 @@ export default Vue.extend({
         "6m": {
           title: "Every 6 month",
           description: (price) =>
-            `Total ${price}k for six-month supply, shipped upfront`,
+            `Total ${price}k for six-months, shipped upfront`,
           subLength: 6,
           productAttributeCopy: (qtyString) =>
             `Six-month supply for your flow. Includes ${qtyString} pads.`,
@@ -454,6 +455,7 @@ export default Vue.extend({
       this.recommendationSubmitted = { days, flow };
       this.recommendationDisplay = this.recommendation[days][flow];
       this.recommendationMonthlyAssortment = AVG_MONTHLY_ASSORTMENT[days][flow];
+      this.selectedVariant = null;
 
       // this.$router.push({
       //   query: { ...this.$route.query, days, flow, sku: null },
@@ -625,6 +627,7 @@ export default Vue.extend({
 $primary: #f5ede4;
 $secondary: #463a23;
 $info: #12212b;
+$gray-300: #eaeaea;
 
 $body-color: $secondary;
 
@@ -724,8 +727,8 @@ strong {
   .btn {
     font-size: inherit;
     &.disabled {
-      background: $gray-400 !important;
-      border-color: $gray-400 !important;
+      background: $gray-300 !important;
+      border-color: $gray-300 !important;
     }
   }
 
@@ -802,8 +805,8 @@ strong {
 }
 .btn {
   &.disabled {
-    background: $gray-400 !important;
-    border-color: $gray-400 !important;
+    background: $gray-300 !important;
+    border-color: $gray-300 !important;
   }
 }
 
@@ -832,7 +835,7 @@ strong {
     background: #e6eff5;
   }
   & .text-muted {
-    color: #b2ada7 !important;
+    color: #7E7D79 !important;
   }
 }
 
