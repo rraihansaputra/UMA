@@ -1,6 +1,6 @@
 {
   "current": {
-    "color_body_bg": "#fafbfc",
+    "color_body_bg": "#fbfcfd",
     "color_body_headings": "#12212b",
     "color_body_text": "#12212b",
     "color_body_links": "#5d66aa",
@@ -8,14 +8,14 @@
     "color_button_text": "#ffffff",
     "color_sale_badge": "#c6dae7",
     "color_borders": "rgba(0,0,0,0)",
-    "color_nav_bg": "#fafbfc",
+    "color_nav_bg": "#fbfcfd",
     "color_nav_text": "#12212b",
-    "color_action_bar_bg": "#fafbfc",
+    "color_action_bar_bg": "rgba(0,0,0,0)",
     "color_action_bar_text": "#12212b",
     "color_action_bar_text_active": "#12212b",
-    "color_drawer_bg": "#fafbfc",
+    "color_drawer_bg": "#fbfcfd",
     "color_drawer_text": "#12212b",
-    "color_footer_bg": "#efeeec",
+    "color_footer_bg": "#e6eff5",
     "color_footer_text": "#12212b",
     "type_header_family": "lato_n6",
     "type_header_base_size": "28px",
@@ -39,7 +39,7 @@
     "share_facebook": true,
     "share_twitter": true,
     "share_pinterest": true,
-    "favicon": "shopify:\/\/shop_images\/UMA_Favicon.png",
+    "favicon": "shopify:\/\/shop_images\/UMA_Favicon_9366c5a7-9b38-4d8f-af8f-7aeeca3fab1d.png",
     "checkout_header_image": "",
     "checkout_logo_image": "shopify:\/\/shop_images\/UMA_12212B_White_Background.png",
     "checkout_logo_position": "left",
@@ -66,10 +66,9 @@
         "settings": {
           "show_announcement": true,
           "home_page_only": false,
-          "text": "FIND OUT IF WE SHIP TO YOUR CITY",
-          "link": "",
-          "color_bg": "#fafbfc",
-          "color_text": "#11212d"
+          "text": "FREE SHIPPING ACROSS INDONESIA",
+          "color_bg": "#85afcc",
+          "color_text": "#ffffff"
         }
       },
       "header": {
@@ -125,7 +124,7 @@
       "action-bar": {
         "type": "action-bar",
         "settings": {
-          "action_bar_link_list": "footer"
+          "action_bar_link_list": ""
         }
       },
       "footer": {
