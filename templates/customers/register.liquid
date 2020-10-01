@@ -23,6 +23,9 @@
         <label for="CreatePassword" class="label--hidden">{{ 'customer.register.password' | t }}</label>
         <input type="password" name="customer[password]" id="CreatePassword" class="input-full {% if form.errors contains 'password' %} input--error{% endif %}" placeholder="{{ 'customer.register.password' | t }}">
 
+        <!-- <label for="phone" class="label--hidden">Phone</label>
+        <input type="phone" name="customer[phone]" id="Phone" class="input-full {% if form.errors contains 'phone' %} input--error{% endif %}" placeholder="phone" {% if form.phone %} value="{{ form.phone }}"{% endif %} autocorrect="off" autocapitalize="off"> -->
+
         <p>
           <input type="submit" value="{{ 'customer.register.submit' | t }}" class="btn">
         </p>

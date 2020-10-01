@@ -55,7 +55,23 @@
   <h2>{{ 'customer.account.details' | t }}</h2>
 
   {{ customer.default_address | format_address }}
-
   <p><a href="{{ routes.account_addresses_url }}">{{ 'customer.account.view_addresses' | t }} ({{ customer.addresses_count }})</a></p>
+
+  <hr class="hr--clear">
+
+  <h2>Update Account Details</h2>
+  <div id='kca-embed'>
+  </div>
+    <style>
+      #kca-forms-container {
+        padding: 0 !important;
+      }
+
+      .kca-form__title {
+        font-size: 1.25em;
+        font-weight: normal;
+        margin-bottom: 0;
+      }
+    </style>
 
 </div>
