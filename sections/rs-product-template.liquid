@@ -16,226 +16,188 @@
 
   <div class="product grid grid--uniform grid--no-gutters" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
 
-    <div class="product__photo grid__item medium-up--one-half">
-      <div class="grid grid--no-gutters">
-        <div class="grid__item grid__item large-up--eight-twelfths large-up--push-three-twelfths medium-up--ten-twelfths medium-up--push-one-twelfth">
+    <div class="product grid grid--uniform grid--no-gutters">
+      <div class="product__photo grid__item medium-up--one-half">
+        <div class="grid grid--no-gutters">
+          <div class="grid__item grid__item large-up--eight-twelfths large-up--push-three-twelfths medium-up--ten-twelfths medium-up--push-one-twelfth">
 
-          <!-- START Swiper Product Image Slider -->
-          <div style="display: flex;">
-            <link rel="stylesheet" href="{{ 'swiper-bundle.css' | asset_url }}">
-            <script src="{{ 'swiper-bundle.min.js' | asset_url }}"></script>
-            <style>
-              @media only screen and (max-width: 749px) {
-                .swiper-container-thumbs {
-                  display: none;
+            <!-- START Swiper Product Image Slider -->
+            <div style="display: flex;">
+              <link rel="stylesheet" href="{{ 'swiper-bundle.css' | asset_url }}">
+              <script src="{{ 'swiper-bundle.min.js' | asset_url }}"></script>
+              <style>
+                @media only screen and (max-width: 749px) {
+                  .swiper-container-thumbs {
+                    display: none;
+                  }
                 }
-              }
-            </style>
+              </style>
 
-            <div class="swiper-container-thumbs " style="margin-right: 0.25em;">
-              <div class="swiper-wrapper c-thumbs" id="c-thumbs" style=" display: flex; flex-direction: column;">
-                {% for image in product.images %}
-                <img style="margin-bottom: 0.25em" src="{{ image | img_url: '200x200'}}">
-                {% endfor %}
-              </div>
-            </div>
-
-            <div class="swiper-container" style="max-width: 100%; --swiper-theme-color: #eeeeee;">
-              <div id="slider" class="swiper-wrapper">
-                {% for image in product.images %}
-                <div class="swiper-slide product-image">
-                  <img style="width: 100%" src="{{ image | img_url: '2048x2048'}}">
+              <div class="swiper-container-thumbs " style="margin-right: 0.25em;">
+                <div class="swiper-wrapper c-thumbs" id="c-thumbs" style=" display: flex; flex-direction: column;">
+                  {% for image in product.images %}
+                  <img style="margin-bottom: 0.25em" src="{{ image | img_url: '200x200'}}">
+                  {% endfor %}
                 </div>
-                {% endfor %}
               </div>
-              <div class="swiper-pagination" style="text-align: start; margin: 0.5em 1em;"></div>
+
+              <div class="swiper-container" style="max-width: 100%; --swiper-theme-color: #eeeeee;">
+                <div id="slider" class="swiper-wrapper">
+                  {% for image in product.images %}
+                  <div class="swiper-slide product-image">
+                    <img style="width: 100%" src="{{ image | img_url: '2048x2048'}}">
+                  </div>
+                  {% endfor %}
+                </div>
+                <div class="swiper-pagination" style="text-align: start; margin: 0.5em 1em;"></div>
+              </div>
+
+              <script>
+                var mySwiper = new Swiper('.swiper-container', {
+                  // loop: true,
+                  mousewheel: true,
+                  grabCursor: true,
+                  slidesPerView: 1.5,
+                  loop: true,
+                  breakpoints: {
+                    '@0.5': {
+                      slidesPerView: 2,
+                    },
+                    '@1.00': {
+                    slidesPerView: 1,
+                    }
+                  },
+                  pagination: { el: '.swiper-pagination',},
+                  navigation: { el: '.swiper-navigation',},
+                  // thumbs: {
+                  //  swiper: {
+                  //    el: '.swiper-container-thumbs',
+                  //    slidesPerView: 6,
+                  //    direction: 'vertical'
+                  //  }
+                  // }
+                });
+
+                function addEvent(element, evnt, funct){
+                  if (element.attachEvent)
+                  return element.attachEvent('on'+evnt, funct);
+                  else
+                  return element.addEventListener(evnt, funct, false);
+                }
+
+                addEvent(
+                    document.getElementById('c-thumbs'),
+                    'click',
+                    function (event) {
+                      // console.log(event);
+                      const el = event.srcElement;
+                      const index = [...el.parentElement.children].indexOf(el)
+                      // console.log({event, el, index})
+                      mySwiper.slideTo(index + 1, 500); // loop shifts the index
+                    }
+                );
+
+              </script>
+            </div>
+            <!-- END Swiper Product Image Slider -->
+
+          </div>
+        </div>
+      </div>
+
+      <div class="product__details grid__item medium-up--one-half" style="margin-top: 20px;">
+        <div class="grid grid--no-gutters product__details-content">
+          <!-- div class="grid__item {% if section.settings.product_form_width == 'large' %}medium-up--three-twelfths medium-up--push-one-fifth{% else %}large-up--two-twelfths large-up--push-two-twelfths medium-up--three-twelfths medium-up--push-one-twelfth{% endif %}">
+          </div-->
+          <div class="grid__item large-up--two-thirds medium-up--eleven-twelfths">
+            {% if section.settings.show_vendor %}
+              <p class="product-item__vendor small--text-center">{{ product.vendor }}</p>
+            {% endif %}
+            <h1 class="h2" itemprop="name">{{ product.title }}</h1>
+            <link itemprop="availability" href="http://schema.org/{% if current_variant.available %}InStock{% else %}OutOfStock{% endif %}">
+            {%- capture 'form_id' -%}AddToCartForm-{{ section.id }}{%- endcapture -%}
+            {%- capture 'form_class' -%}
+              product__form--add-to-cart{% if section.settings.product_form_width == 'large' %} product__form--full-width{% endif %}
+            {%- endcapture -%}
+            <div class="product-single__errors"></div>
+            {% for block in section.blocks %}
+              {% if block.type == 'top-description' %}
+              <p>{{ block.settings.content }}</p>
+              {% endif %}
+            {% endfor %}
+            <!-- CUSTOM VUE PART FOR OPTION RECOMMENDATION AND ADD TO CART-->
+            <div id="app" class="vue-form vue" style="margin-top: 1.5em">
+              <p>Loading...</p>
+              <script src="{{ 'CartWizard.js' | asset_url }}"></script>
+            </div>
+            <!-- END CUSTOM VUE PART -->
+            <div class="product-single__description rte" itemprop="description">
+              {{ product.description }}
             </div>
 
-            <script>
-              var mySwiper = new Swiper('.swiper-container', {
-                // loop: true,
-                mousewheel: true,
-                grabCursor: true,
-                slidesPerView: 1.5,
-                loop: true,
-                breakpoints: {
-                  '@0.5': {
-                    slidesPerView: 2,
-                  },
-                  '@1.00': {
-                  slidesPerView: 1,
-                  }
-                },
-                pagination: { el: '.swiper-pagination',},
-                navigation: { el: '.swiper-navigation',},
-                // thumbs: {
-                //  swiper: {
-                //    el: '.swiper-container-thumbs',
-                //    slidesPerView: 6,
-                //    direction: 'vertical'
-                //  }
-                // }
-              });
+            {% if section.settings.social_sharing_products %}
+            {% include 'social-sharing', share_title: product.title, share_permalink: product.url, share_image: product %}
+            {% endif %}
 
-              function addEvent(element, evnt, funct){
-                if (element.attachEvent)
-                return element.attachEvent('on'+evnt, funct);
-                else
-                return element.addEventListener(evnt, funct, false);
-              }
-
-              addEvent(
-                  document.getElementById('c-thumbs'),
-                  'click',
-                  function (event) {
-                    // console.log(event);
-                    const el = event.srcElement;
-                    const index = [...el.parentElement.children].indexOf(el)
-                    // console.log({event, el, index})
-                    mySwiper.slideTo(index + 1, 500); // loop shifts the index
-                  }
-              );
-
-            </script>
           </div>
-          <!-- END Swiper Product Image Slider -->
-
         </div>
       </div>
     </div>
 
-    <div class="product__details grid__item medium-up--one-half" style="margin-top: 20px;">
-      <div class="grid grid--no-gutters product__details-content">
-        <!-- div class="grid__item {% if section.settings.product_form_width == 'large' %}medium-up--three-twelfths medium-up--push-one-fifth{% else %}large-up--two-twelfths large-up--push-two-twelfths medium-up--three-twelfths medium-up--push-one-twelfth{% endif %}">
-        </div-->
-        <div class="grid__item large-up--two-thirds medium-up--eleven-twelfths">
-          {% if section.settings.show_vendor %}
-            <p class="product-item__vendor small--text-center">{{ product.vendor }}</p>
+    <div class="product grid grid--uniform grid--no-gutters">
+      <div
+        class="grid__item product__details large-up--six-eighths large-up--push-one-eighth medium-up--ten-twelfths medium-up--push-one-twelfth"
+        style="margin-top: 0;"
+      >
+        {% for block in section.blocks %}
+        <div
+          class="grid-item"
+          {{block.shopify_attributes}}
+        >
+          {% if block.type == 'faq' %}
+          <details class="faq-details"
+          {% if block.settings.open %} open {% endif %}
+          {% if block.settings.idTag > "" %}
+          id="{{block.settings.idTag}}"
           {% endif %}
-          <h1 class="h2" itemprop="name">{{ product.title }}</h1>
-          <link itemprop="availability" href="http://schema.org/{% if current_variant.available %}InStock{% else %}OutOfStock{% endif %}">
-          {%- capture 'form_id' -%}AddToCartForm-{{ section.id }}{%- endcapture -%}
-          {%- capture 'form_class' -%}
-            product__form--add-to-cart{% if section.settings.product_form_width == 'large' %} product__form--full-width{% endif %}
-          {%- endcapture -%}
-          <div class="product-single__errors"></div>
-          {% for block in section.blocks %}
-            {% if block.type == 'top-description' %}
-            <p>{{ block.settings.content }}</p>
-            {% endif %}
-          {% endfor %}
-          <!-- CUSTOM VUE PART FOR OPTION RECOMMENDATION AND ADD TO CART-->
-          <div id="app" class="vue-form vue" style="margin-top: 1.5em">
-            <p>Loading...</p>
-            <script src="{{ 'CartWizard.js' | asset_url }}"></script>
-          </div>
-          <!-- END CUSTOM VUE PART -->
-          <div class="product-single__description rte" itemprop="description">
-            {{ product.description }}
-          </div>
-
-          {% for block in section.blocks %}
-          <div
-            class="grid-item"
-            {{block.shopify_attributes}}
           >
-            {% if block.type == 'faq' %}
-            <details class="faq-details"
-            {% if block.settings.open %} open {% endif %}
-            {% if block.settings.idTag > "" %}
+          <summary class="faq-details__summary">
+            <span class="faq-details__summary-text">
+              {{ block.settings.title }}
+            </span>
+          </summary>
+          <div class="faq-details__text">
+            <p>
+              {{ block.settings.content }}
+            </p>
+          </div>
+        </details>
+        {% endif %}
+        {% if block.type == 'faqImage' %}
+        <details class="faq-details"
+          {% if block.settings.open %} open {% endif %}
+          {% if block.settings.idTag > "" %}
             id="{{block.settings.idTag}}"
-            {% endif %}
-            >
+          {% endif %}
+          >
             <summary class="faq-details__summary">
               <span class="faq-details__summary-text">
                 {{ block.settings.title }}
               </span>
             </summary>
-            <div class="faq-details__text">
-              <p>
-                {{ block.settings.content }}
-              </p>
+            <div class="faq-details__image">
+              <img
+                src="{{ block.settings.image | img_url: '2048x' }}"
+              >
             </div>
           </details>
           {% endif %}
-          {% if block.type == 'faqImage' %}
-          <details class="faq-details"
-            {% if block.settings.open %} open {% endif %}
-            {% if block.settings.idTag > "" %}
-              id="{{block.settings.idTag}}"
-            {% endif %}
-            >
-              <summary class="faq-details__summary">
-                <span class="faq-details__summary-text">
-                  {{ block.settings.title }}
-                </span>
-              </summary>
-              <div class="faq-details__image">
-                <img
-                  src="{{ block.settings.image | img_url: '2048x' }}"
-                >
-              </div>
-            </details>
-            {% endif %}
 
-          </div>
-
-          {% endfor %}
-          {% if section.settings.social_sharing_products %}
-          {% include 'social-sharing', share_title: product.title, share_permalink: product.url, share_image: product %}
-          {% endif %}
         </div>
+        {% endfor %}
       </div>
     </div>
 
-    {% comment %}
-      Show second product photo after description on mobile if
-      image setting style is 'portrait' and there is a duplicate_image to show
-    {% endcomment %}
-    {% if is_portrait_image and product.images.size > 1 and duplicate_image %}
-      <div class="product__photo grid__item medium-up--hide {{ grid_item_width }}">
-        <noscript>
-          <img src="{{ duplicate_image | img_url: '2048x2048' }}" alt="{{ duplicate_image.alt | escape }}">
-        </noscript>
-        {% assign img_url = duplicate_image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
-        <div class="product__photo--single" style="padding-top:{{ 1 | divided_by: duplicate_image.aspect_ratio | times: 100}}%;">
-          <img class="lazyload"
-            src="{{ duplicate_image | img_url: '300x' }}"
-            data-src="{{ img_url }}"
-            data-widths="[360, 540, 720, 900, 1080, 1296, 1512, 1728, 1944, 2048, 4472]"
-            data-aspectratio="{{ duplicate_image.aspect_ratio }}"
-            data-sizes="auto"
-            alt="{{ duplicate_image.alt | escape }}">
-        </div>
-      </div>
-    {% endif %}
-
-    {% comment %}
-      Show other product images below product info if there's any left to show
-    {% endcomment %}
-    {% if index < product.images.size %}
-      {% for image in product.images offset:index_offset %}
-        {% unless image == first_image %}
-          {% unless section.settings.skip_first_product_image and image == product.featured_image %}
-            <div class="product__photo grid__item {{ grid_item_width }}">
-              <noscript>
-                <img src="{{ image | img_url: '2048x2048' }}" alt="{{ image.alt | escape }}">
-              </noscript>
-              {% assign img_url = image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
-              <div class="product__photo--single" style="padding-top:{{ 1 | divided_by: image.aspect_ratio | times: 100}}%;">
-                <img class="lazyload"
-                  src="{{ image | img_url: '300x' }}"
-                  data-src="{{ img_url }}"
-                  data-widths="[360, 540, 720, 900, 1080, 1296, 1512, 1728, 1944, 2048, 4472]"
-                  data-aspectratio="{{ image.aspect_ratio }}"
-                  data-sizes="auto"
-                  alt="{{ image.alt | escape }}">
-              </div>
-            </div>
-          {% endunless %}
-        {% endunless %}
-      {% endfor %}
-    {% endif %}
   </div>
 </div>
 
