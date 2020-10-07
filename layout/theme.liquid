@@ -62,7 +62,9 @@
 
  
 {% render 'pagefly-header' %}
- </head> 
+ <script>var scaaffCheck = false;</script>
+{{ 'sca_affiliate.js' | asset_url | script_tag }}
+</head> 
 
 <body id="{{ page_title | handle }}" class="{% if customer %}customer-logged-in {% endif %}template-{{ request.page_type | handle }}">
   <div id="SearchDrawer" class="search-bar drawer drawer--top">
