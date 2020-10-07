@@ -64,11 +64,12 @@
                   {% endfor %}
                 {% endif %}
 
-                {%- if item.variant.id != 34520384602265 and item.variant.id != 34520384569497 -%}
+                {%- if item.product.id != 5257752739993 -%}
+                <!-- Used to be to remove 'remove' button on cart for Organic Pads -->
+                {%- endif -%}
                 <p class="txt--minor">
                   <a href="{{ routes.cart_change_url }}?line={{ forloop.index }}&amp;quantity=0" class="cart__remove">{{ 'cart.general.remove' | t }}</a>
                 </p>
-                {%- endif -%}
               </td>
               <td class="text-right" data-label="{{ 'cart.label.price' | t }}">
                 {%- if item.original_price != item.final_price -%}
@@ -95,7 +96,7 @@
 
               </td>
               <td data-label="{{ 'cart.label.quantity' | t }}" class="large-up--text-center">
-                {%- if item.variant.id != 34520384602265 and item.variant.id != 34520384569497 -%}
+                {%- if item.product.id != 5257752739993 -%}
                 <input type="number" data-ajax-qty name="updates[]" id="updates_{{ item.key }}" value="{{ item.quantity }}" min="0" data-id="{{ item.key }}">
                 {%- else -%}
                 <p>{{item.quantity}} pcs</p>

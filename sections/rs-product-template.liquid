@@ -114,6 +114,7 @@
               <p class="product-item__vendor small--text-center">{{ product.vendor }}</p>
             {% endif %}
             <h1 class="h2" itemprop="name">{{ product.title }}</h1>
+            <p><a href="#shopify-product-reviews">Read reviews</a></p>
             <link itemprop="availability" href="http://schema.org/{% if current_variant.available %}InStock{% else %}OutOfStock{% endif %}">
             {%- capture 'form_id' -%}AddToCartForm-{{ section.id }}{%- endcapture -%}
             {%- capture 'form_class' -%}
@@ -195,7 +196,11 @@
 
         </div>
         {% endfor %}
+
+        <div id="shopify-product-reviews" data-id="{{product.id}}">{{ product.metafields.spr.reviews }}</div>
       </div>
+
+
     </div>
 
   </div>

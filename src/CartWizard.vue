@@ -514,6 +514,51 @@ export default Vue.extend({
       return this.displayMeta[key].productAttributeCopy;
     },
     async addToCart() {
+      const sku = this.selectedVariant;
+
+      const productAttributeCopy = this.productAttributeCopyFunction(sku)(
+        this.getQtyString(sku)
+      );
+      const cartItem = {
+        id: this.skuMap[sku],
+        quantity: 1,
+        properties: {
+          Description: productAttributeCopy,
+        },
+      };
+
+      const allSkuNoQty = {};
+      Object.entries(this.skuMap).map(
+        ([sku, variantId]) => (allSkuNoQty[variantId] = 0)
+      );
+
+      // save state on query
+      this.$router.push({
+        query: {
+          ...this.$route.query,
+          days: this.recommendationSubmitted.days,
+          flow: this.recommendationSubmitted.flow,
+          sku,
+        },
+      });
+
+      this.loading = true;
+      try {
+        await Axios.post("/cart/update.js", {
+          updates: { ...allSkuNoQty },
+        });
+        await Axios.post("/cart/add.js", {
+          items: [cartItem],
+        });
+        this.loading = false;
+        window.location.href = "/cart";
+      } catch (e) {
+        this.loading = false;
+        console.error(e);
+        window.alert("Something went wrong. Please notify the store owner.");
+      }
+    },
+    async goToCheckout() {
       // Prepare information
       const sku = this.selectedVariant;
 
@@ -561,7 +606,9 @@ export default Vue.extend({
           cartItems
         );
 
-        window.location.href = this.checkoutData.webUrl;
+        console.log(this.checkoutData);
+
+        // window.location.href = this.checkoutData.webUrl;
         this.loading = false;
       } catch (e) {
         this.loading = false;
@@ -571,6 +618,17 @@ export default Vue.extend({
     },
     async updateProducts() {
       this.product = await client.product.fetchByHandle("organic-pads");
+
+      const productJsonData = document.getElementById("ProductJsonData")
+        .innerText;
+      const pageProductData = JSON.parse(productJsonData);
+
+      this.skuMap = {};
+
+      pageProductData.variants.map(
+        (variant) => (this.skuMap[variant.sku] = variant.id)
+      );
+
       this.dataLoaded = true;
     },
     openSubscriptionDetails() {
@@ -836,7 +894,7 @@ strong {
     background: #e6eff5;
   }
   & .text-muted {
-    color: #7E7D79 !important;
+    color: #7e7d79 !important;
   }
 }
 
