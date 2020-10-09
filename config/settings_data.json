@@ -40,19 +40,18 @@
     "share_twitter": true,
     "share_pinterest": true,
     "favicon": "shopify:\/\/shop_images\/UMA_Favicon_05d419cc-35b5-4247-b99f-6f9f5c228225.png",
-    "checkout_header_image": "",
-    "checkout_logo_image": "shopify:\/\/shop_images\/UMA_5D7389.png",
+    "checkout_logo_image": "shopify:\/\/shop_images\/UMA_425161.png",
     "checkout_logo_position": "left",
     "checkout_logo_size": "small",
     "checkout_body_background_image": "",
     "checkout_body_background_color": "#ffffff",
     "checkout_input_background_color_mode": "white",
     "checkout_sidebar_background_image": "",
-    "checkout_sidebar_background_color": "#f6f6f5",
+    "checkout_sidebar_background_color": "#f5f5f5",
     "checkout_heading_font": "Helvetica Neue",
     "checkout_body_font": "Helvetica Neue",
-    "checkout_accent_color": "#5d7389",
-    "checkout_button_color": "#5d7389",
+    "checkout_accent_color": "#425161",
+    "checkout_button_color": "#425161",
     "checkout_error_color": "#de2a2a",
     "checkout_logo": "",
     "checkout_use_body_background_image": false,
@@ -74,7 +73,7 @@
       "header": {
         "type": "header",
         "settings": {
-          "logo": "shopify:\/\/shop_images\/UMA_506275.png",
+          "logo": "shopify:\/\/shop_images\/UMA_425161.png",
           "logo_width": "50"
         }
       },
