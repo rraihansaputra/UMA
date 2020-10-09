@@ -437,8 +437,8 @@ export default Vue.extend({
       },
       productAttributeCopy: null,
 
-      // Updated to the GraphQL ID on mounted (updateProducts())
       skuMap: {},
+      variantMap: {},
       product: {},
       checkoutData: null,
       loading: false,
@@ -624,9 +624,13 @@ export default Vue.extend({
       const pageProductData = JSON.parse(productJsonData);
 
       this.skuMap = {};
+      this.variantMap = {};
 
       pageProductData.variants.map(
-        (variant) => (this.skuMap[variant.sku] = variant.id)
+        (variant) => {
+          this.skuMap[variant.sku] = variant.id;
+          this.variantMap[variant.id] = variant.sku;
+        }
       );
 
       this.dataLoaded = true;
@@ -636,6 +640,7 @@ export default Vue.extend({
       document.getElementById("subscription").open = true;
     },
     loadParams() {
+      if ("variant" in this.$route.query) return this.loadVariantParam();
       const { days, flow, sku } = this.$route.query;
       if (sku) this.selectedVariant = sku;
       else this.selectedVariant = null;
@@ -650,6 +655,27 @@ export default Vue.extend({
         this.recommendationMonthlyAssortment = null;
       }
     },
+    async loadVariantParam() {
+      if (!("variant" in this.$route.query)) throw Error("No 'variant' in route query");
+
+      await this.updateProducts();
+
+      const variantId = this.$route.query.variant;
+      const sku = this.variantMap[variantId];
+
+      if (sku === "TRIAL-SET") return this.$router.push({query:{sku, days: "3days", flow: "light"}});
+
+      const daysMap = {"4D": "<4days", "5D": ">5days"}
+      const flowMap = {"L": "light", "M": "medium", "H": "heavy"}
+
+      const daysCode = sku.split("-")[1]
+      const flowCode = sku.split("-")[2]
+
+      const days = daysMap[daysCode]
+      const flow = flowMap[flowCode]
+
+      return this.$router.push({query: {sku, days, flow}})
+    }
   },
   async created() {
     await this.updateProducts();
