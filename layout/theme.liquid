@@ -172,11 +172,12 @@
                     <div class="grid">
                       <div class="grid__item one-half">
                         <!-- CUSTOM POPUP CART QTY DISABLE -->
+                        {{id}}
                         <div class="ajaxcart__qty">
-                        {{#ifeq id "36143473557657"}}
+                        {{#ifeq product_id "5257752739993"}}
                           <p>{{itemQty}} pcs</p>
                         {{/ifeq}}
-                        {{#ifnoteq id "36143473557657"}}
+                        {{#ifnoteq product_id "5257752739993"}}
                           <button type="button" class="ajaxcart__qty-adjust ajaxcart__qty--minus" data-id="{{key}}" data-qty="{{itemMinus}}" data-line="{{line}}" aria-label="{% endraw %}{{ 'cart.label.reduce_quantity' | t }}{% raw %}">
                             <span class="icon icon-minus" aria-hidden="true"></span>
                             <span class="icon__fallback-text" aria-hidden="true">&minus;</span>
