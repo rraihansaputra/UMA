@@ -626,12 +626,10 @@ export default Vue.extend({
       this.skuMap = {};
       this.variantMap = {};
 
-      pageProductData.variants.map(
-        (variant) => {
-          this.skuMap[variant.sku] = variant.id;
-          this.variantMap[variant.id] = variant.sku;
-        }
-      );
+      pageProductData.variants.map((variant) => {
+        this.skuMap[variant.sku] = variant.id;
+        this.variantMap[variant.id] = variant.sku;
+      });
 
       this.dataLoaded = true;
     },
@@ -640,7 +638,6 @@ export default Vue.extend({
       document.getElementById("subscription").open = true;
     },
     loadParams() {
-      if ("variant" in this.$route.query) return this.loadVariantParam();
       const { days, flow, sku } = this.$route.query;
       if (sku) this.selectedVariant = sku;
       else this.selectedVariant = null;
@@ -655,27 +652,41 @@ export default Vue.extend({
         this.recommendationMonthlyAssortment = null;
       }
     },
-    async loadVariantParam() {
-      if (!("variant" in this.$route.query)) throw Error("No 'variant' in route query");
+    async loadVariantFromCart() {
+      if (!this.dataLoaded) await this.updateProducts();
 
-      await this.updateProducts();
+      let response;
 
-      const variantId = this.$route.query.variant;
+      try {
+        response = await Axios.get("/cart.js");
+      } catch (e) {
+        console.error(e);
+      }
+
+      const organicPadsInCart = response.data.items.find(
+        (item) => (item.handle = "organic-pads")
+      );
+      if (!organicPadsInCart) return;
+
+      const variantId = organicPadsInCart.variant_id;
       const sku = this.variantMap[variantId];
 
-      if (sku === "TRIAL-SET") return this.$router.push({query:{sku, days: "3days", flow: "light"}});
+      if (sku === "TRIAL-SET")
+        return this.$router.push({
+          query: { sku, days: "<4days", flow: "light" },
+        });
 
-      const daysMap = {"4D": "<4days", "5D": ">5days"}
-      const flowMap = {"L": "light", "M": "medium", "H": "heavy"}
+      const daysMap = { "4D": "<4days", "5D": ">5days" };
+      const flowMap = { L: "light", M: "medium", H: "heavy" };
 
-      const daysCode = sku.split("-")[1]
-      const flowCode = sku.split("-")[2]
+      const daysCode = sku.split("-")[1];
+      const flowCode = sku.split("-")[2];
 
-      const days = daysMap[daysCode]
-      const flow = flowMap[flowCode]
+      const days = daysMap[daysCode];
+      const flow = flowMap[flowCode];
 
-      return this.$router.push({query: {sku, days, flow}})
-    }
+      return this.$router.push({ query: { sku, days, flow } });
+    },
   },
   async created() {
     await this.updateProducts();
@@ -705,6 +716,9 @@ export default Vue.extend({
       },
       immediate: true,
     },
+  },
+  mounted() {
+    this.loadVariantFromCart();
   },
 });
 </script>
