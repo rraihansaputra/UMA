@@ -193,7 +193,7 @@
       id="recommendation-display"
     >
       <div class="mb-3" v-if="recommendationMonthlyAssortment">
-        <b>Your average monthly assortment</b>
+        <b>{{ activeCopy.recommendationDisplay.assortment }}</b>
         <div class="d-flex stack-h-3">
           <span class="d-flex align-items-center mt-1">
             <div class="monthly-assortment-pill regular mr-2"></div>
@@ -207,7 +207,7 @@
       </div>
 
       <div>
-        <b>Subscribe and save</b>
+        <b>{{ activeCopy.recommendationDisplay.subscribe }}</b>
         <span
           style="float: right; text-decoration: underline; cursor: pointer;"
           class="text-muted"
@@ -222,7 +222,7 @@
             style="text-decoration: underline;"
             @click="openSubscriptionDetails"
           >
-            What is subscription?
+            {{ activeCopy.recommendationDisplay.subscriptionLink }}
           </a>
         </span>
       </div>
@@ -233,7 +233,7 @@
           :key="key"
           :class="key === 'trial' ? 'mt-n1' : ''"
         >
-          <b v-if="key === 'trial'">Not ready to subscribe?</b>
+          <b v-if="key === 'trial'">{{ activeCopy.recommendationDisplay.notReady }}</b>
           <div v-if="key === '6m'" class="d-flex justify-content-end mt-n2">
             <p
               class="px-3 mb-n3"
@@ -245,7 +245,7 @@
                 font-size: 0.95em;
                 "
             >
-              Best value
+              {{ activeCopy.recommendationDisplay.bestValue }}
             </p>
           </div>
 
@@ -295,7 +295,7 @@
       :disabled="!selectedVariant || loading"
     >
       <b-spinner v-if="loading" small></b-spinner>
-      <b>Subscribe now</b>
+      <b>{{ activeCopy.subscribeNow }}</b>
     </b-button>
 
     <!-- <div v-show="recommendationDisplay">
@@ -381,7 +381,6 @@ export default Vue.extend({
   },
   data() {
     return {
-      copy: copy,
       recommendationIntroButton: false,
       daysRadioChoices: [
         { text: "4 days or less", value: "<4days" },
@@ -719,8 +718,11 @@ export default Vue.extend({
       );
     },
     activeCopy() {
-      return this.copy.en;
+      return copy.en;
     },
+    localeCode() {
+      return "en"
+    }
   },
   watch: {
     "$route.query": {

@@ -13,6 +13,14 @@ export default {
         proceed: "Proceed",
         adjust: "Adjust"
       }
-    }
+    },
+    recommendationDisplay: {
+      assortment: "Your average monthly assortment",
+      subscribe: "Subscribe and save",
+      subscriptionLink: "What is subscription?",
+      notReady: "Not Ready to subscribe?",
+      bestValue: "Best value"
+    },
+    subscribeNow: "Subscribe now"
   }
 }
