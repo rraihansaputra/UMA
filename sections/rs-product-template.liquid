@@ -107,31 +107,45 @@
 
       <div class="product__details grid__item medium-up--one-half" style="margin-top: 20px;">
         <div class="grid grid--no-gutters product__details-content">
-          <!-- div class="grid__item {% if section.settings.product_form_width == 'large' %}medium-up--three-twelfths medium-up--push-one-fifth{% else %}large-up--two-twelfths large-up--push-two-twelfths medium-up--three-twelfths medium-up--push-one-twelfth{% endif %}">
-          </div-->
+
           <div class="grid__item large-up--two-thirds medium-up--eleven-twelfths">
             {% if section.settings.show_vendor %}
               <p class="product-item__vendor small--text-center">{{ product.vendor }}</p>
             {% endif %}
             <h1 class="h2" itemprop="name">{{ product.title }}</h1>
-            <p><a href="#shopify-product-reviews">Read reviews</a></p>
+
+            <p>
+              <a href="#shopify-product-reviews">
+                {% if request.locale.iso_code == 'id' %} Baca ulasan
+                {% else %} Read reviews
+                {% endif %}
+              </a>
+            </p>
+
             <link itemprop="availability" href="http://schema.org/{% if current_variant.available %}InStock{% else %}OutOfStock{% endif %}">
             {%- capture 'form_id' -%}AddToCartForm-{{ section.id }}{%- endcapture -%}
             {%- capture 'form_class' -%}
               product__form--add-to-cart{% if section.settings.product_form_width == 'large' %} product__form--full-width{% endif %}
             {%- endcapture -%}
             <div class="product-single__errors"></div>
+
             {% for block in section.blocks %}
               {% if block.type == 'top-description' %}
-              <p>{{ block.settings.content }}</p>
+              <p>
+                {% if request.locale.iso_code == 'id' %} {{ block.settings.content_id }}
+                {% else %} {{ block.settings.content }}
+                {% endif %}
+              </p>
               {% endif %}
             {% endfor %}
+
             <!-- CUSTOM VUE PART FOR OPTION RECOMMENDATION AND ADD TO CART-->
             <div id="app" class="vue-form vue" style="margin-top: 1.5em">
               <p>Loading...</p>
               <script src="{{ 'CartWizard.js' | asset_url }}"></script>
             </div>
             <!-- END CUSTOM VUE PART -->
+
             <div class="product-single__description rte" itemprop="description">
               {{ product.description }}
             </div>
@@ -155,6 +169,7 @@
           class="grid-item"
           {{block.shopify_attributes}}
         >
+
           {% if block.type == 'faq' %}
           <details class="faq-details"
           {% if block.settings.open %} open {% endif %}
@@ -162,35 +177,48 @@
           id="{{block.settings.idTag}}"
           {% endif %}
           >
-          <summary class="faq-details__summary">
-            <span class="faq-details__summary-text">
-              {{ block.settings.title }}
-            </span>
-          </summary>
-          <div class="faq-details__text">
-            <p>
-              {{ block.settings.content }}
-            </p>
-          </div>
-        </details>
-        {% endif %}
-        {% if block.type == 'faqImage' %}
-        <details class="faq-details"
-          {% if block.settings.open %} open {% endif %}
-          {% if block.settings.idTag > "" %}
-            id="{{block.settings.idTag}}"
-          {% endif %}
-          >
             <summary class="faq-details__summary">
               <span class="faq-details__summary-text">
-                {{ block.settings.title }}
+                {% if request.locale.iso_code == 'id' %} {{ block.settings.title_id }}
+                {% else %} {{ block.settings.title }}
+                {% endif %}
               </span>
             </summary>
-            <div class="faq-details__image">
-              <img
-                src="{{ block.settings.image | img_url: '2048x' }}"
-              >
+            <div class="faq-details__text">
+              <p>
+                {% if request.locale.iso_code == 'id' %} {{ block.settings.content_id }}
+                {% else %} {{ block.settings.content }}
+                {% endif %}
+              </p>
             </div>
+          </details>
+          {% endif %}
+
+          {% if block.type == 'faqImage' %}
+          <details class="faq-details"
+            {% if block.settings.open %} open {% endif %}
+            {% if block.settings.idTag > "" %}
+              id="{{block.settings.idTag}}"
+            {% endif %}
+            >
+              <summary class="faq-details__summary">
+                <span class="faq-details__summary-text">
+                  {% if request.locale.iso_code == 'id' %} {{ block.settings.title_id }}
+                  {% else %} {{ block.settings.title }}
+                  {% endif %}
+                </span>
+              </summary>
+              <div class="faq-details__image">
+                {% if request.locale.iso_code == 'id' %}
+                <img
+                  src="{{ block.settings.image_id | img_url: '2048x' }}"
+                >
+                {% else %}
+                <img
+                  src="{{ block.settings.image | img_url: '2048x' }}"
+                >
+                {% endif %}
+              </div>
           </details>
           {% endif %}
 
@@ -263,7 +291,12 @@
         {
           "id": "content",
           "type": "text",
-          "label": "Content"
+          "label": "Content - EN"
+        },
+        {
+          "id": "content_id",
+          "type": "text",
+          "label": "Content - ID"
         }
       ]
     },
@@ -274,12 +307,22 @@
         {
           "id": "title",
           "type": "text",
-          "label": "Title"
+          "label": "Title - EN"
         },
         {
           "id": "content",
           "type": "textarea",
-          "label": "Content"
+          "label": "Content - EN"
+        },
+        {
+          "id": "title_id",
+          "type": "text",
+          "label": "Title - ID"
+        },
+        {
+          "id": "content_id",
+          "type": "textarea",
+          "label": "Content - ID"
         },
         {
           "id": "idTag",
@@ -300,12 +343,22 @@
         {
           "id": "title",
           "type": "text",
-          "label": "Title"
+          "label": "Title - EN"
         },
         {
           "id": "image",
           "type": "image_picker",
-          "label": "Image"
+          "label": "Image - EN"
+        },
+        {
+          "id": "title_id",
+          "type": "text",
+          "label": "Title - ID"
+        },
+        {
+          "id": "image_id",
+          "type": "image_picker",
+          "label": "Image - ID"
         },
         {
           "id": "idTag",
