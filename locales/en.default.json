@@ -366,5 +366,15 @@
       "signup_form_success": "We will send you an email right before we open!",
       "password_link": "Enter using password"
     }
+  },
+  "shopify": {
+    "checkout": {
+      "shipping": {
+        "shipping_line_phone_label": "Phone number for order & delivery updates",
+        "shipping_line_phone": "Phone number for order & delivery updates",
+        "shipping_line_delivery_phone_label": "Phone number for order & delivery updates",
+        "shipping_line_delivery_phone": "Phone number for order & delivery updates"
+      }
+    }
   }
 }
