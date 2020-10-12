@@ -527,7 +527,7 @@ export default Vue.extend({
         },
       };
 
-      const allSkuNoQty = {};
+      let allSkuNoQty = {};
       Object.entries(this.skuMap).map(
         ([sku, variantId]) => (allSkuNoQty[variantId] = 0)
       );
@@ -551,7 +551,12 @@ export default Vue.extend({
           items: [cartItem],
         });
         this.loading = false;
-        window.location.href = "/cart";
+
+        // Navigate to cart page
+        // window.location.href = "/cart";
+
+        // Open the cart drawer
+        document.getElementsByClassName("js-drawer-open-right")[0].click();
       } catch (e) {
         this.loading = false;
         console.error(e);
@@ -607,7 +612,6 @@ export default Vue.extend({
         );
 
         console.log(this.checkoutData);
-
         // window.location.href = this.checkoutData.webUrl;
         this.loading = false;
       } catch (e) {
