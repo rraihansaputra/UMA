@@ -10,7 +10,7 @@
         pill
         dark
       >
-        Subscribe now
+        {{ activeCopy.assortmentButton.default }}
       </b-button>
       <b-button
         v-else
@@ -21,7 +21,7 @@
         pill
         dark
       >
-        Adjust my assortment
+        {{ activeCopy.assortmentButton.active }}
       </b-button>
       <p
         style="text-align: center; margin-top: 0.5em;"
@@ -33,7 +33,7 @@
           style="text-decoration: underline;"
           @click="openSubscriptionDetails"
         >
-          What is subscription?
+          {{ activeCopy.subscriptionLink }}
         </a>
       </p>
 
@@ -102,7 +102,7 @@
               v-if="recommendationIntroButton || recommendationChoice.days"
               class="modal-form-item"
             >
-              <b>How long does your average period last?</b>
+              <b>{{ activeCopy.quizModal.daysQuestion }}</b>
               <b-form-radio-group
                 v-model="recommendationChoice.days"
                 stacked
@@ -119,7 +119,7 @@
               class="mb-1 modal-form-item"
               key="flow"
             >
-              <b>How would you describe your flow?</b>
+              <b>{{ activeCopy.quizModal.flowQuestion }}</b>
               <b-form-radio-group
                 v-model="recommendationChoice.flow"
                 stacked
@@ -137,7 +137,7 @@
               key="monthlyAssortment"
               class="modal-form-item"
             >
-              <b>Your monthly assortment</b>
+              <b>{{ activeCopy.quizModal.assortment }}</b>
               <div class="d-flex stack-h-3">
                 <span
                   class="d-flex align-items-center monthly-assortment-pill-text"
@@ -169,8 +169,12 @@
                 :disabled="!!recommendationDisplay ? modalIsNotChanged : false"
               >
                 <b>
-                  <span v-show="!recommendationDisplay">Proceed</span>
-                  <span v-show="!!recommendationDisplay">Adjust</span>
+                  <span v-show="!recommendationDisplay">
+                    {{ activeCopy.quizModal.submitButton.proceed }}
+                  </span>
+                  <span v-show="!!recommendationDisplay">
+                    {{ activeCopy.quizModal.submitButton.adjust }}
+                  </span>
                 </b>
               </b-button>
             </div>
@@ -326,6 +330,7 @@ import {
   BFormRadio,
   BFormRadioGroup,
 } from "bootstrap-vue";
+import copy from "./CartWizard.copy";
 
 import Client from "shopify-buy";
 const client = Client.buildClient({
@@ -376,6 +381,7 @@ export default Vue.extend({
   },
   data() {
     return {
+      copy: copy,
       recommendationIntroButton: false,
       daysRadioChoices: [
         { text: "4 days or less", value: "<4days" },
@@ -711,6 +717,9 @@ export default Vue.extend({
         JSON.stringify(this.recommendationSubmitted) ===
         JSON.stringify(this.recommendationChoice)
       );
+    },
+    activeCopy() {
+      return this.copy.en;
     },
   },
   watch: {
