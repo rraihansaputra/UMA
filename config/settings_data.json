@@ -174,7 +174,8 @@
           "1601127562625": {
             "type": "top-description",
             "settings": {
-              "content": "Ultra soft period pads for maximum comfort and protection."
+              "content": "Ultra soft period pads for maximum comfort and protection.",
+              "content_id": "Pembalut ultra lembut untuk kenyamanan dan proteksi maksimum."
             }
           },
           "1599630740147": {
@@ -182,6 +183,8 @@
             "settings": {
               "title": "Subscription",
               "content": "Subscription is design to [...]. With subscription, you can:\n\nSave [...]\nOpt in for subscription [...]\n\nMake you routine easy\nWhen it comes to building a healthy routine, consistency is key. Subscribing keeps you going.\n\nPerfect timing\nGet your period care when —and where—you need them. With a few quick clicks, you can get your supply replenished.",
+              "title_id": "Subscription - ID",
+              "content_id": "Content -ID",
               "idTag": "subscription",
               "open": false
             }
@@ -191,6 +194,8 @@
             "settings": {
               "title": "Ingredients",
               "image": "shopify:\/\/shop_images\/pads_layer.jpg",
+              "title_id": "Bahan Bahan - ID",
+              "image_id": "shopify:\/\/shop_images\/2_d2eb0658-85d2-46cf-a6e4-569622e906db.png",
               "idTag": "",
               "open": false
             }
