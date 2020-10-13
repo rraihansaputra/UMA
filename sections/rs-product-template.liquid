@@ -114,14 +114,6 @@
             {% endif %}
             <h1 class="h2" itemprop="name">{{ product.title }}</h1>
 
-            <p>
-              <a href="#shopify-product-reviews">
-                {% if request.locale.iso_code == 'id' %} Baca ulasan
-                {% else %} Read reviews
-                {% endif %}
-              </a>
-            </p>
-
             <link itemprop="availability" href="http://schema.org/{% if current_variant.available %}InStock{% else %}OutOfStock{% endif %}">
             {%- capture 'form_id' -%}AddToCartForm-{{ section.id }}{%- endcapture -%}
             {%- capture 'form_class' -%}
@@ -154,6 +146,69 @@
             {% include 'social-sharing', share_title: product.title, share_permalink: product.url, share_image: product %}
             {% endif %}
 
+            <div>
+              {% for block in section.blocks %}
+              <div
+                class="grid-item"
+                {{block.shopify_attributes}}
+              >
+
+                {% if block.type == 'faq' %}
+                <details class="faq-details"
+                {% if block.settings.open %} open {% endif %}
+                {% if block.settings.idTag > "" %}
+                id="{{block.settings.idTag}}"
+                {% endif %}
+                >
+                  <summary class="faq-details__summary">
+                    <span class="faq-details__summary-text">
+                      {% if request.locale.iso_code == 'id' %} {{ block.settings.title_id }}
+                      {% else %} {{ block.settings.title }}
+                      {% endif %}
+                    </span>
+                  </summary>
+                  <div class="faq-details__text">
+                    <p>
+                      {% if request.locale.iso_code == 'id' %} {{ block.settings.content_id }}
+                      {% else %} {{ block.settings.content }}
+                      {% endif %}
+                    </p>
+                  </div>
+                </details>
+                {% endif %}
+
+                {% if block.type == 'faqImage' %}
+                <details class="faq-details"
+                  {% if block.settings.open %} open {% endif %}
+                  {% if block.settings.idTag > "" %}
+                    id="{{block.settings.idTag}}"
+                  {% endif %}
+                  >
+                    <summary class="faq-details__summary">
+                      <span class="faq-details__summary-text">
+                        {% if request.locale.iso_code == 'id' %} {{ block.settings.title_id }}
+                        {% else %} {{ block.settings.title }}
+                        {% endif %}
+                      </span>
+                    </summary>
+                    <div class="faq-details__image">
+                      {% if request.locale.iso_code == 'id' %}
+                      <img
+                        src="{{ block.settings.image_id | img_url: '2048x' }}"
+                      >
+                      {% else %}
+                      <img
+                        src="{{ block.settings.image | img_url: '2048x' }}"
+                      >
+                      {% endif %}
+                    </div>
+                </details>
+                {% endif %}
+
+              </div>
+              {% endfor %}
+            </div>
+
           </div>
         </div>
       </div>
@@ -164,66 +219,6 @@
         class="grid__item product__details large-up--six-eighths large-up--push-one-eighth medium-up--ten-twelfths medium-up--push-one-twelfth"
         style="margin-top: 0;"
       >
-        {% for block in section.blocks %}
-        <div
-          class="grid-item"
-          {{block.shopify_attributes}}
-        >
-
-          {% if block.type == 'faq' %}
-          <details class="faq-details"
-          {% if block.settings.open %} open {% endif %}
-          {% if block.settings.idTag > "" %}
-          id="{{block.settings.idTag}}"
-          {% endif %}
-          >
-            <summary class="faq-details__summary">
-              <span class="faq-details__summary-text">
-                {% if request.locale.iso_code == 'id' %} {{ block.settings.title_id }}
-                {% else %} {{ block.settings.title }}
-                {% endif %}
-              </span>
-            </summary>
-            <div class="faq-details__text">
-              <p>
-                {% if request.locale.iso_code == 'id' %} {{ block.settings.content_id }}
-                {% else %} {{ block.settings.content }}
-                {% endif %}
-              </p>
-            </div>
-          </details>
-          {% endif %}
-
-          {% if block.type == 'faqImage' %}
-          <details class="faq-details"
-            {% if block.settings.open %} open {% endif %}
-            {% if block.settings.idTag > "" %}
-              id="{{block.settings.idTag}}"
-            {% endif %}
-            >
-              <summary class="faq-details__summary">
-                <span class="faq-details__summary-text">
-                  {% if request.locale.iso_code == 'id' %} {{ block.settings.title_id }}
-                  {% else %} {{ block.settings.title }}
-                  {% endif %}
-                </span>
-              </summary>
-              <div class="faq-details__image">
-                {% if request.locale.iso_code == 'id' %}
-                <img
-                  src="{{ block.settings.image_id | img_url: '2048x' }}"
-                >
-                {% else %}
-                <img
-                  src="{{ block.settings.image | img_url: '2048x' }}"
-                >
-                {% endif %}
-              </div>
-          </details>
-          {% endif %}
-
-        </div>
-        {% endfor %}
 
         <div id="shopify-product-reviews" data-id="{{product.id}}">{{ product.metafields.spr.reviews }}</div>
       </div>
