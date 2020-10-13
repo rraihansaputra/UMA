@@ -107,7 +107,7 @@
                 v-model="recommendationChoice.days"
                 stacked
                 buttons
-                :options="daysRadioChoices"
+                :options="activeCopy.quizModal.daysRadioChoices"
                 name="assortment_days"
                 class="mt-2 stack-2 c-radio-stacked-buttons"
                 button-variant="outline-info"
@@ -263,10 +263,10 @@
             style="cursor: pointer;"
           >
             <div class="flex-grow-1">
-              <span>{{ displayMeta[key].title }}</span
+              <span>{{ activeCopy.recommendationDisplay.displayMeta[key].title }}</span
               ><br />
               <span class="text-muted">
-                {{ displayMeta[key].description(getSkuPrice(sku)) }} </span
+                {{ activeCopy.recommendationDisplay.displayMeta[key].description(getSkuPrice(sku)) }} </span
               ><br />
               <span v-show="isQtyDisplayed" class="text-muted">
                 {{ getQtyString(sku) }}
@@ -275,10 +275,10 @@
 
             <div>
               <p v-if="key === 'trial'" class="h5">
-                {{ getSkuPrice(sku) / displayMeta[key].subLength }}k/set
+                {{ getSkuPrice(sku) / displayMeta[key].subLength }}{{activeCopy.recommendationDisplay.perSet}}
               </p>
               <p v-else class="h5">
-                {{ getSkuPrice(sku) / displayMeta[key].subLength }}k/month
+                {{ getSkuPrice(sku) / displayMeta[key].subLength }}{{activeCopy.recommendationDisplay.perMonth}}
               </p>
             </div>
           </div>
@@ -448,6 +448,8 @@ export default Vue.extend({
       checkoutData: null,
       loading: false,
       dataLoaded: false,
+
+      lang: "en",
     };
   },
   methods: {
@@ -718,10 +720,10 @@ export default Vue.extend({
       );
     },
     activeCopy() {
-      return copy.en;
+      return copy[this.lang];
     },
     localeCode() {
-      return "en"
+      return this.lang
     }
   },
   watch: {
@@ -734,6 +736,7 @@ export default Vue.extend({
   },
   mounted() {
     this.loadVariantFromCart();
+    this.lang = document.documentElement.lang;
   },
 });
 </script>
