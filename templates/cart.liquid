@@ -111,6 +111,7 @@
 
               <td class="cart__table-cell" data-label="{{ 'cart.label.quantity' | t }}">
                 <div class="cart__controls">
+                  {%- if item.product.id != 5257752739993 -%}
                   <label for="updates_{{ item.key }}"
                     class="cart__label"
                     aria-label="{{ 'cart.general.quantity' | t }}">
@@ -125,6 +126,10 @@
                     value="{{ item.quantity }}"
                     min="0"
                     aria-label="{{ 'cart.general.item_quantity' | t }}">
+
+                  {%- else -%}
+                    <p>{{item.quantity}} pcs</p>
+                  {%- endif -%}
                 </div>
               </td>
 
