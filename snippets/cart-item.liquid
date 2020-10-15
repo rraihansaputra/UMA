@@ -52,6 +52,7 @@
 
   <div class="cart-drawer__tuning">
     <div class="cart-drawer__controls">
+      {%- if item.product.id != 5257752739993 -%}
       <label for="quantity_{{ item.key }}"
         class="cart-drawer__label"
         aria-label="{{ 'cart.general.quantity' | t }}">
@@ -67,6 +68,9 @@
         min="1"
         aria-label="{{ 'cart.general.item_quantity' | t }}"
         data-cart-item-quantity>
+      {%- else -%}
+        <span>{{item.quantity}} pcs</span>
+      {%- endif -%}
 
       <button aria-label="{{ 'cart.general.remove_title' | t: title: item.title }}"
         class="cart-drawer__remove"
@@ -74,6 +78,7 @@
 
         {{ 'cart.general.remove' | t }}
       </button>
+
     </div>
 
     <div class="cart-drawer__price">
