@@ -174,7 +174,7 @@
           "1601127562625": {
             "type": "top-description",
             "settings": {
-              "content": "Upgrade your period regimen with our organic pads set, including assortment of Regular and Heavy pads. <a href=\"#shopify-product-reviews\">Read 10 reviews</a>",
+              "content": "Upgrade your period regimen with our organic pads set, including assortment of Regular and Heavy pads. <a href=\"#shopify-product-reviews\">Read 10 reviews<\/a>",
               "content_id": "Pembalut ultra lembut untuk kenyamanan dan proteksi maksimum."
             }
           },
@@ -182,9 +182,9 @@
             "type": "faq",
             "settings": {
               "title": "Subscription",
-              "content": "<b>Modern convenience</b><br>Get your products delivered when and where you need them. Reorder with one click through our auto-reminder feature.<br> <b>More savings, less footprint</b><br>Earn up to 30% savings and get aff of your supplies in one shipment. Less shipment = less footprint!",
+              "content": "<b>Modern convenience<\/b><br>Get your products delivered when and where you need them. Reorder with one click through our auto-reminder feature.<br> <b>More savings, less footprint<\/b><br>Earn up to 30% savings and get aff of your supplies in one shipment. Less shipment = less footprint!",
               "title_id": "Subscription",
-              "content_id": "<b>Kemudahan modern</b><br />Dapatkan pembalut organik kapanpun dan dimanapun kamu butuhkan. Reorder cukup dengan satu klik dengan fitur auto-reminder<br /><b>Lebih hemat dan footprint minimal</b><br />Dapatkan diskon hingga 30% dan terima supply bulanan kamu dalam satu shipment. Lebih sedikit shipment = lebih sedikit footprint!",
+              "content_id": "<b>Kemudahan modern<\/b><br>Dapatkan pembalut organik kapanpun dan dimanapun kamu butuhkan. Reorder cukup dengan satu klik dengan fitur auto-reminder<br><b>Lebih hemat dan footprint minimal<\/b><br>Dapatkan diskon hingga 30% dan terima supply bulanan kamu dalam satu shipment. Lebih sedikit shipment = lebih sedikit footprint!",
               "idTag": "subscription",
               "open": false
             }

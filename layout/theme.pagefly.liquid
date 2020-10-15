@@ -64,9 +64,11 @@ PLEASE REMOVE ONLY AFTER YOU UNINSTALLED THE PAGEFLY APP.
 
   {{ content_for_header }}
 
- 
+
 {% render 'pagefly-header' %}
- </head> 
+ <script>var scaaffCheck = false;</script>
+{{ 'sca_affiliate.js' | asset_url | script_tag }}
+</head>
 
 <body id="{{ page_title | handle }}" class="{% if customer %}customer-logged-in {% endif %}template-{{ request.page_type | handle }}"><div class="pagefly-container">{{ content_for_layout }}</div></body>
 </html>
