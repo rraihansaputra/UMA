@@ -241,6 +241,51 @@
           "show_product_recommendations": false,
           "quick_add": false
         }
+      },
+      "custom-product": {
+        "type": "custom-product",
+        "blocks": {
+          "1602751383212": {
+            "type": "top-description",
+            "settings": {
+              "content": "Upgrade your period regimen with our organic pads set, including assortment of Regular and Heavy pads. <a href=\"#shopify-product-reviews\">Read 10 reviews<\/a>",
+              "content_id": "Pembalut ultra lembut untuk kenyamanan dan proteksi maksimum."
+            }
+          },
+          "1602751419355": {
+            "type": "faq",
+            "settings": {
+              "title": "Subscription",
+              "content": "<b>Modern convenience<\/b><br>Get your products delivered when and where you need them. Reorder with one click through our auto-reminder feature.<br> <b>More savings, less footprint<\/b><br>Earn up to 30% savings and get aff of your supplies in one shipment. Less shipment = less footprint!",
+              "title_id": "Subscription",
+              "content_id": "<b>Kemudahan modern<\/b><br>Dapatkan pembalut organik kapanpun dan dimanapun kamu butuhkan. Reorder cukup dengan satu klik dengan fitur auto-reminder<br><b>Lebih hemat dan footprint minimal<\/b><br>Dapatkan diskon hingga 30% dan terima supply bulanan kamu dalam satu shipment. Lebih sedikit shipment = lebih sedikit footprint!",
+              "idTag": "subscription","idTag": "subscription",
+              "open": false
+            }
+          },
+          "1602751437549": {
+            "type": "faqImage",
+            "settings": {
+              "title": "Ingredients",
+              "image": "shopify:\/\/shop_images\/pads_layer.jpg",
+              "title_id": "Bahan baku",
+              "image_id": "shopify:\/\/shop_images\/2_d2eb0658-85d2-46cf-a6e4-569622e906db.png",
+              "idTag": "",
+              "open": false
+            }
+          }
+        },
+        "block_order": [
+          "1602751383212",
+          "1602751419355",
+          "1602751437549"
+        ],
+        "settings": {
+          "show_quantity_selector": false,
+          "show_vendor": false,
+          "enable_dynamic_checkout": false,
+          "show_social_buttons": true
+        }
       }
     },
     "content_for_index": [
