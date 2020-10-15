@@ -135,7 +135,7 @@
       <h1 id="ProductHeading" class="product__title product__title--template">{{ product.title | escape }}</h1>
       <h2 id="ProductHeadingModal" class="product__title product__title--template product__title--modal">{{ product.title | escape }}</h2>
 
-      {% render 'product-price', variant: current_variant, product: product, show_vendor: section.settings.show_vendor %}
+
 
       {%- if shop.taxes_included or shop.shipping_policy.body != blank -%}
         <div class="product__policies product__policies--template" data-product-policies>
@@ -148,14 +148,15 @@
         </div>
       {%- endif -%}
 
-      {% render 'product-form',
-        section_id: section.id,
-        product: product,
-        current_variant: current_variant,
-        enable_dynamic_checkout: section.settings.enable_dynamic_checkout,
-        show_quantity_selector: section.settings.show_quantity_selector,
-        show_success_message: true
-      %}
+      <!-- CUSTOM VUE PART FOR OPTION RECOMMENDATION AND ADD TO CART-->
+      <div id="app" class="vue-form vue" style="margin-top: 1.5em">
+        <p>Loading...</p>
+        <script src="{{ 'CartWizard.js' | asset_url }}"></script>
+      </div>
+      <script type="application/json" id="ProductJsonData">
+        {{ product | json }}
+      </script>
+      <!-- END CUSTOM VUE PART -->
 
       {%- if product.description != blank -%}
         <div class="product__description rte">

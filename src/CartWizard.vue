@@ -560,10 +560,10 @@ export default Vue.extend({
         this.loading = false;
 
         // Navigate to cart page
-        // window.location.href = "/cart";
+        window.location.href = "/cart";
 
         // Open the cart drawer
-        document.getElementsByClassName("js-drawer-open-right")[0].click();
+        // document.getElementsByClassName("header__icon--cart")[0].click();
       } catch (e) {
         this.loading = false;
         console.error(e);
@@ -1041,6 +1041,8 @@ strong {
   opacity: 1;
   background: unset;
   transition: all 0.5s ease;
+  visibility: visible;
+  transform: unset;
 
   &___BV_modal_footer_ {
     border-top: 0px solid red !important;
