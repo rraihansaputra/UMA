@@ -741,6 +741,7 @@ export default Vue.extend({
 });
 </script>
 <style lang="scss" scoped>
+$font-size-base: 1.6rem; // change to 1.6 because express has it as default..
 $primary: #f5ede4;
 $secondary: #463a23;
 $info: #12212b;
@@ -748,7 +749,7 @@ $gray-300: #eaeaea;
 
 $body-color: $secondary;
 
-$spacer: 1rem !default;
+$spacer: 1.6rem !default; // change to 1.6 because express has it as default..
 $spacers: () !default;
 // stylelint-disable-next-line scss/dollar-variable-default
 $spacers: map-merge(
