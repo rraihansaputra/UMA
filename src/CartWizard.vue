@@ -851,9 +851,9 @@ strong {
   }
 
   .progress-bullet {
-    width: 0.6em;
-    height: 0.6em;
-    margin-right: 0.2em;
+    width: 0.6* $spacer;
+    height: 0.6* $spacer;
+    margin-right: 0.2* $spacer;
     display: inline-block;
     border-radius: 100%;
     border: 1px solid $info;
@@ -872,8 +872,8 @@ strong {
       border: 1px solid $gray-500 !important;
       background-color: $white !important;
       width: 100%;
-      letter-spacing: 0.04em;
-      font-size: 1.25em;
+      letter-spacing: 0.04* $spacer;
+      font-size: 1.25* $spacer;
 
       &:hover {
         color: $info !important;
@@ -894,7 +894,7 @@ strong {
     display: inline-block;
 
     &-text {
-      font-size: 1.25em;
+      font-size: 1.25 * $font-size-base;
     }
 
     &.heavy {
@@ -961,10 +961,10 @@ strong {
   color: $white;
   background-color: $info;
   border-color: $info;
-  box-shadow: 0 0.2rem 0.3rem rgba(37, 40, 43, 0.32);
+  box-shadow: 0 0.2* $spacer 0.3* $spacer rgba(37, 40, 43, 0.32);
   font-weight: 600;
   transition: unset;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.06 * $spacer;
 
   &__active {
     color: $info;
@@ -991,7 +991,7 @@ strong {
     border: 1px solid $secondary;
 
     &:checked {
-      border: 0.4em solid $secondary;
+      border: 0.4 * $spacer solid $secondary;
       & + label {
         font-weight: bold;
       }
@@ -1001,7 +1001,7 @@ strong {
 
 .radio-thing {
   label {
-    margin-top: 0.2em;
+    margin-top: 0.2 * $spacer;
   }
 
   input {
@@ -1015,7 +1015,7 @@ strong {
     border: 1px solid $secondary;
 
     &:checked {
-      border: 0.4em solid $secondary;
+      border: 0.4* $spacer solid $secondary;
 
       & + label {
         font-weight: bold;
@@ -1038,6 +1038,7 @@ strong {
 </style>
 <style lang="scss">
 // modal override styles
+$spacer: 1.6rem;
 #modal1 {
   opacity: 1;
   background: unset;
@@ -1047,12 +1048,12 @@ strong {
 
   &___BV_modal_footer_ {
     border-top: 0px solid red !important;
-    padding: 0rem 1rem !important;
+    padding: 0rem 1* $spacer !important;
   }
 
   &___BV_modal_header_ {
     border-bottom: 0px solid red !important;
-    padding: 1rem 1rem 0 1rem !important;
+    padding: 1* $spacer 1* $spacer 0 1* $spacer !important;
     align-items: center !important;
   }
 
