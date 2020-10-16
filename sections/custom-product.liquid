@@ -53,16 +53,16 @@
             // loop: true,
             mousewheel: true,
             grabCursor: true,
-            slidesPerView: 1.5,
+            slidesPerView: 1,
             loop: true,
-            breakpoints: {
-              '@0.5': {
-                slidesPerView: 2,
-              },
-              '@1.00': {
-              slidesPerView: 1,
-              }
-            },
+            // breakpoints: {
+            //   '@0.5': {
+            //     slidesPerView: 2,
+            //   },
+            //   '@1.00': {
+            //   slidesPerView: 1,
+            //   }
+            // },
             pagination: { el: '.swiper-pagination',},
             navigation: { el: '.swiper-navigation',},
             // thumbs: {
@@ -99,7 +99,7 @@
     </div>
   </div>
 
-  <div class="product__content--template product__content--information">
+  <div class="product__content product__content--template product__content--information" style="order: unset">
     <div class="product__sticky">
       <p class="product__collection product__collection--desktop" data-product-collection-title-wrapper>
         <span class="visually-hidden">{{ 'products.product.collection' | t }}:</span>

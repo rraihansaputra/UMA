@@ -236,10 +236,9 @@
           <b v-if="key === 'trial'">{{ activeCopy.recommendationDisplay.notReady }}</b>
           <div v-if="key === '6m'" class="d-flex justify-content-end mt-n2">
             <p
-              class="px-3 mb-n3"
+              class="px-3 mb-n3 bg-info"
               style="
                 color: white;
-                background: #4854AD;
                 z-index: 1;
                 margin-right: 0.25em;
                 font-size: 0.95em;
@@ -252,7 +251,6 @@
           <div
             @click="selectVariant(sku, key)"
             :class="[
-              'p-3',
               'border',
               'd-flex',
               'stack-h-3',
@@ -263,8 +261,9 @@
             style="cursor: pointer;"
           >
             <div class="flex-grow-1">
-              <span>{{ activeCopy.recommendationDisplay.displayMeta[key].title }}</span
-              ><br />
+              <p style="margin-bottom: 0.2rem">
+                {{ activeCopy.recommendationDisplay.displayMeta[key].title }}
+              </p>
               <span class="text-muted">
                 {{ activeCopy.recommendationDisplay.displayMeta[key].description(getSkuPrice(sku)) }} </span
               ><br />
@@ -744,7 +743,7 @@ export default Vue.extend({
 $font-size-base: 1.6rem; // change to 1.6 because express has it as default..
 $primary: #f5ede4;
 $secondary: #463a23;
-$info: #12212b;
+$info: #425161;
 $gray-300: #eaeaea;
 
 $body-color: $secondary;
@@ -947,6 +946,7 @@ strong {
 
 .sku-select {
   background: $white;
+  padding: 1.2rem;
   &__active {
     // background: #b8c3cc;
     // background: #f4f6fa;
@@ -1045,6 +1045,7 @@ $spacer: 1.6rem;
   transition: all 0.5s ease;
   visibility: visible;
   transform: unset;
+  padding: 0;
 
   &___BV_modal_footer_ {
     border-top: 0px solid red !important;
