@@ -386,5 +386,10 @@
       "menu": "Menu",
       "close": "Tutup"
     }
+  },
+  "shopify": {
+    "sentence": {
+      "two_words_connector": "Dan"
+    }
   }
 }

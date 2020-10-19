@@ -10,10 +10,10 @@
     "color_sale_price": "#c74230",
     "color_field_text": "#3e3e3e",
     "color_field_borders": "#e9e9e9",
-    "font_heading": "lato_n4",
-    "font_heading_base_size": 22,
+    "font_heading": "lato_n7",
+    "font_heading_base_size": 20,
     "font_body": "lato_n4",
-    "font_body_base_size": 16,
+    "font_body_base_size": 15,
     "show_product_modal": true,
     "show_cart_drawer": true,
     "show_cart_note": false,
@@ -31,18 +31,18 @@
     "social_vimeo_link": "",
     "favicon": "",
     "checkout_header_image": "",
-    "checkout_logo_image": "",
+    "checkout_logo_image": "shopify:\/\/shop_images\/UMA_425161_45510f87-1b34-426b-9991-17fc25b51647.png",
     "checkout_logo_position": "left",
-    "checkout_logo_size": "medium",
+    "checkout_logo_size": "small",
     "checkout_body_background_image": "",
-    "checkout_body_background_color": "#fff",
+    "checkout_body_background_color": "#ffffff",
     "checkout_input_background_color_mode": "white",
     "checkout_sidebar_background_image": "",
-    "checkout_sidebar_background_color": "#fafafa",
+    "checkout_sidebar_background_color": "#e9e9e9",
     "checkout_heading_font": "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
     "checkout_body_font": "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
-    "checkout_accent_color": "#197bbd",
-    "checkout_button_color": "#197bbd",
+    "checkout_accent_color": "#425161",
+    "checkout_button_color": "#425161",
     "checkout_error_color": "#e32c2b",
     "sections": {
       "header": {
@@ -51,10 +51,10 @@
           "logo": "shopify:\/\/shop_images\/UMA_425161_45510f87-1b34-426b-9991-17fc25b51647.png",
           "logo_max_width": 50,
           "main_menu": "",
-          "enable_secondary_background": true,
+          "enable_secondary_background": false,
           "show_search": false,
           "announcement_bar_enabled": true,
-          "announcement_bar_text": "Announce something here",
+          "announcement_bar_text": "Free shipping to Jabodetabek and Bali",
           "announcement_bar_color_background": "#e9e9e9",
           "announcement_bar_color_text": "#425161"
         }
@@ -187,7 +187,7 @@
             "type": "text",
             "settings": {
               "title": "About us",
-              "text": "<p>UMA is Indonesia's leading organic period care company, providing trusted organic products for women and the planet.<\/p>"
+              "text": "<p>UMA is Indonesia&#x27;s leading organic period care company, providing trusted organic products for women and the planet.<\/p>"
             }
           },
           "e0a30966-7b6d-4abc-8ba6-adb79cf928a0": {
@@ -248,17 +248,17 @@
           "1602751383212": {
             "type": "top-description",
             "settings": {
-              "content": "Upgrade your period regimen with our organic pads set, including assortment of Regular and Heavy pads. <a href=\"#shopify-product-reviews\">Read 10 reviews<\/a>",
-              "content_id": "Pembalut ultra lembut untuk kenyamanan dan proteksi maksimum."
+              "content": "Upgrade your period regimen with these ultra-soft organic pads. <a href=\"#shopify-product-reviews\">Read reviews<\/a>",
+              "content_id": "Upgrade rutinitasmu dengan pembalut organik super lembut dari UMA. <a href=\"#shopify-product-reviews\">Read reviews<\/a>"
             }
           },
           "1602751419355": {
             "type": "faq",
             "settings": {
               "title": "Subscription",
-              "content": "<b>Modern convenience<\/b><br>Get your products delivered when and where you need them. Reorder with one click through our auto-reminder feature.<br> <b>More savings, less footprint<\/b><br>Earn up to 30% savings and get aff of your supplies in one shipment. Less shipment = less footprint!",
+              "content": "<b>Modern convenience<\/b><br>Get your products delivered when and where you need them. Reorder with one click through our auto-reminder feature.<br> <br> <b>More savings, less footprint<\/b><br>Earn up to 30% savings and get aff of your supplies in one shipment. Less shipment = less footprint!",
               "title_id": "Subscription",
-              "content_id": "<b>Kemudahan modern<\/b><br>Dapatkan pembalut organik kapanpun dan dimanapun kamu butuhkan. Reorder cukup dengan satu klik dengan fitur auto-reminder<br><b>Lebih hemat dan footprint minimal<\/b><br>Dapatkan diskon hingga 30% dan terima supply bulanan kamu dalam satu shipment. Lebih sedikit shipment = lebih sedikit footprint!",
+              "content_id": "<b>Kemudahan modern<\/b><br>Dapatkan pembalut organik UMA kapanpun dan dimanapun kamu butuhkan. Reorder cukup dengan satu klik dengan fitur auto-reminder.<br>\n<br> <b>Lebih hemat dan footprint minimal<\/b><br>Dapatkan diskon hingga 30% dan terima supply bulanan kamu dalam satu shipment. Lebih sedikit shipment = lebih sedikit footprint!<br>",
               "idTag": "subscription",
               "open": false
             }
