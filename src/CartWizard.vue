@@ -559,10 +559,11 @@ export default Vue.extend({
         this.loading = false;
 
         // Navigate to cart page
-        window.location.href = "/cart";
+        // window.location.href = "/cart";
 
         // Open the cart drawer
-        // document.getElementsByClassName("header__icon--cart")[0].click();
+        await carts[0].onCartUpdated();
+        document.getElementsByClassName("header__icon--cart")[0].click();
       } catch (e) {
         this.loading = false;
         console.error(e);
