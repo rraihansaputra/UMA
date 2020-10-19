@@ -1,6 +1,6 @@
 <template>
   <div class="mt-3 " id="container" style="margin-bottom: 1.5em;">
-    <div style="margin-bottom: 2em;">
+    <div style="margin-bottom: 1.5em;">
       <b-button
         v-if="!this.recommendationSubmitted.flow"
         v-b-modal.modal1
@@ -29,8 +29,7 @@
       >
         <a
           href="#subscription"
-          class="text-info"
-          style="text-decoration: underline;"
+          style="text-decoration: underline; color: #4854AD;"
           @click="openSubscriptionDetails"
         >
           {{ activeCopy.subscriptionLink }}
@@ -55,12 +54,6 @@
           <div
             :class="[
               'progress-bullet',
-              recommendationIntroButton ? 'active' : null,
-            ]"
-          ></div>
-          <div
-            :class="[
-              'progress-bullet',
               recommendationChoice.days ? 'active' : null,
             ]"
           ></div>
@@ -77,29 +70,7 @@
         <form @submit.prevent="handleAssortmentForm" class="px-4">
           <transition-group name="modal-form" tag="div" class="stack-4">
             <div
-              key="intro"
-              class="mt-2"
-              v-if="!recommendationIntroButton && !recommendationChoice.days"
-            >
-              <p>
-                <b>
-                  To get started, let's find the perfect assortment for you.
-                </b>
-              </p>
-              <b-button
-                variant="info"
-                dark
-                block
-                pill
-                @click="recommendationIntroButton = true"
-                style="font-size: 1.25em;"
-              >
-                Let's go
-              </b-button>
-            </div>
-            <div
               key="days"
-              v-if="recommendationIntroButton || recommendationChoice.days"
               class="modal-form-item"
             >
               <b>{{ activeCopy.quizModal.daysQuestion }}</b>
@@ -218,8 +189,7 @@
           </a> -->
           <a
             href="#subscription"
-            class="text-info"
-            style="text-decoration: underline;"
+            style="text-decoration: underline; color: #4854AD"
             @click="openSubscriptionDetails"
           >
             {{ activeCopy.recommendationDisplay.subscriptionLink }}
@@ -261,7 +231,7 @@
             style="cursor: pointer;"
           >
             <div class="flex-grow-1">
-              <p style="margin-bottom: 0.2rem">
+              <p style="line-height: 1.15;">
                 {{ activeCopy.recommendationDisplay.displayMeta[key].title }}
               </p>
               <span class="text-muted">
@@ -292,6 +262,7 @@
       variant="info"
       @click="addToCart"
       :disabled="!selectedVariant || loading"
+      style="padding-top: 0.5em; padding-bottom: 0.5em"
     >
       <b-spinner v-if="loading" small></b-spinner>
       <b>{{ activeCopy.subscribeNow }}</b>
@@ -873,7 +844,7 @@ strong {
       background-color: $white !important;
       width: 100%;
       letter-spacing: 0.04* $spacer;
-      font-size: 1.25* $spacer;
+      font-size: 1.25* $font-size-base;
 
       &:hover {
         color: $info !important;
@@ -966,6 +937,8 @@ strong {
   font-weight: 600;
   transition: unset;
   letter-spacing: 0.06 * $spacer;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
 
   &__active {
     color: $info;

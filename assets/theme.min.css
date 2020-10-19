@@ -3794,8 +3794,8 @@ background-color: var(--color-secondary-background)
 margin: 0;
 flex-basis: 40%;
 flex-shrink: 1;
-margin-top: 2.2rem;
-margin-bottom: 2.2rem
+margin-top: 1rem;
+margin-bottom: 1rem
 }
 @media only screen and (min-width:46.85em) {.header__heading {
 flex-basis: auto
@@ -3837,8 +3837,8 @@ word-break: break-word
 display: flex;
 align-items: center;
 flex-shrink: 0;
-margin-top: 2.2rem;
-margin-bottom: 2.2rem
+margin-top: 1rem;
+margin-bottom: 1rem
 }
 .header__icon {
 color: var(--color-body-text)
