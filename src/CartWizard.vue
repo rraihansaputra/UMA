@@ -1,6 +1,6 @@
 <template>
-  <div class="mt-3 stack-3" id="container" style="margin-bottom: 1.5em;">
-    <div>
+  <div class="mt-3 " id="container" style="margin-bottom: 1.5em;">
+    <div style="margin-bottom: 2em;">
       <b-button
         v-if="!this.recommendationSubmitted.flow"
         v-b-modal.modal1
@@ -188,7 +188,7 @@
     </div>
 
     <div
-      class="stack-3"
+      class="stack-3 mb-3"
       v-if="recommendationDisplay"
       id="recommendation-display"
     >

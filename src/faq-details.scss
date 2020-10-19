@@ -82,3 +82,13 @@ $body-color: $secondary;
 
   &:first-child { margin-right: 0.5em; }
 }
+
+.spr-header-title {
+  text-align: left !important;
+}
+
+.product__description {
+  p {
+    margin-bottom: 0.5em;
+  }
+}

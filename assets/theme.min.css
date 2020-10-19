@@ -2537,7 +2537,7 @@ width: 100%
 .gallery-indicator {
 display: flex;
 justify-content: space-between;
-margin-top: 3rem;
+/*margin-top: 3rem;*/
 align-items: center;
 color: var(--color-body-text);
 padding: 0 3.2rem
@@ -3020,7 +3020,8 @@ max-width: 56rem
 .product--template {
 display: block;
 padding: 2rem;
-width: 100%
+width: 100%;
+padding-top: 0;
 }
 .product-modal .product--template {
 margin: 0
@@ -3029,7 +3030,8 @@ margin: 0
 display: grid;
 grid-template-columns: 1.4fr 1.4fr;
 /* grid-gap:; grid-column-gap: 14rem;*/
-padding:4.5rem 5rem
+padding:4.5rem 5rem;
+padding-top: 0;
 }
 .product--template.product--no-media {
 display: block
@@ -3125,7 +3127,7 @@ margin-top: 0
 display: none
 }
 .product__title--template {
-text-align: center
+text-align: left
 }
 @media only screen and (min-width:46.85em) {.product__title--template {
 margin-top: 2.5rem
