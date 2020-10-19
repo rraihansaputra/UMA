@@ -17,85 +17,111 @@
         <span data-product-collection-title></span>
       </p>
 
-      <!-- START Swiper Product Image Slider -->
-      <div style="display: flex;">
-        <link rel="stylesheet" href="{{ 'swiper-bundle.css' | asset_url }}">
-        <script src="{{ 'swiper-bundle.min.js' | asset_url }}"></script>
-        <style>
-          @media only screen and (max-width: 749px) {
-            .swiper-container-thumbs {
-              display: none;
-            }
-          }
-        </style>
+      <div class="product__content product__content--template product__media-wrapper"
+        {% if product.media.size > 1 %} data-media data-media-click-nav="true" role="region" data-label="{{ 'products.slider.media_gallery' | t }}"{% endif %}>
 
-        <div class="swiper-container-thumbs " style="margin-right: 0.25em;">
-          <div class="swiper-wrapper c-thumbs" id="c-thumbs" style=" display: flex; flex-direction: column;">
-            {% for image in product.images %}
-            <img style="margin-bottom: 0.25em" src="{{ image | img_url: '200x200'}}">
-            {% endfor %}
-          </div>
-        </div>
+        {%- if featured_media -%}
+          <div class="product__gallery">
+            <div class="gallery gallery--stacked" id="Gallery-{{ section.id }}" data-media-strip-wrapper>
+              <div class="gallery__strip" data-media-strip>
+                {%- for media in product.media -%}
+                  {%- if featured_media == media -%}
+                    {%- assign starting_index = forloop.index -%}
+                  {%- endif -%}
+                  <div class="gallery__image-wrapper gallery__image-wrapper--scale"
+                  {% if product.media.size > 1 %}
+                    data-media-wrapper
+                    data-media-label="{{ 'products.slider.media_index_of_total' | t: index: forloop.index, indexTotal: forloop.length }}"{% endif %}>
 
-        <div class="swiper-container" style="max-width: 100%; --swiper-theme-color: #eeeeee;">
-          <div id="slider" class="swiper-wrapper">
-            {% for image in product.images %}
-            <div class="swiper-slide product-image">
-              <img style="width: 100%" src="{{ image | img_url: '2048x2048'}}">
+                    <img
+                      {% if featured_media == media %}
+                        srcset="{% if media.preview_image.width >= 311 %}{{ media.preview_image | img_url: '311x' }} 311w,{% endif %}
+                        {% if media.preview_image.width >= 622 %}{{ media.preview_image | img_url: '622x' }} 622w,{% endif %}
+                        {% if media.preview_image.width >= 503 %}{{ media.preview_image | img_url: '503x' }} 503w,{% endif %}
+                        {% if media.preview_image.width >= 1006 %}{{ media.preview_image | img_url: '1006x' }} 1006w,{% endif %}
+                        {% if media.preview_image.width >= 685 %}{{ media.preview_image | img_url: '685x' }} 685w,{% endif %}
+                        {% if media.preview_image.width >= 1370 %}{{ media.preview_image | img_url: '1370x' }} 1370w{% endif %}"
+                      {% else %}
+                        data-srcset="{% if media.preview_image.width >= 311 %}{{ media.preview_image | img_url: '311x' }} 311w,{% endif %}
+                        {% if media.preview_image.width >= 622 %}{{ media.preview_image | img_url: '622x' }} 622w,{% endif %}
+                        {% if media.preview_image.width >= 503 %}{{ media.preview_image | img_url: '503x' }} 503w,{% endif %}
+                        {% if media.preview_image.width >= 1006 %}{{ media.preview_image | img_url: '1006x' }} 1006w,{% endif %}
+                        {% if media.preview_image.width >= 685 %}{{ media.preview_image | img_url: '685x' }} 685w,{% endif %}
+                        {% if media.preview_image.width >= 1370 %}{{ media.preview_image | img_url: '1370x' }} 1370w{% endif %}"
+                      {% endif %}
+
+                      {% if featured_media == media %}
+                        src="{{ media | img_url: '503x503' }}"
+                      {% else %}
+                        data-src="{{ media | img_url: '503x503' }}"
+                      {% endif %}
+
+                      sizes="(min-width: 1200px) calc((1200px - 19.5rem) / 2), (min-width: 750px) calc((100vw - 19.5rem) / 2), calc(100vw - 6.4rem)"
+                      width="{{ media.preview_image.width }}"
+                      height="{{ media.preview_image.height }}"
+                      loading="lazy"
+                      class="gallery__image{% if featured_media == media %} is-active{% endif %}"
+                      data-media-id="{{ media.id }}"
+                      data-media-image
+                      data-media-index="{{ forloop.index }}"
+                      alt="{{ media.preview_image.alt | escape }}">
+                  </div>
+                {%- endfor -%}
+              </div>
+
+              <noscript>
+                <img
+                  srcset="{% if featured_media.preview_image.width >= 311 %}{{ featured_media.preview_image | img_url: '311x' }} 311w,{% endif %}
+                  {% if featured_media.preview_image.width >= 622 %}{{ featured_media.preview_image | img_url: '622x' }} 622w,{% endif %}
+                  {% if featured_media.preview_image.width >= 503 %}{{ featured_media.preview_image | img_url: '503x' }} 503w,{% endif %}
+                  {% if featured_media.preview_image.width >= 1006 %}{{ featured_media.preview_image | img_url: '1006x' }} 1006w,{% endif %}
+                  {% if featured_media.preview_image.width >= 685 %}{{ featured_media.preview_image | img_url: '685x' }} 685w,{% endif %}
+                  {% if featured_media.preview_image.width >= 1370 %}{{ featured_media.preview_image | img_url: '1370x' }} 1370w{% endif %}"
+                  sizes="(min-width: 1200px) calc((1200px - 19.5rem) / 2), (min-width: 750px) calc((100vw - 19.5rem) / 2), calc(100vw - 6.4rem)"
+                  src="{{ featured_media | img_url: '503x503' }}"
+                  width="{{ featured_media.preview_image.width }}"
+                  height="{{ featured_media.preview_image.height }}"
+                  class="gallery__image--no-js"
+                  loading="lazy"
+                  alt="{{ featured_media.preview_image.alt | escape }}">
+                </noscript>
             </div>
-            {% endfor %}
           </div>
-          <div class="swiper-pagination" style="text-align: start; margin: 0.5em 1em;"></div>
-        </div>
 
-        <script>
-          var mySwiper = new Swiper('.swiper-container', {
-            // loop: true,
-            mousewheel: true,
-            grabCursor: true,
-            slidesPerView: 1,
-            loop: true,
-            // breakpoints: {
-            //   '@0.5': {
-            //     slidesPerView: 2,
-            //   },
-            //   '@1.00': {
-            //   slidesPerView: 1,
-            //   }
-            // },
-            pagination: { el: '.swiper-pagination',},
-            navigation: { el: '.swiper-navigation',},
-            // thumbs: {
-            //  swiper: {
-            //    el: '.swiper-container-thumbs',
-            //    slidesPerView: 6,
-            //    direction: 'vertical'
-            //  }
-            // }
-          });
+          {%- if product.media.size > 1 -%}
+            <div class="gallery-indicator gallery-indicator--stacked">
+              <button class="gallery-indicator__arrow gallery-indicator__arrow--previous"
+                data-media-arrow-previous aria-label="{{ 'products.slider.media_previous' | t }}"
+                aria-controls="Gallery-{{ section.id }}">
 
-          function addEvent(element, evnt, funct){
-            if (element.attachEvent)
-            return element.attachEvent('on'+evnt, funct);
-            else
-            return element.addEventListener(evnt, funct, false);
-          }
+                {%- render 'icon-chevron-right' -%}
+              </button>
 
-          addEvent(
-              document.getElementById('c-thumbs'),
-              'click',
-              function (event) {
-                // console.log(event);
-                const el = event.srcElement;
-                const index = [...el.parentElement.children].indexOf(el)
-                // console.log({event, el, index})
-                mySwiper.slideTo(index + 1, 500); // loop shifts the index
-              }
-          );
+              <div class="gallery-indicator__count"
+                data-media-indicator-label>
 
-        </script>
+                <span data-media-current>{{ starting_index }}</span>
+                <span aria-hidden="true">/</span>
+                {{ product.media.size }}
+              </div>
+
+              <button class="gallery-indicator__arrow"
+                data-media-arrow-next aria-label="{{ 'products.slider.media_next' | t }}"
+                aria-controls="Gallery-{{ section.id }}">
+
+                {%- render 'icon-chevron-right' -%}
+              </button>
+            </div>
+
+            <div class="visually-hidden"
+              role="status"
+              aria-hidden="true"
+              data-media-liveregion-message="{{- 'products.slider.media_indicator' | t: index: '[index]', indexTotal: '[indexTotal]' -}}"
+              data-media-liveregion >
+            </div>
+          {%- endif -%}
+        {%- endif -%}
       </div>
-      <!-- END Swiper Product Image Slider -->
     </div>
   </div>
 
