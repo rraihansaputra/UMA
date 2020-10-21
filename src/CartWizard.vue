@@ -69,10 +69,7 @@
         </template>
         <form @submit.prevent="handleAssortmentForm" class="px-4">
           <transition-group name="modal-form" tag="div" class="stack-4">
-            <div
-              key="days"
-              class="modal-form-item"
-            >
+            <div key="days" class="modal-form-item">
               <b>{{ activeCopy.quizModal.daysQuestion }}</b>
               <b-form-radio-group
                 v-model="recommendationChoice.days"
@@ -203,7 +200,9 @@
           :key="key"
           :class="key === 'trial' ? 'mt-n1' : ''"
         >
-          <b v-if="key === 'trial'">{{ activeCopy.recommendationDisplay.notReady }}</b>
+          <b v-if="key === 'trial'">{{
+            activeCopy.recommendationDisplay.notReady
+          }}</b>
           <div v-if="key === '6m'" class="d-flex justify-content-end mt-n2">
             <p
               class="px-3 mb-n3 bg-info"
@@ -235,7 +234,11 @@
                 {{ activeCopy.recommendationDisplay.displayMeta[key].title }}
               </p>
               <span class="text-muted">
-                {{ activeCopy.recommendationDisplay.displayMeta[key].description(getSkuPrice(sku)) }} </span
+                {{
+                  activeCopy.recommendationDisplay.displayMeta[key].description(
+                    getSkuPrice(sku)
+                  )
+                }} </span
               ><br />
               <span v-show="isQtyDisplayed" class="text-muted">
                 {{ getQtyString(sku) }}
@@ -244,10 +247,12 @@
 
             <div>
               <p v-if="key === 'trial'" class="h5">
-                {{ getSkuPrice(sku) / displayMeta[key].subLength }}{{activeCopy.recommendationDisplay.perSet}}
+                {{ getSkuPrice(sku) / displayMeta[key].subLength
+                }}{{ activeCopy.recommendationDisplay.perSet }}
               </p>
               <p v-else class="h5">
-                {{ getSkuPrice(sku) / displayMeta[key].subLength }}{{activeCopy.recommendationDisplay.perMonth}}
+                {{ getSkuPrice(sku) / displayMeta[key].subLength
+                }}{{ activeCopy.recommendationDisplay.perMonth }}
               </p>
             </div>
           </div>
@@ -694,8 +699,8 @@ export default Vue.extend({
       return copy[this.lang];
     },
     localeCode() {
-      return this.lang
-    }
+      return this.lang;
+    },
   },
   watch: {
     "$route.query": {
@@ -822,9 +827,9 @@ strong {
   }
 
   .progress-bullet {
-    width: 0.6* $spacer;
-    height: 0.6* $spacer;
-    margin-right: 0.2* $spacer;
+    width: 0.6 * $spacer;
+    height: 0.6 * $spacer;
+    margin-right: 0.2 * $spacer;
     display: inline-block;
     border-radius: 100%;
     border: 1px solid $info;
@@ -843,8 +848,8 @@ strong {
       border: 1px solid $gray-500 !important;
       background-color: $white !important;
       width: 100%;
-      letter-spacing: 0.04* $spacer;
-      font-size: 1.25* $font-size-base;
+      letter-spacing: 0.04 * $spacer;
+      font-size: 1.25 * $font-size-base;
 
       &:hover {
         color: $info !important;
@@ -918,7 +923,7 @@ strong {
 
 .sku-select {
   background: $white;
-  padding: 1.2rem;
+  padding: 1.2 * $spacer $spacer;
   &__active {
     // background: #b8c3cc;
     // background: #f4f6fa;
@@ -933,7 +938,7 @@ strong {
   color: $white;
   background-color: $info;
   border-color: $info;
-  box-shadow: 0 0.2* $spacer 0.3* $spacer rgba(37, 40, 43, 0.32);
+  box-shadow: 0 0.2 * $spacer 0.3 * $spacer rgba(37, 40, 43, 0.32);
   font-weight: 600;
   transition: unset;
   letter-spacing: 0.06 * $spacer;
@@ -946,6 +951,8 @@ strong {
     border-color: $info;
     font-weight: bold;
     transition: unset;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
 
     &:focus {
       box-shadow: 0 0 0 0.2rem #e6eff5;
@@ -989,7 +996,7 @@ strong {
     border: 1px solid $secondary;
 
     &:checked {
-      border: 0.4* $spacer solid $secondary;
+      border: 0.4 * $spacer solid $secondary;
 
       & + label {
         font-weight: bold;
@@ -1023,12 +1030,12 @@ $spacer: 1.6rem;
 
   &___BV_modal_footer_ {
     border-top: 0px solid red !important;
-    padding: 0rem 1* $spacer !important;
+    padding: 0rem 1 * $spacer !important;
   }
 
   &___BV_modal_header_ {
     border-bottom: 0px solid red !important;
-    padding: 1* $spacer 1* $spacer 0 1* $spacer !important;
+    padding: 1 * $spacer 1 * $spacer 0 1 * $spacer !important;
     align-items: center !important;
   }
 

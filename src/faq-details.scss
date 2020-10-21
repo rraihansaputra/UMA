@@ -68,22 +68,16 @@ $body-color: $secondary;
 }
 
 // gtk product description layout
-.c-gtk-container {
-  display: flex;
-  align-items: center;
-  margin-bottom: 1.5em;
-}
 
 .c-gtk-item {
   display: flex;
   align-items: center;
-  width: 50%;
   img { margin-right: 0.55em; }
 
   &:first-child { margin-right: 0.5em; }
 }
 
-.spr-header-title {
+.spr-header-title, .spr-summary {
   text-align: left !important;
 }
 
