@@ -105,7 +105,7 @@
               key="monthlyAssortment"
               class="modal-form-item"
             >
-              <b>{{ activeCopy.quizModal.assortment }}</b>
+              <p style="margin-bottom: 0.2em"><b>{{ activeCopy.quizModal.assortment }}</b></p>
               <div class="d-flex stack-h-3">
                 <span
                   class="d-flex align-items-center monthly-assortment-pill-text"
@@ -374,7 +374,7 @@ export default Vue.extend({
         "<4days": {
           light: { "3m": "3M-4D-L", "6m": "6M-4D-L", trial: "TRIAL-SET" },
           medium: { "3m": "3M-4D-M", "6m": "6M-4D-M", trial: "TRIAL-SET" },
-          heavy: { "3m": "3M-4D-M", "6m": "6M-4D-M", trial: "TRIAL-SET" },
+          heavy: { "3m": "3M-4D-H", "6m": "6M-4D-H", trial: "TRIAL-SET" },
         },
         ">5days": {
           light: { "3m": "3M-5D-L", "6m": "6M-5D-L", trial: "TRIAL-SET" },
@@ -1030,6 +1030,7 @@ $spacer: 1.6rem;
   visibility: visible;
   transform: unset;
   padding: 0;
+  max-width: unset;
 
   &___BV_modal_footer_ {
     border-top: 0px solid red !important;
