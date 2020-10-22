@@ -305,7 +305,7 @@ import {
   BFormRadio,
   BFormRadioGroup,
 } from "bootstrap-vue";
-import copy from "./CartWizard.copy";
+import defaultcopy from "./CartWizard.defaultcopy";
 
 import Client from "shopify-buy";
 const client = Client.buildClient({
@@ -424,6 +424,7 @@ export default Vue.extend({
       loading: false,
       dataLoaded: false,
 
+      copy: undefined,
       lang: "en",
     };
   },
@@ -696,7 +697,8 @@ export default Vue.extend({
       );
     },
     activeCopy() {
-      return copy[this.lang];
+      if (!this.copy) return defaultcopy;
+      return this.copy ? this.copy[this.lang] : defaultcopy;
     },
     localeCode() {
       return this.lang;
@@ -710,8 +712,9 @@ export default Vue.extend({
       immediate: true,
     },
   },
-  mounted() {
-    this.loadVariantFromCart();
+  async mounted() {
+    await this.loadVariantFromCart();
+    this.copy = await window.cartWizardCopy;
     this.lang = document.documentElement.lang;
   },
 });

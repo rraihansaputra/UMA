@@ -1,4 +1,4 @@
-export default {
+const cartWizardCopy = {
   en: {
     assortmentButton: {
       default: "Subscribe now",
@@ -112,3 +112,5 @@ export default {
     subscribeNow: "Add to cart"
   }
 }
+
+window.cartWizardCopy = cartWizardCopy;
