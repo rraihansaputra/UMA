@@ -1,6 +1,6 @@
 <template>
-  <div class="mt-3 stack-3" id="container" style="margin-bottom: 1.5em;">
-    <div>
+  <div class="mt-3 " id="container" style="margin-bottom: 1.5em;">
+    <div style="margin-bottom: 1.5em;">
       <b-button
         v-if="!this.recommendationSubmitted.flow"
         v-b-modal.modal1
@@ -29,8 +29,7 @@
       >
         <a
           href="#subscription"
-          class="text-info"
-          style="text-decoration: underline;"
+          style="text-decoration: underline; color: #4854AD;"
           @click="openSubscriptionDetails"
         >
           {{ activeCopy.subscriptionLink }}
@@ -55,12 +54,6 @@
           <div
             :class="[
               'progress-bullet',
-              recommendationIntroButton ? 'active' : null,
-            ]"
-          ></div>
-          <div
-            :class="[
-              'progress-bullet',
               recommendationChoice.days ? 'active' : null,
             ]"
           ></div>
@@ -76,32 +69,7 @@
         </template>
         <form @submit.prevent="handleAssortmentForm" class="px-4">
           <transition-group name="modal-form" tag="div" class="stack-4">
-            <div
-              key="intro"
-              class="mt-2"
-              v-if="!recommendationIntroButton && !recommendationChoice.days"
-            >
-              <p>
-                <b>
-                  To get started, let's find the perfect assortment for you.
-                </b>
-              </p>
-              <b-button
-                variant="info"
-                dark
-                block
-                pill
-                @click="recommendationIntroButton = true"
-                style="font-size: 1.25em;"
-              >
-                Let's go
-              </b-button>
-            </div>
-            <div
-              key="days"
-              v-if="recommendationIntroButton || recommendationChoice.days"
-              class="modal-form-item"
-            >
+            <div key="days" class="modal-form-item">
               <b>{{ activeCopy.quizModal.daysQuestion }}</b>
               <b-form-radio-group
                 v-model="recommendationChoice.days"
@@ -137,7 +105,7 @@
               key="monthlyAssortment"
               class="modal-form-item"
             >
-              <b>{{ activeCopy.quizModal.assortment }}</b>
+              <p style="margin-bottom: 0.2em"><b>{{ activeCopy.quizModal.assortment }}</b></p>
               <div class="d-flex stack-h-3">
                 <span
                   class="d-flex align-items-center monthly-assortment-pill-text"
@@ -188,7 +156,7 @@
     </div>
 
     <div
-      class="stack-3"
+      class="stack-3 mb-3"
       v-if="recommendationDisplay"
       id="recommendation-display"
     >
@@ -218,8 +186,7 @@
           </a> -->
           <a
             href="#subscription"
-            class="text-info"
-            style="text-decoration: underline;"
+            style="text-decoration: underline; color: #4854AD"
             @click="openSubscriptionDetails"
           >
             {{ activeCopy.recommendationDisplay.subscriptionLink }}
@@ -233,13 +200,14 @@
           :key="key"
           :class="key === 'trial' ? 'mt-n1' : ''"
         >
-          <b v-if="key === 'trial'">{{ activeCopy.recommendationDisplay.notReady }}</b>
+          <b v-if="key === 'trial'">{{
+            activeCopy.recommendationDisplay.notReady
+          }}</b>
           <div v-if="key === '6m'" class="d-flex justify-content-end mt-n2">
             <p
-              class="px-3 mb-n3"
+              class="px-3 mb-n3 bg-info"
               style="
                 color: white;
-                background: #4854AD;
                 z-index: 1;
                 margin-right: 0.25em;
                 font-size: 0.95em;
@@ -252,7 +220,6 @@
           <div
             @click="selectVariant(sku, key)"
             :class="[
-              'p-3',
               'border',
               'd-flex',
               'stack-h-3',
@@ -263,10 +230,15 @@
             style="cursor: pointer;"
           >
             <div class="flex-grow-1">
-              <span>{{ activeCopy.recommendationDisplay.displayMeta[key].title }}</span
-              ><br />
+              <p style="line-height: 1.15;">
+                {{ activeCopy.recommendationDisplay.displayMeta[key].title }}
+              </p>
               <span class="text-muted">
-                {{ activeCopy.recommendationDisplay.displayMeta[key].description(getSkuPrice(sku)) }} </span
+                {{
+                  activeCopy.recommendationDisplay.displayMeta[key].description(
+                    getSkuPrice(sku)
+                  )
+                }} </span
               ><br />
               <span v-show="isQtyDisplayed" class="text-muted">
                 {{ getQtyString(sku) }}
@@ -275,10 +247,12 @@
 
             <div>
               <p v-if="key === 'trial'" class="h5">
-                {{ getSkuPrice(sku) / displayMeta[key].subLength }}{{activeCopy.recommendationDisplay.perSet}}
+                {{ getSkuPrice(sku) / displayMeta[key].subLength
+                }}{{ activeCopy.recommendationDisplay.perSet }}
               </p>
               <p v-else class="h5">
-                {{ getSkuPrice(sku) / displayMeta[key].subLength }}{{activeCopy.recommendationDisplay.perMonth}}
+                {{ getSkuPrice(sku) / displayMeta[key].subLength
+                }}{{ activeCopy.recommendationDisplay.perMonth }}
               </p>
             </div>
           </div>
@@ -293,6 +267,7 @@
       variant="info"
       @click="addToCart"
       :disabled="!selectedVariant || loading"
+      style="padding-top: 0.5em; padding-bottom: 0.5em"
     >
       <b-spinner v-if="loading" small></b-spinner>
       <b>{{ activeCopy.subscribeNow }}</b>
@@ -330,7 +305,7 @@ import {
   BFormRadio,
   BFormRadioGroup,
 } from "bootstrap-vue";
-import copy from "./CartWizard.copy";
+import defaultcopy from "./CartWizard.defaultcopy";
 
 import Client from "shopify-buy";
 const client = Client.buildClient({
@@ -399,7 +374,7 @@ export default Vue.extend({
         "<4days": {
           light: { "3m": "3M-4D-L", "6m": "6M-4D-L", trial: "TRIAL-SET" },
           medium: { "3m": "3M-4D-M", "6m": "6M-4D-M", trial: "TRIAL-SET" },
-          heavy: { "3m": "3M-4D-M", "6m": "6M-4D-M", trial: "TRIAL-SET" },
+          heavy: { "3m": "3M-4D-H", "6m": "6M-4D-H", trial: "TRIAL-SET" },
         },
         ">5days": {
           light: { "3m": "3M-5D-L", "6m": "6M-5D-L", trial: "TRIAL-SET" },
@@ -449,6 +424,7 @@ export default Vue.extend({
       loading: false,
       dataLoaded: false,
 
+      copy: undefined,
       lang: "en",
     };
   },
@@ -563,7 +539,8 @@ export default Vue.extend({
         // window.location.href = "/cart";
 
         // Open the cart drawer
-        document.getElementsByClassName("js-drawer-open-right")[0].click();
+        await carts[0].onCartUpdated();
+        document.getElementsByClassName("header__icon--cart")[0].click();
       } catch (e) {
         this.loading = false;
         console.error(e);
@@ -720,11 +697,12 @@ export default Vue.extend({
       );
     },
     activeCopy() {
-      return copy[this.lang];
+      if (!this.copy) return defaultcopy;
+      return this.copy ? this.copy[this.lang] : defaultcopy;
     },
     localeCode() {
-      return this.lang
-    }
+      return this.lang;
+    },
   },
   watch: {
     "$route.query": {
@@ -734,21 +712,23 @@ export default Vue.extend({
       immediate: true,
     },
   },
-  mounted() {
-    this.loadVariantFromCart();
+  async mounted() {
+    await this.loadVariantFromCart();
+    this.copy = await window.cartWizardCopy;
     this.lang = document.documentElement.lang;
   },
 });
 </script>
 <style lang="scss" scoped>
+$font-size-base: 1.6rem; // change to 1.6 because express has it as default..
 $primary: #f5ede4;
 $secondary: #463a23;
-$info: #12212b;
+$info: #425161;
 $gray-300: #eaeaea;
 
 $body-color: $secondary;
 
-$spacer: 1rem !default;
+$spacer: 1.6rem !default; // change to 1.6 because express has it as default..
 $spacers: () !default;
 // stylelint-disable-next-line scss/dollar-variable-default
 $spacers: map-merge(
@@ -850,9 +830,9 @@ strong {
   }
 
   .progress-bullet {
-    width: 0.6em;
-    height: 0.6em;
-    margin-right: 0.2em;
+    width: 0.6 * $spacer;
+    height: 0.6 * $spacer;
+    margin-right: 0.2 * $spacer;
     display: inline-block;
     border-radius: 100%;
     border: 1px solid $info;
@@ -871,8 +851,8 @@ strong {
       border: 1px solid $gray-500 !important;
       background-color: $white !important;
       width: 100%;
-      letter-spacing: 0.04em;
-      font-size: 1.25em;
+      letter-spacing: 0.04 * $spacer;
+      font-size: 1.25 * $font-size-base;
 
       &:hover {
         color: $info !important;
@@ -893,7 +873,7 @@ strong {
     display: inline-block;
 
     &-text {
-      font-size: 1.25em;
+      font-size: 1.25 * $font-size-base;
     }
 
     &.heavy {
@@ -946,6 +926,7 @@ strong {
 
 .sku-select {
   background: $white;
+  padding: 1.2 * $spacer $spacer;
   &__active {
     // background: #b8c3cc;
     // background: #f4f6fa;
@@ -960,10 +941,12 @@ strong {
   color: $white;
   background-color: $info;
   border-color: $info;
-  box-shadow: 0 0.2rem 0.3rem rgba(37, 40, 43, 0.32);
+  box-shadow: 0 0.2 * $spacer 0.3 * $spacer rgba(37, 40, 43, 0.32);
   font-weight: 600;
   transition: unset;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.06 * $spacer;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
 
   &__active {
     color: $info;
@@ -971,6 +954,8 @@ strong {
     border-color: $info;
     font-weight: bold;
     transition: unset;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
 
     &:focus {
       box-shadow: 0 0 0 0.2rem #e6eff5;
@@ -990,7 +975,7 @@ strong {
     border: 1px solid $secondary;
 
     &:checked {
-      border: 0.4em solid $secondary;
+      border: 0.4 * $spacer solid $secondary;
       & + label {
         font-weight: bold;
       }
@@ -1000,7 +985,7 @@ strong {
 
 .radio-thing {
   label {
-    margin-top: 0.2em;
+    margin-top: 0.2 * $spacer;
   }
 
   input {
@@ -1014,7 +999,7 @@ strong {
     border: 1px solid $secondary;
 
     &:checked {
-      border: 0.4em solid $secondary;
+      border: 0.4 * $spacer solid $secondary;
 
       & + label {
         font-weight: bold;
@@ -1037,19 +1022,24 @@ strong {
 </style>
 <style lang="scss">
 // modal override styles
+$spacer: 1.6rem;
 #modal1 {
   opacity: 1;
   background: unset;
   transition: all 0.5s ease;
+  visibility: visible;
+  transform: unset;
+  padding: 0;
+  max-width: unset;
 
   &___BV_modal_footer_ {
     border-top: 0px solid red !important;
-    padding: 0rem 1rem !important;
+    padding: 0rem 1 * $spacer !important;
   }
 
   &___BV_modal_header_ {
     border-bottom: 0px solid red !important;
-    padding: 1rem 1rem 0 1rem !important;
+    padding: 1 * $spacer 1 * $spacer 0 1 * $spacer !important;
     align-items: center !important;
   }
 

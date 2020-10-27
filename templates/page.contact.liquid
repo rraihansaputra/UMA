@@ -1,49 +1,67 @@
-<!-- /templates/page.contact.liquid -->
+<div class="customer customer--medium-width">
+  <h1 class="customer__heading">{{ page.title }}</h1>
 
-<div class="page-width page-container">
-  <header>
-    <h1>{{ page.title }}</h1>
-  </header>
+  {%- if page.content.size > 0 -%}
+    <div class="rte">
+      {{ page.content }}
+    </div>
+  {%- endif -%}
 
-  <div class="rte rte--indented-images">
-    {{ page.content }}
-  </div>
+  {%- assign formId = 'ContactForm' -%}
+  {%- form 'contact', id: formId, class: 'form', data-form: '' -%}
+    {% render 'form-status', form: form, form_id: formId %}
 
-  <div class="contact-form form-vertical">
-    {% form 'contact' %}
+    <div class="form__input-wrapper form__input-wrapper--half-width{% if form[name] or customer %} form__input-wrapper--floating-label{% endif %}" data-form-input-wrapper>
+      <label class="form__input-label" for="{{ formId }}-name">{{ 'contact.form.name' | t }}</label>
+      <input type="text" id="{{ formId }}-name" class="form__input" name="contact[{{ 'contact.form.name' | t }}]" value="{% if form[name] %}{{ form[name] }}{% elsif customer %}{{ customer.name }}{% endif %}">
+    </div>
 
-      {% if form.posted_successfully? %}
-        <p class="note form-success">
-          {{ 'contact.form.post_success' | t }}
-        </p>
-      {% endif %}
+    <div class="form__input-wrapper form__input-wrapper--half-width{% if form[email] or customer %} form__input-wrapper--floating-label{% endif %}{% if form.errors contains 'email' %}  form__input-wrapper--error{% endif %}" data-form-input-wrapper>
+      <label class="form__input-label" for="{{ formId }}-email">{{ 'contact.form.email' | t }} <span aria-hidden="true">*</span></label>
+      <input
+        type="email"
+        id="{{ formId }}-email"
+        class="form__input"
+        name="contact[email]"
+        autocorrect="off"
+        autocapitalize="off"
+        value="{% if form[email] %}{{ form[email] }}{% elsif customer %}{{ customer.email }}{% endif %}"
+        aria-required="true"
+        {% if form.errors contains 'email' %}
+          aria-invalid="true"
+          aria-describedby="{{ formId }}-email-error"
+        {% endif %}
+        >
+      {%- if form.errors contains 'email' -%}
+        <span id="{{ formId }}-email-error" class="form__error-message-wrapper form__error-message-wrapper--input">
+          <span class="visually-hidden">{{ 'general.accessibility.error' | t }} </span>
+          {% render 'icon-error' %}
+          <span class="form__error-message">{{ form.errors.translated_fields['email'] | capitalize }} {{ form.errors.messages['email'] }}.</span>
+        </span>
+      {%- endif -%}
+    </div>
 
-      {{ form.errors | default_errors }}
+    <div class="form__input-wrapper" data-form-input-wrapper>
+      <label class="form__input-label" for="{{ formId }}-phone">{{ 'contact.form.phone' | t }}</label>
+      <input type="tel" id="{{ formId }}-phone" class="form__input" name="contact[{{ 'contact.form.phone' | t }}]" pattern="[0-9\-]*" value="{% if form[phone] %}{{ form[phone] }}{% elsif customer %}{{ customer.phone }}{% endif %}">
+    </div>
 
-      <div class="grid">
-        <div class="grid__item medium-up--one-half">
-          <label for="ContactFormName" class="label--hidden">{{ 'contact.form.name' | t }}</label>
-          <input type="text" id="ContactFormName" name="contact[{{ 'contact.form.name' | t }}]" placeholder="{{ 'contact.form.name' | t }}" value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}" class="input-full">
-        </div>
+    <div class="form__input-wrapper">
+      <label class="form__textarea-label" for="{{ formId }}-message">{{ 'contact.form.message' | t }}</label>
+      <textarea
+        rows="10"
+        id="{{ formId }}-message"
+        class="form__textarea"
+        name="contact[{{ 'contact.form.message' | t }}]"
+      >
+        {%- if form.body -%}
+          {{ form.body }}
+        {%- endif -%}
+      </textarea>
+    </div>
 
-        <div class="contact-form__email grid__item medium-up--one-half">
-          <label for="ContactFormEmail" class="label--hidden">{{ 'contact.form.email' | t }}</label>
-          <input type="email" id="ContactFormEmail" name="contact[email]" placeholder="{{ 'contact.form.email' | t }}" autocorrect="off" value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}" class="input-full">
-        </div>
-
-        <div class="grid__item">
-          <label for="ContactFormPhone" class="label--hidden">{{ 'contact.form.phone' | t }}</label>
-          <input type="tel" id="ContactFormPhone" name="contact[{{ 'contact.form.phone' | t }}]" placeholder="{{ 'contact.form.phone' | t }}" pattern="[0-9\-]*" value="{% if form.phone %}{{ form.phone }}{% elsif customer %}{{ customer.phone }}{% endif %}" class="input-full">
-        </div>
-
-        <div class="grid__item">
-          <label for="ContactFormMessage" class="label--hidden">{{ 'contact.form.message' | t }}</label>
-          <textarea id="ContactFormMessage" name="contact[{{ 'contact.form.message' | t }}]" placeholder="{{ 'contact.form.message' | t }}" class="input-full">{% if form.body %}{{ form.body }}{% endif %}</textarea>
-        </div>
-      </div>
-
-      <input type="submit" class="btn" value="{{ 'contact.form.send' | t }}">
-
-    {% endform %}
-  </div>
+    <button type="submit" class="button button--small">
+      {{ 'contact.form.send' | t }}
+    </button>
+  {%- endform -%}
 </div>

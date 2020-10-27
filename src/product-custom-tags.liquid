@@ -1,0 +1,327 @@
+{% comment %}
+File to store all the features from boundless
+{% endcomment %}
+
+
+{% comment %}
+Swiper for product image
+{% endcomment %}
+
+<!-- START Swiper Product Image Slider -->
+<div style="display: flex;">
+  <link rel="stylesheet" href="{{ 'swiper-bundle.css' | asset_url }}">
+  <script src="{{ 'swiper-bundle.min.js' | asset_url }}"></script>
+  <style>
+    @media only screen and (max-width: 749px) {
+      .swiper-container-thumbs {
+        display: none;
+      }
+    }
+  </style>
+
+  <div class="swiper-container-thumbs " style="margin-right: 0.25em;">
+    <div class="swiper-wrapper c-thumbs" id="c-thumbs" style=" display: flex; flex-direction: column;">
+      {% for image in product.images %}
+      <img style="margin-bottom: 0.25em" src="{{ image | img_url: '200x200'}}">
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="swiper-container" style="max-width: 100%; --swiper-theme-color: #eeeeee;">
+    <div id="slider" class="swiper-wrapper">
+      {% for image in product.images %}
+      <div class="swiper-slide product-image">
+        <img style="width: 100%" src="{{ image | img_url: '2048x2048'}}">
+      </div>
+      {% endfor %}
+    </div>
+    <div class="swiper-pagination" style="text-align: start; margin: 0.5em 1em;"></div>
+  </div>
+
+  <script>
+    var mySwiper = new Swiper('.swiper-container', {
+      // loop: true,
+      mousewheel: true,
+      grabCursor: true,
+      slidesPerView: 1.5,
+      loop: true,
+      breakpoints: {
+        '@0.5': {
+          slidesPerView: 2,
+        },
+        '@1.00': {
+        slidesPerView: 1,
+        }
+      },
+      pagination: { el: '.swiper-pagination',},
+      navigation: { el: '.swiper-navigation',},
+      // thumbs: {
+      //  swiper: {
+      //    el: '.swiper-container-thumbs',
+      //    slidesPerView: 6,
+      //    direction: 'vertical'
+      //  }
+      // }
+    });
+
+    function addEvent(element, evnt, funct){
+      if (element.attachEvent)
+      return element.attachEvent('on'+evnt, funct);
+      else
+      return element.addEventListener(evnt, funct, false);
+    }
+
+    addEvent(
+        document.getElementById('c-thumbs'),
+        'click',
+        function (event) {
+          // console.log(event);
+          const el = event.srcElement;
+          const index = [...el.parentElement.children].indexOf(el)
+          // console.log({event, el, index})
+          mySwiper.slideTo(index + 1, 500); // loop shifts the index
+        }
+    );
+
+  </script>
+</div>
+<!-- END Swiper Product Image Slider -->
+
+
+{% comment %}
+Vue Part
+{% endcomment %}
+<!-- CUSTOM VUE PART FOR OPTION RECOMMENDATION AND ADD TO CART-->
+<div id="app" class="vue-form vue" style="margin-top: 1.5em">
+  <p>Loading...</p>
+  <script src="{{ 'CartWizard.js' | asset_url }}"></script>
+</div>
+
+{% unless product == empty %}
+  <script type="application/json" id="ProductJson-{{ section.id }}">
+    {{ product | json }}
+  </script>
+  <script type="application/json" id="ProductJsonData">
+    {{ product | json }}
+  </script>
+{% endunless %}
+<!-- END CUSTOM VUE PART -->
+
+
+{% comment %}
+Blocks for custom blocks like short description and faq
+{% endcomment %}
+
+<!-- Product review-->
+<div id="shopify-product-reviews" data-id="{{product.id}}">
+  {{ product.metafields.spr.reviews }}
+</div>
+
+<!-- Short Description-->
+{% for block in section.blocks %}
+{% if block.type == 'top-description' %}
+<p>
+  {% if request.locale.iso_code == 'id' %} {{ block.settings.content_id }}
+  {% else %} {{ block.settings.content }}
+  {% endif %}
+</p>
+{% endif %}
+{% endfor %}
+
+
+<!-- FAQ Blocks -->
+{{ 'faq-details.css' | asset_url | stylesheet_tag }}
+<div>
+  {% for block in section.blocks %}
+  <div
+    class="grid-item"
+    {{block.shopify_attributes}}
+  >
+
+    {% if block.type == 'faq' %}
+    <details class="faq-details"
+    {% if block.settings.open %} open {% endif %}
+    {% if block.settings.idTag > "" %}
+    id="{{block.settings.idTag}}"
+    {% endif %}
+    >
+      <summary class="faq-details__summary">
+        <span class="faq-details__summary-text">
+          {% if request.locale.iso_code == 'id' %} {{ block.settings.title_id }}
+          {% else %} {{ block.settings.title }}
+          {% endif %}
+        </span>
+      </summary>
+      <div class="faq-details__text">
+        <p>
+          {% if request.locale.iso_code == 'id' %} {{ block.settings.content_id }}
+          {% else %} {{ block.settings.content }}
+          {% endif %}
+        </p>
+      </div>
+    </details>
+    {% endif %}
+
+    {% if block.type == 'faqImage' %}
+    <details class="faq-details"
+      {% if block.settings.open %} open {% endif %}
+      {% if block.settings.idTag > "" %}
+        id="{{block.settings.idTag}}"
+      {% endif %}
+      >
+        <summary class="faq-details__summary">
+          <span class="faq-details__summary-text">
+            {% if request.locale.iso_code == 'id' %} {{ block.settings.title_id }}
+            {% else %} {{ block.settings.title }}
+            {% endif %}
+          </span>
+        </summary>
+        <div class="faq-details__image">
+          {% if request.locale.iso_code == 'id' %}
+          <img
+            src="{{ block.settings.image_id | img_url: '2048x' }}"
+          >
+          {% else %}
+          <img
+            src="{{ block.settings.image | img_url: '2048x' }}"
+          >
+          {% endif %}
+        </div>
+    </details>
+    {% endif %}
+
+  </div>
+  {% endfor %}
+</div>
+
+<!-- block schema -->
+"blocks": [
+    {
+      "type": "top-description",
+      "name": "Top Desicrption",
+      "settings": [
+        {
+          "id": "content",
+          "type": "text",
+          "label": "Content - EN"
+        },
+        {
+          "id": "content_id",
+          "type": "text",
+          "label": "Content - ID"
+        }
+      ]
+    },
+    {
+      "type": "faq",
+      "name": "FAQ Text",
+      "settings": [
+        {
+          "id": "title",
+          "type": "text",
+          "label": "Title - EN"
+        },
+        {
+          "id": "content",
+          "type": "textarea",
+          "label": "Content - EN"
+        },
+        {
+          "id": "title_id",
+          "type": "text",
+          "label": "Title - ID"
+        },
+        {
+          "id": "content_id",
+          "type": "textarea",
+          "label": "Content - ID"
+        },
+        {
+          "id": "idTag",
+          "type": "text",
+          "label": "id Tag for navigation"
+        },
+        {
+          "id": "open",
+          "type": "checkbox",
+          "label": "Load with section open"
+        }
+      ]
+    },
+    {
+      "type": "faqImage",
+      "name": "FAQ Image",
+      "settings": [
+        {
+          "id": "title",
+          "type": "text",
+          "label": "Title - EN"
+        },
+        {
+          "id": "image",
+          "type": "image_picker",
+          "label": "Image - EN"
+        },
+        {
+          "id": "title_id",
+          "type": "text",
+          "label": "Title - ID"
+        },
+        {
+          "id": "image_id",
+          "type": "image_picker",
+          "label": "Image - ID"
+        },
+        {
+          "id": "idTag",
+          "type": "text",
+          "label": "id Tag for navigation"
+        },
+        {
+          "id": "open",
+          "type": "checkbox",
+          "label": "Load with section open"
+        }
+      ]
+    }
+  ],
+
+<!-- Settings data -->
+"rs-product-template": {
+  "type": "rs-product-template",
+  "blocks": {
+    "1601127562625": {
+      "type": "top-description",
+      "settings": {
+        "content": "Upgrade your period regimen with our organic pads set, including assortment of Regular and Heavy pads. <a href=\"#shopify-product-reviews\">Read 10 reviews<\/a>",
+        "content_id": "Pembalut ultra lembut untuk kenyamanan dan proteksi maksimum."
+      }
+    },
+    "1599630740147": {
+      "type": "faq",
+      "settings": {
+        "title": "Subscription",
+        "content": "<b>Modern convenience<\/b><br>Get your products delivered when and where you need them. Reorder with one click through our auto-reminder feature.<br> <b>More savings, less footprint<\/b><br>Earn up to 30% savings and get aff of your supplies in one shipment. Less shipment = less footprint!",
+        "title_id": "Subscription",
+        "content_id": "<b>Kemudahan modern<\/b><br>Dapatkan pembalut organik kapanpun dan dimanapun kamu butuhkan. Reorder cukup dengan satu klik dengan fitur auto-reminder<br><b>Lebih hemat dan footprint minimal<\/b><br>Dapatkan diskon hingga 30% dan terima supply bulanan kamu dalam satu shipment. Lebih sedikit shipment = lebih sedikit footprint!",
+        "idTag": "subscription","idTag": "subscription",
+        "open": false
+      }
+    },
+    "1599630767385": {
+      "type": "faqImage",
+      "settings": {
+        "title": "Ingredients",
+        "image": "shopify:\/\/shop_images\/pads_layer.jpg",
+        "title_id": "Bahan baku",
+        "image_id": "shopify:\/\/shop_images\/2_d2eb0658-85d2-46cf-a6e4-569622e906db.png",
+        "idTag": "",
+        "open": false
+      }
+    }
+  },
+  "block_order": [
+    "1601127562625",
+    "1599630740147",
+    "1599630767385"
+  ],

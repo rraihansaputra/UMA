@@ -264,7 +264,7 @@ function createLanguageFloatLinkSelector(shopDomain, languageList, defaultLocale
               }
 
               //切换为默认语言
-              if(currentLocale!==lan_code && url_lan_code.toLowerCase()!==lan_code && defaultLocale===lan_code){
+              if(currentLocale.toLowerCase()!==lan_code.toLowerCase() && url_lan_code.toLowerCase()!==lan_code.toLowerCase() && defaultLocale.toLowerCase()===lan_code.toLowerCase()){
                 var new_pathname
                 if (!url_lan_code) {
                     new_pathname = '/' + lan_code
@@ -275,7 +275,7 @@ function createLanguageFloatLinkSelector(shopDomain, languageList, defaultLocale
               }
 
               //切换为非默认
-              if(currentLocale!==lan_code && url_lan_code.toLowerCase()!==lan_code && defaultLocale!==lan_code){
+              if(currentLocale.toLowerCase()!==lan_code.toLowerCase() && url_lan_code.toLowerCase()!==lan_code.toLowerCase() && defaultLocale.toLowerCase()!==lan_code.toLowerCase()){
                 //插入url_lan_code
             	var new_pathname
                 if (lan_code === url_lan_code.toLowerCase()) {

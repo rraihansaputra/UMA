@@ -39,7 +39,8 @@ $body-color: $secondary;
     // text-transform: uppercase;
     font-weight: bold;
     margin-bottom: 0.5em;
-    padding: 0.5em;
+    padding: 1em 0.5em;
+    cursor: pointer;
 
     &:focus {
       outline: none;
@@ -67,17 +68,25 @@ $body-color: $secondary;
 }
 
 // gtk product description layout
-.c-gtk-container {
-  display: flex;
-  align-items: center;
-  margin-bottom: 1.5em;
-}
 
 .c-gtk-item {
   display: flex;
   align-items: center;
-  width: 50%;
   img { margin-right: 0.55em; }
 
   &:first-child { margin-right: 0.5em; }
+}
+
+.spr-header-title, .spr-summary {
+  text-align: left !important;
+}
+
+.product__description {
+  p {
+    margin-bottom: 0.5em;
+  }
+}
+
+a {
+  color: #4854AD;
 }

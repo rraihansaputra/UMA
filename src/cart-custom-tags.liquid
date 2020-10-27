@@ -1,0 +1,75 @@
+<!-- Cart page qty modifications -->
+<td data-label="{{ 'cart.label.quantity' | t }}" class="large-up--text-center">
+  {%- if item.product.id != 5257752739993 -%}
+  <input type="number" data-ajax-qty name="updates[]" id="updates_{{ item.key }}" value="{{ item.quantity }}" min="0" data-id="{{ item.key }}">
+  {%- else -%}
+  <p>{{item.quantity}} pcs</p>
+  {%- endif -%}
+</td>
+<td data-label="{{ 'cart.label.total' | t }}" class="text-right">
+  {%- if item.original_line_price != item.final_line_price -%}
+    <span class="visually-hidden">{{ 'products.general.regular_price' | t }}</span>
+    <del>{{ item.original_line_price | money }}</del>
+    <span class="visually-hidden">{{ 'products.general.sale_price' | t }}</span>
+    <span class="order-discount">{{ item.final_line_price | money }}</span>
+  {%- else -%}
+    {{ item.original_line_price | money }}
+  {%- endif -%}
+</td>
+
+<!-- Costum Popup cart on theme.liquid -->
+<div class="grid__item one-half">
+  <!-- CUSTOM POPUP CART QTY DISABLE -->
+  {{id}}
+  <div class="ajaxcart__qty">
+  {{#ifeq product_id "5257752739993"}}
+    <p>{{itemQty}} pcs</p>
+  {{/ifeq}}
+  {{#ifnoteq product_id "5257752739993"}}
+    <button type="button" class="ajaxcart__qty-adjust ajaxcart__qty--minus" data-id="{{key}}" data-qty="{{itemMinus}}" data-line="{{line}}" aria-label="{% endraw %}{{ 'cart.label.reduce_quantity' | t }}{% raw %}">
+      <span class="icon icon-minus" aria-hidden="true"></span>
+      <span class="icon__fallback-text" aria-hidden="true">&minus;</span>
+    </button>
+    <input type="text" name="updates[]" class="ajaxcart__qty-num" value="{{itemQty}}" min="0" data-id="{{key}}" data-line="{{line}}" aria-label="quantity" pattern="[0-9]*">
+    <button type="button" class="ajaxcart__qty-adjust ajaxcart__qty--plus" data-id="{{key}}" data-line="{{line}}" data-qty="{{itemAdd}}" aria-label="{% endraw %}{{ 'cart.label.increase_quantity' | t }}{% raw %}">
+      <span class="icon icon-plus" aria-hidden="true"></span>
+      <span class="icon__fallback-text" aria-hidden="true">+</span>
+    </button>
+    {{/ifnoteq}}
+  </div>
+</div>
+
+<!-- JS Part modifications -->
+<!-- Add product_id param -->
+
+// Create item's data object and add to 'items' array
+item = {
+  key: cartItem.key,
+  line: index + 1, // Shopify uses a 1+ index in the API
+  url: cartItem.url,
+  img: prodImg,
+  name: cartItem.product_title,
+  product_id: cartItem.product_id,
+  variation: cartItem.variant_title,
+  properties: cartItem.properties,
+  itemAdd: cartItem.quantity + 1,
+  itemMinus: cartItem.quantity - 1,
+  itemQty: cartItem.quantity,
+  price: Shopify.formatMoney(cartItem.price, settings.moneyFormat),
+  vendor: cartItem.vendor,
+  unitPrice: unitPrice,
+  linePrice: Shopify.formatMoney(cartItem.final_line_price, settings.moneyFormat),
+  originalLinePrice: Shopify.formatMoney(cartItem.original_line_price, settings.moneyFormat),
+  discounts: cartItem.line_level_discount_allocations,
+  discountsApplied: cartItem.line_level_discount_allocations.length === 0 ? false : true
+};
+<!-- Handlebars add helpers for ifeq and ifnoteq -->
+Handlebars.registerHelper('ifeq', function (a, b, options) {
+  console.log({a,b})
+  if (a == b) { return options.fn(this); }
+  return options.inverse(this);
+});
+Handlebars.registerHelper('ifnoteq', function (a, b, options) {
+  if (a != b) { return options.fn(this); }
+  return options.inverse(this);
+});

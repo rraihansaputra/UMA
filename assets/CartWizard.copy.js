@@ -1,7 +1,7 @@
-export default {
+const cartWizardCopy = {
   en: {
     assortmentButton: {
-      default: "Find the perfect assortment",
+      default: "Subscribe now",
       active: "Adjust my assortment"
     },
     subscriptionLink: "What is subscription?",
@@ -57,8 +57,8 @@ export default {
   },
   id: {
     assortmentButton: {
-      default: "Cari tahu assortment yang cocok",
-      active: "Ubah assortment saya"
+      default: "Subscribe now",
+      active: "Adjust my assortment"
     },
     subscriptionLink: "Apa itu subscription?",
     quizModal: {
@@ -70,8 +70,8 @@ export default {
       flowQuestion: "Bagaimana flow kamu?",
       assortment: "Assortment pembalut per bulan",
       submitButton: {
-        proceed: "Cari tahu",
-        adjust: "Ubah"
+        proceed: "Proceed",
+        adjust: "Adjust"
       }
     },
     recommendationDisplay: {
@@ -112,3 +112,5 @@ export default {
     subscribeNow: "Add to cart"
   }
 }
+
+window.cartWizardCopy = cartWizardCopy;

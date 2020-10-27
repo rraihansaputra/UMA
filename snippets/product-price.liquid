@@ -5,6 +5,7 @@
     - variant: {Object} Variant Liquid object (optional)
     - product: {Object} Product Liquid object (optional)
     - show_vendor: {Boolean} Show the product's vendor depending on the section setting (optional)
+    - wrapper_class: {String} Adds a class for the wrapper (optional)
 
     Usage:
     {% include 'product-price', variant: current_variant, product: product %}
@@ -26,7 +27,8 @@
 <dl class="price
   {% if available == false %} price--sold-out {% endif %}
   {% if compare_at_price > price %} price--on-sale {% endif %}
-  {% if variant.unit_price_measurement %} price--unit-available {% endif %}"
+  {% if variant.unit_price_measurement %} price--unit-available {% endif %}
+  {% if wrapper_class %} {{ wrapper_class }}{% endif %}"
   data-price
 >
 
@@ -61,14 +63,6 @@
     </div>
     <div class="price__sale">
       <dt>
-        <span class="visually-hidden visually-hidden--inline">{{ 'products.product.sale_price' | t }}</span>
-      </dt>
-      <dd>
-        <span class="price-item price-item--sale" data-sale-price>
-          {{ money_price }}
-        </span>
-      </dd>
-      <dt>
         <span class="visually-hidden visually-hidden--inline">{{ 'products.product.regular_price' | t }}</span>
       </dt>
       <dd>
@@ -76,13 +70,18 @@
           {{ compare_at_price | money }}
         </s>
       </dd>
+      <dt>
+        <span class="visually-hidden visually-hidden--inline">{{ 'products.product.sale_price' | t }}</span>
+      </dt>
+      <dd>
+        <span class="price-item price-item--sale" data-sale-price>
+          {{ money_price }}
+        </span>
+      </dd>
     </div>
     <div class="price__badges">
       <span class="price__badge price__badge--sale" aria-hidden="true">
         <span>{{ 'products.product.on_sale' | t }}</span>
-      </span>
-      <span class="price__badge price__badge--sold-out">
-        <span>{{ 'products.product.sold_out' | t }}</span>
       </span>
     </div>
   </div>
