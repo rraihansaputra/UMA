@@ -5,7 +5,7 @@ $tertiary: #f9f7f3;
 
 $body-color: $secondary;
 
-.faq-details {
+.product__description > details {
   margin-bottom: 0.5em;
 
   // hack to get hash navigation (#) not be displayed up top
@@ -31,7 +31,7 @@ $body-color: $secondary;
     content: "–";
   }
 
-  &__summary {
+  summary {
     // background: $tertiary;
     // background: #EFEEEC;
     background: #F4F4F4;
@@ -52,7 +52,7 @@ $body-color: $secondary;
     }
   }
 
-  &__text {
+  div {
     color: $secondary;
     padding: 0.3em;
 
@@ -61,7 +61,7 @@ $body-color: $secondary;
     }
   }
 
-  &__image {
+  img {
     max-width: 100%;
     padding: 0.3em
   }

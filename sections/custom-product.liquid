@@ -135,8 +135,8 @@
       <h1 id="ProductHeading" class="product__title product__title--template">{{ product.title | escape }}</h1>
       <h2 id="ProductHeadingModal" class="product__title product__title--template product__title--modal">{{ product.title | escape }}</h2>
 
-      
-      
+
+
 
       {%- if shop.taxes_included or shop.shipping_policy.body != blank -%}
         <div class="product__policies product__policies--template" data-product-policies>
@@ -158,7 +158,7 @@
       </p>
       {% endif %}
       {% endfor %}
-      
+
 
       <!-- CUSTOM VUE PART FOR OPTION RECOMMENDATION AND ADD TO CART-->
       <div id="app" class="vue-form vue" style="margin-top: 1.5em">
@@ -184,68 +184,6 @@
 
       <!-- FAQ Blocks -->
       {{ 'faq-details.css' | asset_url | stylesheet_tag }}
-      <div>
-        {% for block in section.blocks %}
-        <div
-          class="grid-item"
-          {{block.shopify_attributes}}
-        >
-
-          {% if block.type == 'faq' %}
-          <details class="faq-details"
-          {% if block.settings.open %} open {% endif %}
-          {% if block.settings.idTag > "" %}
-          id="{{block.settings.idTag}}"
-          {% endif %}
-          >
-            <summary class="faq-details__summary">
-              <span class="faq-details__summary-text">
-                {% if request.locale.iso_code == 'id' %} {{ block.settings.title_id }}
-                {% else %} {{ block.settings.title }}
-                {% endif %}
-              </span>
-            </summary>
-            <div class="faq-details__text">
-              <p>
-                {% if request.locale.iso_code == 'id' %} {{ block.settings.content_id }}
-                {% else %} {{ block.settings.content }}
-                {% endif %}
-              </p>
-            </div>
-          </details>
-          {% endif %}
-
-          {% if block.type == 'faqImage' %}
-          <details class="faq-details"
-            {% if block.settings.open %} open {% endif %}
-            {% if block.settings.idTag > "" %}
-              id="{{block.settings.idTag}}"
-            {% endif %}
-            >
-              <summary class="faq-details__summary">
-                <span class="faq-details__summary-text">
-                  {% if request.locale.iso_code == 'id' %} {{ block.settings.title_id }}
-                  {% else %} {{ block.settings.title }}
-                  {% endif %}
-                </span>
-              </summary>
-              <div class="faq-details__image">
-                {% if request.locale.iso_code == 'id' %}
-                <img
-                  src="{{ block.settings.image_id | img_url: '2048x' }}"
-                >
-                {% else %}
-                <img
-                  src="{{ block.settings.image | img_url: '2048x' }}"
-                >
-                {% endif %}
-              </div>
-          </details>
-          {% endif %}
-
-        </div>
-        {% endfor %}
-      </div>
     </div>
   </div>
 </div>
@@ -275,15 +213,15 @@
 .jdgm-rev-widg__title {
     display:none!important;
 }
-  
+
   @media screen and (min-width: 800px) {
 #judgemobile{display:none!important;}}
-  
+
   @media screen and (max-width: 800px) {
 #judgedesktop{display:none!important;}}
-  
+
   .jdgm-rev-widg__summary {text-align:center!important;float:none!important;}
-  
+
 </style>
 
 <script type="application/ld+json">
@@ -499,78 +437,6 @@
           "id": "content_id",
           "type": "text",
           "label": "Content - ID"
-        }
-      ]
-    },
-    {
-      "type": "faq",
-      "name": "FAQ Text",
-      "settings": [
-        {
-          "id": "title",
-          "type": "text",
-          "label": "Title - EN"
-        },
-        {
-          "id": "content",
-          "type": "textarea",
-          "label": "Content - EN"
-        },
-        {
-          "id": "title_id",
-          "type": "text",
-          "label": "Title - ID"
-        },
-        {
-          "id": "content_id",
-          "type": "textarea",
-          "label": "Content - ID"
-        },
-        {
-          "id": "idTag",
-          "type": "text",
-          "label": "id Tag for navigation"
-        },
-        {
-          "id": "open",
-          "type": "checkbox",
-          "label": "Load with section open"
-        }
-      ]
-    },
-    {
-      "type": "faqImage",
-      "name": "FAQ Image",
-      "settings": [
-        {
-          "id": "title",
-          "type": "text",
-          "label": "Title - EN"
-        },
-        {
-          "id": "image",
-          "type": "image_picker",
-          "label": "Image - EN"
-        },
-        {
-          "id": "title_id",
-          "type": "text",
-          "label": "Title - ID"
-        },
-        {
-          "id": "image_id",
-          "type": "image_picker",
-          "label": "Image - ID"
-        },
-        {
-          "id": "idTag",
-          "type": "text",
-          "label": "id Tag for navigation"
-        },
-        {
-          "id": "open",
-          "type": "checkbox",
-          "label": "Load with section open"
         }
       ]
     }
