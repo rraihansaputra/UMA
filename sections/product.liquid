@@ -134,7 +134,11 @@
 
       <h1 id="ProductHeading" class="product__title product__title--template">{{ product.title | escape }}</h1>
       <h2 id="ProductHeadingModal" class="product__title product__title--template product__title--modal">{{ product.title | escape }}</h2>
-
+      
+      <div style="text-align: center">
+{% render 'judgeme_widgets', widget_type: 'judgeme_preview_badge', jm_style: '', concierge_install: true, product: product %}
+      </div>
+      
       {% render 'product-price', variant: current_variant, product: product, show_vendor: section.settings.show_vendor %}
 
       {%- if shop.taxes_included or shop.shipping_policy.body != blank -%}

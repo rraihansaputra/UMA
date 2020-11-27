@@ -59,7 +59,10 @@
 {{ 'sca_affiliate.js' | asset_url | script_tag }}
  
 {% include 'pagefly-header' %}
- </head> 
+ 
+  {% render 'shogun-head' %}
+  {% include 'judgeme_core' %}
+</head> 
 
   <body>
     <a class="skip-link" href="#MainContent">{{ 'general.accessibility.skip_to_content' | t }}</a>
@@ -127,5 +130,9 @@
     {%- endif -%}
 
     <script src="{{ 'theme.min.js' | asset_url }}" defer="defer"></script>
-      </body>
+      {% render 'spurit_po2_theme_snippet' %}
+ {% include 'smile-initializer' %}
+
+{% render 'banana-stand-footer' %}
+</body>
 </html>

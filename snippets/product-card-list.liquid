@@ -59,10 +59,14 @@
   {%- unless show_form -%}
     <a class="full-width-link" href="{{ product.url | within: collection }}" data-product-card-link>
       <span class="visually-hidden">{{ product_title }}</span>
+              
+
     </a>
   {%- else -%}
     <div class="full-width-link">
       <span class="visually-hidden">{{ product_title }}</span>
+             
+
     </div>
   {%- endunless -%}
 
@@ -88,6 +92,7 @@
       {%- if show_vendor -%}
         <div class="product-card__vendor">{{ product_vendor }}</div>
       {%- endif -%}
+      {% render 'judgeme_widgets', widget_type: 'judgeme_preview_badge', jm_style: '', concierge_install: true, product: product %}
       <div class="product-card__price-wrapper">
         {% render 'product-price-listing', product: product %}
         {% render 'product-price', variant: product.selected_or_first_available_variant, product: product, wrapper_class: 'price--listing price--variants' %}
@@ -121,4 +126,6 @@
       {%- endif -%}
     </div>
   </div>
+  {% render 'banana-stand-product-list-container', product: product %}
 </div>
+

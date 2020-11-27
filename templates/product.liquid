@@ -1,2 +1,15 @@
 {% section 'product' %}
+<div class="page-width container wrapper">
+  {% render 'judgeme_widgets', widget_type: 'judgeme_review_widget', concierge_install: true, product: product %}
+</div>
 {% section 'product-recommendations' %}
+
+<style>
+.jdgm-rev-widg::before {
+    content: attr(data-average-rating)!important;
+}
+
+.jdgm-rev-widg__title {
+    display:none!important;
+}
+</style>

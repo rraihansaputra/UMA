@@ -23,7 +23,9 @@
     {% render 'css-variables' %}
 
     <link rel="stylesheet" href="{{ 'gift-card.min.css' | asset_url }}">
-  </head>
+  
+  {% render 'shogun-head' %}
+</head>
 
   <body>
     <a class="skip-link" href="#MainContent">{{ 'general.accessibility.skip_to_content' | t }}</a>

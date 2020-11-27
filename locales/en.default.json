@@ -72,8 +72,8 @@
     "newsletter_form": {
       "newsletter_email": "Join our mailing list",
       "email_placeholder": "Email address",
-      "confirmation": "Thanks for subscribing",
-      "submit": "Subscribe"
+      "confirmation": "Thanks for signing up!",
+      "submit": "Sign up"
     },
     "filters": {
       "title_tags": "Filter by",

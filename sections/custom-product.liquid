@@ -135,7 +135,8 @@
       <h1 id="ProductHeading" class="product__title product__title--template">{{ product.title | escape }}</h1>
       <h2 id="ProductHeadingModal" class="product__title product__title--template product__title--modal">{{ product.title | escape }}</h2>
 
-
+      
+      
 
       {%- if shop.taxes_included or shop.shipping_policy.body != blank -%}
         <div class="product__policies product__policies--template" data-product-policies>
@@ -157,6 +158,7 @@
       </p>
       {% endif %}
       {% endfor %}
+      
 
       <!-- CUSTOM VUE PART FOR OPTION RECOMMENDATION AND ADD TO CART-->
       <div id="app" class="vue-form vue" style="margin-top: 1.5em">
@@ -248,9 +250,41 @@
   </div>
 </div>
 <!-- Review block  -->
-<div class="product product--template" id="shopify-product-reviews" data-id="{{product.id}}" style="margin: auto">
-  {{ product.metafields.spr.reviews }}
+<div id="judge">
+  <div class="page-width" id="judgedesktop">
+  {% render 'judgeme_widgets', widget_type: 'judgeme_review_widget', concierge_install: true, product: product %}
 </div>
+
+<div class="product product--template" id="judgemobile">
+  {% render 'judgeme_widgets', widget_type: 'judgeme_review_widget', concierge_install: true, product: product %}
+</div>
+</div>
+{% comment %}<div class="product product--template" id="shopify-product-reviews" data-id="{{product.id}}" style="margin: auto">
+  {{ product.metafields.spr.reviews }}
+</div>{% endcomment %}
+
+<style>
+.jdgm-rev-widg::before {
+    content: attr(data-average-rating)!important;
+  text-align:center!important;
+  display:block!important;
+  font-size:26px!important;
+  font-weight:bold!important;
+}
+
+.jdgm-rev-widg__title {
+    display:none!important;
+}
+  
+  @media screen and (min-width: 800px) {
+#judgemobile{display:none!important;}}
+  
+  @media screen and (max-width: 800px) {
+#judgedesktop{display:none!important;}}
+  
+  .jdgm-rev-widg__summary {text-align:center!important;float:none!important;}
+  
+</style>
 
 <script type="application/ld+json">
   {
